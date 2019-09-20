@@ -1,0 +1,12 @@
+Source: ros-dashing-rosbridge-msgs
+Section: misc
+Priority: extra
+Maintainer: Hans-Joachim Krauch <achim@intermodalics.eu>
+Build-Depends: debhelper (>= 9.0.0), ros-dashing-ament-cmake-ros, ros-dashing-builtin-interfaces, ros-dashing-rosidl-default-generators, ros-dashing-ros-workspace, ros-dashing-rmw-connext-cpp, ros-dashing-rmw-fastrtps-cpp, ros-dashing-rmw-implementation, ros-dashing-rmw-opensplice-cpp, ros-dashing-rosidl-typesupport-connext-c, ros-dashing-rosidl-typesupport-connext-cpp, ros-dashing-rosidl-typesupport-opensplice-c, ros-dashing-rosidl-typesupport-opensplice-cpp
+Homepage: 
+Standards-Version: 3.9.2
+
+Package: ros-dashing-rosbridge-msgs
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, ros-dashing-rosidl-default-runtime, ros-dashing-ros-workspace
+Description: Package containing message files
