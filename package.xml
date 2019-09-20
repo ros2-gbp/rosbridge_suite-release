@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package format="3">
   <name>rosapi</name>
-  <version>1.0.0</version>
+  <version>1.0.1</version>
   <description>
     Provides service calls for getting ros meta-information, like list of
     topics, services, params, etc.
@@ -21,6 +21,9 @@
 
   <buildtool_depend>rosidl_default_generators</buildtool_depend>
 
+  <build_depend>builtin_interfaces</build_depend>
+
+  <exec_depend>builtin_interfaces</exec_depend>
   <exec_depend>rclpy</exec_depend>
   <exec_depend>rcl_interfaces</exec_depend>
   <exec_depend>rosbridge_library</exec_depend>

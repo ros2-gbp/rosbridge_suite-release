@@ -2,6 +2,10 @@
 Changelog for package rosapi
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.0.1 (2019-09-20)
+------------------
+* fix missing dependency
+
 1.0.0 (2019-09-19)
 ------------------
 * Port to ROS 2
