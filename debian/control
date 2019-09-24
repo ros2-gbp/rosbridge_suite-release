@@ -1,0 +1,12 @@
+Source: ros-dashing-rosbridge-library
+Section: misc
+Priority: extra
+Maintainer: Russell Toris <rctoris@wpi.edu>
+Build-Depends: debhelper (>= 9.0.0), python3-bson, python3-pil, ros-dashing-ament-cmake, ros-dashing-builtin-interfaces, ros-dashing-geometry-msgs, ros-dashing-rosidl-default-generators, ros-dashing-std-msgs, ros-dashing-ros-workspace
+Homepage: http://ros.org/wiki/rosbridge_library
+Standards-Version: 3.9.2
+
+Package: ros-dashing-rosbridge-library
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, python3-bson, python3-pil, ros-dashing-builtin-interfaces, ros-dashing-geometry-msgs, ros-dashing-rclpy, ros-dashing-rosidl-default-runtime, ros-dashing-std-msgs, ros-dashing-ros-workspace
+Description: The core rosbridge package, repsonsible for interpreting JSON andperforming the appropriate ROS action, like subscribe, publish, call service, and interact with params.
