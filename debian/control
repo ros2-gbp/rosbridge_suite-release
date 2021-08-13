@@ -1,0 +1,12 @@
+Source: ros-foxy-rosbridge-library
+Section: misc
+Priority: optional
+Maintainer: Russell Toris <rctoris@wpi.edu>
+Build-Depends: debhelper (>= 9.0.0), python3-bson, python3-pil, ros-foxy-ament-cmake, ros-foxy-builtin-interfaces, ros-foxy-geometry-msgs, ros-foxy-rosidl-default-generators, ros-foxy-std-msgs, ros-foxy-ros-workspace
+Homepage: http://ros.org/wiki/rosbridge_library
+Standards-Version: 3.9.2
+
+Package: ros-foxy-rosbridge-library
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, python3-bson, python3-pil, ros-foxy-builtin-interfaces, ros-foxy-geometry-msgs, ros-foxy-rclpy, ros-foxy-rosidl-default-runtime, ros-foxy-std-msgs, ros-foxy-ros-workspace
+Description: The core rosbridge package, repsonsible for interpreting JSON andperforming the appropriate ROS action, like subscribe, publish, call service, and interact with params.
