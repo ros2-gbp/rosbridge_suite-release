@@ -38,14 +38,14 @@ import time
 
 from socket import error
 
-from threading import Thread
+from tornado.httpserver import HTTPServer
 from tornado.ioloop import IOLoop
 from tornado.ioloop import PeriodicCallback
+from tornado.netutil import bind_sockets
 from tornado.web import Application
 
 import rclpy
 from rclpy.node import Node
-from rclpy.parameter import Parameter
 from rclpy.qos import QoSProfile, QoSDurabilityPolicy
 from std_msgs.msg import Int32
 
@@ -94,9 +94,6 @@ class RosbridgeWebsocketNode(Node):
 
         bson_only_mode = self.declare_parameter('bson_only_mode', False).value
 
-        if RosbridgeWebSocket.max_message_size == "None":
-            RosbridgeWebSocket.max_message_size = None
-
         # get tornado application parameters
         tornado_settings = {}
         tornado_settings['websocket_ping_interval'] = float(self.declare_parameter('websocket_ping_interval', 0).value)
@@ -109,7 +106,7 @@ class RosbridgeWebsocketNode(Node):
         RosbridgeWebSocket.authenticate = self.declare_parameter('authenticate', False).value
 
         port = self.declare_parameter('port', 9090).value
-        
+
         address = self.declare_parameter('address', '').value
 
         RosbridgeWebSocket.client_manager = ClientManager(self)
@@ -189,12 +186,9 @@ class RosbridgeWebsocketNode(Node):
             idx = sys.argv.index("--max_message_size") + 1
             if idx < len(sys.argv):
                 value = sys.argv[idx]
-                if value == "None":
-                    RosbridgeWebSocket.max_message_size = None
-                else:
-                    RosbridgeWebSocket.max_message_size = int(value)
+                RosbridgeWebSocket.max_message_size = int(value)
             else:
-                print("--max_message_size argument provided without a value. (can be None or <Integer>)")
+                print("--max_message_size argument provided without a value. (can be <Integer>)")
                 sys.exit(-1)
 
         if "--unregister_timeout" in sys.argv:
@@ -280,11 +274,15 @@ class RosbridgeWebsocketNode(Node):
         connected = False
         while not connected and self.context.ok():
             try:
+                ssl_options = None
                 if certfile is not None and keyfile is not None:
-                    application.listen(port, address, ssl_options={ "certfile": certfile, "keyfile": keyfile})
-                else:
-                    application.listen(port, address)
-                self.get_logger().info("Rosbridge WebSocket server started on port {}".format(port))
+                    ssl_options = { "certfile": certfile, "keyfile": keyfile }
+                sockets = bind_sockets(port, address)
+                actual_port = sockets[0].getsockname()[1]
+                server = HTTPServer(application, ssl_options=ssl_options)
+                server.add_sockets(sockets)
+                self.declare_parameter("actual_port", actual_port)
+                self.get_logger().info("Rosbridge WebSocket server started on port {}".format(actual_port))
                 connected = True
             except error as e:
                 self.get_logger().warn(
@@ -292,15 +290,14 @@ class RosbridgeWebsocketNode(Node):
                     "Retrying in {}s.".format(e, retry_startup_delay))
                 time.sleep(retry_startup_delay)
 
-
 def main(args=None):
     if args is None:
         args = sys.argv
-    
+
     rclpy.init(args=args)
     rosbridge_websocket_node = RosbridgeWebsocketNode()
 
-    spin_callback = PeriodicCallback(lambda: rclpy.spin_once(rosbridge_websocket_node, timeout_sec=0.01), 100)
+    spin_callback = PeriodicCallback(lambda: rclpy.spin_once(rosbridge_websocket_node, timeout_sec=0.01), 1)
     spin_callback.start()
     start_hook()
 

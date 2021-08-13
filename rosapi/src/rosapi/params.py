@@ -78,6 +78,7 @@ def set_param(node_name, name, value, params_glob):
     d = None
     try:
         d = loads(value)
+        value = d if isinstance(d, str) else value
     except ValueError:
         raise Exception("Due to the type flexibility of the ROS parameter server, the value argument to set_param must be a JSON-formatted string.")
 
@@ -119,7 +120,7 @@ def get_param(node_name, name, default, params_glob):
         return
     # If the glob list is empty (i.e. false) or the parameter matches
     # one of the glob strings, continue to get the parameter.
-    if default is not "":
+    if default != "":
         try:
             default = loads(default)
         except ValueError:

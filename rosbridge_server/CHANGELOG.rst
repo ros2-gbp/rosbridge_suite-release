@@ -2,6 +2,34 @@
 Changelog for package rosbridge_server
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.0.5 (2021-08-12)
+------------------
+* Fix globs in launch xml for ROS 2 pre-Galactic (`#589 <https://github.com/foxglove/rosbridge_suite/issues/589>`_)
+* Remove authentication features and rosauth dependency (`#586 <https://github.com/foxglove/rosbridge_suite/issues/586>`_)
+  [rosauth](http://wiki.ros.org/rosauth) is not maintained for ROS 2, and has not been released for Galactic (https://github.com/GT-RAIL/rosauth/issues/35). Since the authentication feature is old and not commonly used, and since rosbridge_suite has not yet been released in Eloquent, Foxy, or Galactic, we decided to just remove the authentication features to unblock us from pushing releases.
+  To avoid breaking backwards compatibility, we will not publish the new version of rosbridge_suite for Dashing.
+* The server now allows choosing `port:=0` to select an ephemeral port, and sets the port number in the `actual_port` ROS param. (`#585 <https://github.com/foxglove/rosbridge_suite/issues/585>`_)
+* Contributors: Jacob Bandes-Storch
+
+1.0.4 (2021-08-11)
+------------------
+
+1.0.3 (2021-08-03)
+------------------
+* Add cbor-raw compression support (`#574 <https://github.com/foxglove/rosbridge_suite/issues/574>`_, adapted from ROS 1 implementation `#452 <https://github.com/foxglove/rosbridge_suite/issues/452>`_)
+* Adaptations to Eloquent [Again] (`#533 <https://github.com/foxglove/rosbridge_suite/issues/533>`_)
+  * increase spin period to 1000Hz to allow 1000 messages per second into the websocket
+  * allow interpreting int as float when needed
+  * better handling array.array and numpy arrays
+  * allow bytes and str websocket messages
+  * add boolean type
+  * handle type extraction of static array rostypes
+  * missing cls variable
+  Co-authored-by: Maximilian Matthe <maxi.matthe@googlemail.com>
+  Co-authored-by: CoRoLa generic <corola@bi>
+  Co-authored-by: joshwapohlmann <joshwa.pohlmann@barkhauseninstitut.org>
+* Contributors: Jacob Bandes-Storch, travipross
+
 1.0.2 (2019-09-24)
 ------------------
 * use Python 3 dependency keys (`#436 <https://github.com/RobotWebTools/rosbridge_suite/issues/436>`_)

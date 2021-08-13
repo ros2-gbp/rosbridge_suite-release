@@ -34,7 +34,7 @@
 import fnmatch
 import socket
 
-from ros2node.api import get_node_names, get_publisher_info, get_service_info, get_subscriber_info
+from ros2node.api import get_node_names, get_publisher_info, get_service_server_info, get_subscriber_info
 from ros2service.api import get_service_names, get_service_names_and_types
 from ros2topic.api import get_topic_names, get_topic_names_and_types
 
@@ -97,10 +97,18 @@ def get_publications_and_types(glob, getter_function, **include_hidden_publicati
     # publication[0] has the publication name and publication[1] has the type wrapped in a list.
     all_publications = [publication[0] for publication in publication_names_and_types]
     filtered_publications = filter_globs(glob, all_publications)
-    filtered_publication_types = [publication[1][0] for publication
+    filtered_publication_types = [sanitize_type_name(publication[1][0]) for publication
                                   in publication_names_and_types
                                   if publication[0] in filtered_publications]
     return filtered_publications, filtered_publication_types
+
+def sanitize_type_name(name):
+    splits = name.split("/")
+    if len(splits) == 3:
+        return f"{splits[0]}/{splits[2]}"
+    if len(splits) == 2:
+        return f"{splits[0]}/{splits[1]}"
+    raise RuntimeError(f"Invalid type name {name}")
 
 
 def get_nodes(include_hidden=False):
@@ -135,13 +143,13 @@ def get_node_subscriptions(node_name):
 
 def get_node_services(node_name):
     """ Returns a list of service names that are being hosted by the specified node """
-    services = get_service_info(node=_node, remote_node_name=node_name)
+    services = get_service_server_info(node=_node, remote_node_name=node_name)
     return [service.name for service in services]
 
 
 def get_node_service_types(node_name):
     """ Returns a list of service types that are being hosted by the specified node """
-    services = get_service_info(node=_node, remote_node_name=node_name)
+    services = get_service_server_info(node=_node, remote_node_name=node_name)
     return [service.types[0] for service in services]
 
 
