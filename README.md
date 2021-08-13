@@ -1,3 +1,31 @@
+## rosbridge_suite (galactic) - 1.0.5-1
+
+The packages in the `rosbridge_suite` repository were released into the `galactic` distro by running `/usr/bin/bloom-release --rosdistro galactic --track galactic rosbridge_suite --edit` on `Fri, 13 Aug 2021 04:31:32 -0000`
+
+These packages were released:
+- `rosapi`
+- `rosbridge_library`
+- `rosbridge_msgs`
+- `rosbridge_server`
+- `rosbridge_suite`
+
+Version of package(s) in repository `rosbridge_suite`:
+
+- upstream repository: https://github.com/RobotWebTools/rosbridge_suite.git
+- release repository: unknown
+- rosdistro version: `null`
+- old version: `null`
+- new version: `1.0.5-1`
+
+Versions of tools used:
+
+- bloom version: `0.10.7`
+- catkin_pkg version: `0.4.23`
+- rosdep version: `0.21.0`
+- rosdistro version: `0.8.3`
+- vcstools version: `0.1.42`
+
+
 ## rosbridge_suite (dashing) - 1.0.2-1
 
 The packages in the `rosbridge_suite` repository were released into the `dashing` distro by running `/usr/bin/bloom-release -r dashing -t dashing rosbridge_suite` on `Tue, 24 Sep 2019 22:40:17 -0000`
