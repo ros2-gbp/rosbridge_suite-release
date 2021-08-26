@@ -31,11 +31,7 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-from ros2pkg.api import get_prefix_path
-
 import importlib
-import os
-import sys
 from threading import Lock
 
 """ ros_loader contains methods for dynamically loading ROS message classes at
@@ -180,7 +176,7 @@ def _load_class(modname, subname, classname):
 
     # This assumes the module is already in the path.
     try:
-        pypkg = importlib.import_module('%s.%s' % (modname, subname))
+        pypkg = importlib.import_module(f'{modname}.{subname}')
     except Exception as exc:
         raise InvalidModuleException(modname, subname, exc)
 

@@ -42,6 +42,7 @@ from ros2param.api import call_get_parameters, call_set_parameters, get_paramete
 
 from rosapi.proxy import get_nodes
 
+
 """ Methods to interact with the param server.  Values have to be passed
 as JSON in order to facilitate dynamically typed SRV messages """
 
@@ -107,7 +108,7 @@ def _set_param(node_name, name, value, parameter_type=None):
     try:
         # call_get_parameters will fail if node does not exist.
         call_set_parameters(node=_node, node_name=node_name, parameters=[parameter])
-    except:
+    except Exception:
         pass
 
 
@@ -137,7 +138,7 @@ def get_param(node_name, name, default, params_glob):
             # if type is 0 (parameter not set), the next line will raise an exception
             # and return value shall go to default.
             value = getattr(pvalue, _parameter_type_mapping[pvalue.type])
-        except:
+        except Exception:
             # If either the node or the parameter does not exist, return default.
             value = default
 
@@ -159,7 +160,7 @@ def has_param(node_name, name, params_glob):
             response = call_get_parameters(
                 node=_node, node_name=node_name,
                 parameter_names=[name])
-        except:
+        except Exception:
             return False
 
     return response.values[0].type > 0 and response.values[0].type < len(_parameter_type_mapping)
@@ -211,7 +212,7 @@ def _get_param_names(node_name):
     if node_name == _parent_node_name:
         return []
 
-    client = _node.create_client(ListParameters, '{}/list_parameters'.format(node_name))
+    client = _node.create_client(ListParameters, f'{node_name}/list_parameters')
 
     ready = client.wait_for_service(timeout_sec=5.0)
     if not ready:
@@ -223,7 +224,7 @@ def _get_param_names(node_name):
     response = future.result()
 
     if response is not None:
-        return ['{}:{}'.format(node_name, param_name) for param_name in response.result.names]
+        return [f'{node_name}:{param_name}' for param_name in response.result.names]
     else:
         return []
 
@@ -236,4 +237,4 @@ def search_param(name, params_glob):
         return None
     # If the glob list is empty (i.e. false) or the parameter matches
     # one of the glob strings, continue to find the parameter.
-    return rospy.search_param(name)
+    return rospy.search_param(name)  # noqa: F821 as discussed in #608
