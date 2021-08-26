@@ -1,15 +1,12 @@
 #!/usr/bin/env python
-import sys
 import rospy
 import rostest
 import unittest
 from time import sleep
 
-from std_msgs.msg import *
-
 from rosbridge_library.protocol import Protocol
 from rosbridge_library.protocol import InvalidArgumentException, MissingArgumentException
-from rosbridge_library.capabilities.advertise import Registration, Advertise
+from rosbridge_library.capabilities.advertise import Advertise
 from rosbridge_library.internal.publishers import manager
 from rosbridge_library.internal import ros_loader
 
@@ -51,7 +48,7 @@ class TestAdvertise(unittest.TestCase):
         invalid = ["", "/", "//", "///", "////", "/////", "bad", "stillbad",
        "not/better/still", "not//better//still", "not///better///still",
        "better/", "better//", "better///", "/better", "//better", "///better",
-       "this\isbad", "\\"]
+       r"this\isbad", "\\"]
 
         proto = Protocol("hello")
         adv = Advertise(proto)
