@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-import sys
 import rospy
 import rostest
 import unittest
@@ -74,11 +73,8 @@ class TestMessageHandlers(unittest.TestCase):
 
         try:
             self.assertEqual(["hello"] + list(range(990, 1000)), received["msgs"])
-        except:
+        finally:
             handler.finish()
-            raise
-
-        handler.finish()
 
     def test_queue_message_handler_rate(self):
         handler = subscribe.MessageHandler(None, self.dummy_cb)
@@ -208,7 +204,7 @@ class TestMessageHandlers(unittest.TestCase):
             for x in range(10):
                 self.assertEqual(x, received["msg"])
                 time.sleep(throttle_rate_sec)
-        except:
+        except:  # noqa: E722  # Will finish and raise
             handler.finish()
             raise
 
