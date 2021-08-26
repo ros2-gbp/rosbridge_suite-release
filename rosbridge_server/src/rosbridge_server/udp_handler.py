@@ -1,8 +1,8 @@
 import rospy
 from rosbridge_library.rosbridge_protocol import RosbridgeProtocol
-from rosbridge_library.util import json, bson
+from rosbridge_library.util import bson
 
-from twisted.internet.protocol import DatagramProtocol,Factory
+from twisted.internet.protocol import DatagramProtocol
 
 class RosbridgeUdpFactory(DatagramProtocol):
     def startProtocol(self):
@@ -13,7 +13,9 @@ class RosbridgeUdpFactory(DatagramProtocol):
         if endpoint in self.socks:
             self.socks[endpoint].datagramReceived(message)
         else:
-            writefunc = lambda msg: self.transport.write(msg, (host,port))
+            def writefunc(msg):
+                self.transport.write(msg, (host, port))
+
             self.socks[endpoint] = RosbridgeUdpSocket(writefunc)
             self.socks[endpoint].startProtocol()
             self.socks[endpoint].datagramReceived(message)
@@ -64,7 +66,7 @@ class RosbridgeUdpSocket:
             cls.client_count_pub.publish(cls.clients_connected)
         rospy.loginfo("Client disconnected. %d clients total.", cls.clients_connected)
     def send_message(self, message):
-        binary = type(message)==bson.BSON
+        binary = isinstance(message, bson.BSON)
         self.write(message)
     def check_origin(self, origin):
         return False
