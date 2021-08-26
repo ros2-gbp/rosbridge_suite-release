@@ -31,14 +31,9 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-import fnmatch
-import socket
-
 from ros2node.api import get_node_names, get_publisher_info, get_service_server_info, get_subscriber_info
 from ros2service.api import get_service_names, get_service_names_and_types
 from ros2topic.api import get_topic_names, get_topic_names_and_types
-
-from rosapi.msg import TypeDef
 
 from .glob_helper import filter_globs, any_match
 
@@ -151,7 +146,7 @@ def get_topic_type(topic, topics_glob):
     topics, types = get_topics_and_types(topics_glob)
     try:
         return types[topics.index(topic)]
-    except ValueError as e:
+    except ValueError:
         # Return empty string if the topic is not present.
         return ""
 
@@ -191,7 +186,7 @@ def get_service_type(service, services_glob):
     services, types = get_services_and_types(services_glob)
     try:
         return types[services.index(service)]
-    except ValueError as e:
+    except ValueError:
         # Return empty string if the service is not present.
         return ""
 
@@ -237,8 +232,8 @@ def get_service_node(queried_type, services_glob, include_hidden=False):
 
 def get_service_host(service):
     """ Returns the name of the machine that is hosting the given service, or empty string """
-    uri = get_service_uri(service)
-    if uri == None:
+    uri = get_service_uri(service)  # noqa: F821  # To be fixed in issue #604
+    if uri is None:
         uri = ""
     else:
         uri = uri[9:]
