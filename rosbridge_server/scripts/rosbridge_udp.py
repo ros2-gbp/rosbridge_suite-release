@@ -31,11 +31,9 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-from __future__ import print_function
 import rospy
 import sys
 
-from socket import error
 from twisted.internet import reactor
 from rosbridge_server import RosbridgeUdpSocket,RosbridgeUdpFactory
 
