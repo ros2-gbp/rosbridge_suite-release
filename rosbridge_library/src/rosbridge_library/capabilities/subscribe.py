@@ -30,9 +30,6 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-import sys
-PYTHON2 = sys.version_info < (3, 0)
-
 import fnmatch
 from threading import Lock
 from functools import partial
@@ -53,8 +50,6 @@ except ImportError:
         from simplejson import dumps as encode_json
     except ImportError:
         from json import dumps as encode_json
-
-from rosbridge_library.util import string_types
 
 
 class Subscription():
@@ -180,7 +175,7 @@ class Subscription():
 
         self.throttle_rate = min(f("throttle_rate"))
         self.queue_length = min(f("queue_length"))
-        frags = [x for x in f("fragment_size") if x != None]
+        frags = [x for x in f("fragment_size") if x is not None]
         if frags == []:
             self.fragment_size = None
         else:
@@ -201,10 +196,10 @@ class Subscription():
 
 class Subscribe(Capability):
 
-    subscribe_msg_fields = [(True, "topic", string_types), (False, "type", string_types),
+    subscribe_msg_fields = [(True, "topic", str), (False, "type", str),
                             (False, "throttle_rate", int), (False, "fragment_size", int),
-                            (False, "queue_length", int), (False, "compression", string_types)]
-    unsubscribe_msg_fields = [(True, "topic", string_types)]
+                            (False, "queue_length", int), (False, "compression", str)]
+    unsubscribe_msg_fields = [(True, "topic", str)]
 
     topics_glob = None
 
@@ -242,7 +237,7 @@ class Subscribe(Capability):
         else:
             self.protocol.log("debug", "No topic security glob, not checking subscription.")
 
-        if not topic in self._subscriptions:
+        if topic not in self._subscriptions:
             client_id = self.protocol.client_id
             cb = partial(self.publish, topic)
             self._subscriptions[topic] = Subscription(client_id, topic, cb, self.protocol.node_handle)
@@ -318,23 +313,20 @@ class Subscribe(Capability):
         else:
             self.protocol.log("debug", "No topic security glob, not checking topic publish.")
 
-        if PYTHON2:
-            topic = unicode(topic)
-
-        outgoing_msg = {u"op": u"publish", u"topic": topic}
+        outgoing_msg = {"op": "publish", "topic": topic}
         if compression=="png":
             outgoing_msg["msg"] = message.get_json_values()
             outgoing_msg_dumped = encode_json(outgoing_msg)
             outgoing_msg = {"op": "png", "data": encode_png(outgoing_msg_dumped)}
         elif compression=="cbor":
-            outgoing_msg[u"msg"] = message.get_cbor_values()
+            outgoing_msg["msg"] = message.get_cbor_values()
             outgoing_msg = bytearray(encode_cbor(outgoing_msg))
         elif compression=="cbor-raw":
             (secs, nsecs) = self.protocol.node_handle.get_clock().now().seconds_nanoseconds()
-            outgoing_msg[u"msg"] = {
-                u"secs": secs,
-                u"nsecs": nsecs,
-                u"bytes": message.message
+            outgoing_msg["msg"] = {
+                "secs": secs,
+                "nsecs": nsecs,
+                "bytes": message.message
             }
             outgoing_msg = bytearray(encode_cbor(outgoing_msg))
         else:

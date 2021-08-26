@@ -30,13 +30,10 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-import uuid
-
-from rclpy.time import Time
-
 import sys
 import threading
 import traceback
+import uuid
 from functools import partial, wraps
 
 from tornado import version_info as tornado_version_info
@@ -46,9 +43,7 @@ from tornado.websocket import WebSocketHandler, WebSocketClosedError
 from tornado.gen import coroutine, BadYieldError
 
 from rosbridge_library.rosbridge_protocol import RosbridgeProtocol
-from rosbridge_library.util import json, bson
-
-from std_msgs.msg import Int32
+from rosbridge_library.util import bson
 
 
 def _log_exception():
@@ -106,13 +101,13 @@ class RosbridgeWebSocket(WebSocketHandler):
             if cls.client_manager:
                 cls.client_manager.add_client(self.client_id, self.request.remote_ip)
         except Exception as exc:
-            cls.node_handle.get_logger().error("Unable to accept incoming connection.  Reason: {}".format(exc))
+            cls.node_handle.get_logger().error(f"Unable to accept incoming connection.  Reason: {exc}")
 
-        cls.node_handle.get_logger().info("Client connected. {} clients total.".format(cls.clients_connected))
+        cls.node_handle.get_logger().info(f"Client connected. {cls.clients_connected} clients total.")
 
     @log_exceptions
     def on_message(self, message):
-        if type(message) is bytes:
+        if isinstance(message, bytes):
             message = message.decode('utf-8')
         self.protocol.incoming(message)
 
@@ -123,12 +118,12 @@ class RosbridgeWebSocket(WebSocketHandler):
         self.protocol.finish()
         if cls.client_manager:
             cls.client_manager.remove_client(self.client_id, self.request.remote_ip)
-        cls.node_handle.get_logger().info("Client disconnected. {} clients total.".format(cls.clients_connected))
+        cls.node_handle.get_logger().info(f"Client disconnected. {cls.clients_connected} clients total.")
 
     def send_message(self, message):
-        if type(message) == bson.BSON:
+        if isinstance(message, bson.BSON):
             binary = True
-        elif type(message) == bytearray:
+        elif isinstance(message, bytearray):
             binary = True
             message = bytes(message)
         else:
@@ -168,7 +163,7 @@ class RosbridgeWebSocket(WebSocketHandler):
             else:
                 _log_exception()
                 raise
-        except:
+        except:  # noqa: E722  # Will log and raise
             _log_exception()
             raise
 
