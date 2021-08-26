@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
-from __future__ import print_function
-from rospy import init_node, get_param, loginfo, logerr, on_shutdown, Publisher
+from rospy import init_node, get_param, loginfo, on_shutdown, Publisher
 from rosbridge_server import RosbridgeTcpSocket
 
 from rosbridge_library.capabilities.advertise import Advertise
@@ -239,6 +238,6 @@ if __name__ == "__main__":
 
             server.serve_forever()
             loaded = True
-        except Exception as e:
+        except Exception:
             time.sleep(retry_startup_delay)
     print("server loaded")
