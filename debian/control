@@ -1,0 +1,12 @@
+Source: ros-galactic-rosbridge-test-msgs
+Section: misc
+Priority: optional
+Maintainer: Jihoon Lee <jihoonlee.in@gmail.com>
+Build-Depends: debhelper (>= 9.0.0), ros-galactic-actionlib-msgs, ros-galactic-ament-cmake, ros-galactic-ament-cmake-pytest, ros-galactic-builtin-interfaces, ros-galactic-diagnostic-msgs, ros-galactic-example-interfaces, ros-galactic-geometry-msgs, ros-galactic-nav-msgs, ros-galactic-rosidl-default-generators, ros-galactic-sensor-msgs, ros-galactic-std-msgs, ros-galactic-std-srvs, ros-galactic-stereo-msgs, ros-galactic-tf2-msgs, ros-galactic-trajectory-msgs, ros-galactic-visualization-msgs, ros-galactic-ros-workspace, ros-galactic-rosidl-typesupport-fastrtps-c, ros-galactic-rosidl-typesupport-fastrtps-cpp
+Homepage: http://ros.org/wiki/rosbridge_library
+Standards-Version: 3.9.2
+
+Package: ros-galactic-rosbridge-test-msgs
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, ros-galactic-builtin-interfaces, ros-galactic-geometry-msgs, ros-galactic-rclpy, ros-galactic-rosidl-default-runtime, ros-galactic-std-msgs, ros-galactic-ros-workspace
+Description: Message and service definitions used in internal tests for rosbridge packages.
