@@ -2,6 +2,29 @@
 Changelog for package rosbridge_library
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.1.0 (2021-10-22)
+------------------
+* Fix test imports from rosbridge_test_msgs (`#668 <https://github.com/RobotWebTools/rosbridge_suite/issues/668>`_)
+* Move msg/srv from rosapi and rosbridge_library into separate packages; enable Rolling in CI (`#665 <https://github.com/RobotWebTools/rosbridge_suite/issues/665>`_)
+* Fix test_services.py (`#653 <https://github.com/RobotWebTools/rosbridge_suite/issues/653>`_)
+* Fix unused variables: flake8 --select=F841 (`#623 <https://github.com/RobotWebTools/rosbridge_suite/issues/623>`_)
+* Remove get_service_instance from ros_loader (`#647 <https://github.com/RobotWebTools/rosbridge_suite/issues/647>`_)
+* Fix test settings for rosbridge_library (`#643 <https://github.com/RobotWebTools/rosbridge_suite/issues/643>`_)
+* Fix DOS line endings (`#658 <https://github.com/RobotWebTools/rosbridge_suite/issues/658>`_)
+* Port `#464 <https://github.com/RobotWebTools/rosbridge_suite/issues/464>`_, `#478 <https://github.com/RobotWebTools/rosbridge_suite/issues/478>`_, `#496 <https://github.com/RobotWebTools/rosbridge_suite/issues/496>`_, and `#502 <https://github.com/RobotWebTools/rosbridge_suite/issues/502>`_ from ROS1 branch (`#663 <https://github.com/RobotWebTools/rosbridge_suite/issues/663>`_)
+* Add pre-commit, format with black and isort (`#648 <https://github.com/RobotWebTools/rosbridge_suite/issues/648>`_)
+* Contributors: Adrian Macneil, Christian Clauss, Domenic Rodriguez, Jacob Bandes-Storch, Kenji Miyake
+
+1.0.8 (2021-08-26)
+------------------
+* Fix various Python code style and lint issues
+* Contributors: Christian Clauss, Jacob Bandes-Storch
+
+1.0.7 (2021-08-18)
+------------------
+* Fix typos discovered by codespell (`#600 <https://github.com/RobotWebTools/rosbridge_suite/issues/600>`_)
+* Contributors: Christian Clauss
+
 1.0.6 (2021-08-17)
 ------------------
 * Fix broken links in changelogs
@@ -202,7 +225,7 @@ Changelog for package rosbridge_library
 * correct default values for security globs
   also accept empty list as the default "do not check globs" value in addition to None.
   Finally, append rosapi service glob after processing command line input so it's not overwritten
-* Added services_glob to CallServices, added globs to rosbridge_tcp and rosbridge_udp, and other miscellanous fixes.
+* Added services_glob to CallServices, added globs to rosbridge_tcp and rosbridge_udp, and other miscellaneous fixes.
 * As per the suggestions of @T045T, fixed several typos, improved logging, and made some style fixes.
 * Added new parameters for topic and service security.
   Added 3 new parameters to rosapi and rosbridge_server which filter the
@@ -401,7 +424,7 @@ Changelog for package rosbridge_library
 ------------------
 * removing wrong import
 * test case for fixed size of uint8 array
-* uses regular expresion to match uint8 array and char array.
+* uses regular expression to match uint8 array and char array.
 * logerr when it fails while message_conversion
 * Contributors: Jihoon Lee
 
@@ -444,7 +467,7 @@ Changelog for package rosbridge_library
 * updated websocket test service server script to use websocket
 * added files to test new caps with websocket server
 * feierabend.. morgen weiter mit server & client JSON-decoder, see notes
-* fixed parsing of incomplete/multiple JSON in incoming buffer; so clients do not need to use an intervall when sending to rosbridge
+* fixed parsing of incomplete/multiple JSON in incoming buffer; so clients do not need to use an interval when sending to rosbridge
 * only current changes; not yet done..
 * code cleanup, not yet finished..; rosbridge logging much cleaner now
 * fixed test_server_defragment - recodegit status
@@ -455,7 +478,7 @@ Changelog for package rosbridge_library
 * blocking behavior for service requests to non-ros; test-scripts use get-ip4 helper function; ..needs a lot cleanup before next steps..
 * need to implement server side blocking of multiple requests, to keep implementation of service provider as easy and simple as possible
 * not finished
-* some changes.. still needs serveral fixes
+* some changes.. still needs several fixes
 * unique request_ids
 * fixed deserialization of multiple fragments in incoming-data; was caused by too short delay between socket-sends (<0.2 seconds); maybe only temp. fixed
 * added fragment sorting to test-client and test-server
@@ -542,7 +565,7 @@ Changelog for package rosbridge_library
 * Adds BSD license header to code files.
   See Issue `#13 <https://github.com/RobotWebTools/rosbridge_suite/issues/13>`_.
 * Removing ultrajson from rosbridge.
-  If JSON parsing becomes a performance bottle neck, we can readd it.
+  If JSON parsing becomes a performance bottle neck, we can re-add it.
 * Catkinizing rosbridge_library and server.
 * PNG compression now creates a square RGB image padded with new-line characters
 * Add stack dependencies and rosdeps.

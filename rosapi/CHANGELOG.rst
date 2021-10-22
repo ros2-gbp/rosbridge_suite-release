@@ -2,6 +2,27 @@
 Changelog for package rosapi
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.1.0 (2021-10-22)
+------------------
+* Move msg/srv from rosapi and rosbridge_library into separate packages; enable Rolling in CI (`#665 <https://github.com/RobotWebTools/rosbridge_suite/issues/665>`_)
+* Exit cleanly on SIGINT; remove sleep in test (`#667 <https://github.com/RobotWebTools/rosbridge_suite/issues/667>`_)
+* Remove unused service_host and search_param services (`#660 <https://github.com/RobotWebTools/rosbridge_suite/issues/660>`_)
+* Migrate remaining linters to pre-commit (`#657 <https://github.com/RobotWebTools/rosbridge_suite/issues/657>`_)
+* Add pre-commit, format with black and isort (`#648 <https://github.com/RobotWebTools/rosbridge_suite/issues/648>`_)
+* Contributors: Adrian Macneil, Jacob Bandes-Storch, Kenji Miyake
+
+1.0.8 (2021-08-26)
+------------------
+* Add missing test_depends and buildtool_depends (`#617 <https://github.com/RobotWebTools/rosbridge_suite/issues/617>`_)
+* Fix various Python code style and lint issues
+* Contributors: Christian Clauss, Jacob Bandes-Storch
+
+1.0.7 (2021-08-18)
+------------------
+* Load message definitions from .msg files; exclude /msg/ and include builtin_interfaces in combined definitions (`#597 <https://github.com/RobotWebTools/rosbridge_suite/issues/597>`_)
+* Fix typos discovered by codespell (`#600 <https://github.com/RobotWebTools/rosbridge_suite/issues/600>`_)
+* Contributors: Christian Clauss, Jacob Bandes-Storch
+
 1.0.6 (2021-08-17)
 ------------------
 * Include /msg/ in type names (`#591 <https://github.com/RobotWebTools/rosbridge_suite/issues/591>`_)
@@ -144,7 +165,7 @@ Changelog for package rosapi
 * correct default values for security globs
   also accept empty list as the default "do not check globs" value in addition to None.
   Finally, append rosapi service glob after processing command line input so it's not overwritten
-* Added services_glob to CallServices, added globs to rosbridge_tcp and rosbridge_udp, and other miscellanous fixes.
+* Added services_glob to CallServices, added globs to rosbridge_tcp and rosbridge_udp, and other miscellaneous fixes.
 * As per the suggestions of @T045T, fixed several typos, improved logging, and made some style fixes.
 * Fixed time object field definitions to match documentation.
 * Two minor fixes.
