@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package format="2">
   <name>rosbridge_server</name>
-  <version>1.1.0</version>
+  <version>1.1.1</version>
   <description>A WebSocket interface to rosbridge.</description>
 
   <license>BSD</license>
@@ -30,6 +30,7 @@
   <test_depend>launch_testing</test_depend>
   <test_depend>launch_testing_ros</test_depend>
   <test_depend>launch_testing_ament_cmake</test_depend>
+  <test_depend>std_srvs</test_depend>
 
   <export>
     <build_type>ament_cmake</build_type>
