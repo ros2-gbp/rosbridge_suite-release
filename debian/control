@@ -1,0 +1,12 @@
+Source: ros-galactic-rosbridge-library
+Section: misc
+Priority: optional
+Maintainer: Jihoon Lee <jihoonlee.in@gmail.com>
+Build-Depends: debhelper (>= 9.0.0), python3-bson, python3-pil, ros-galactic-actionlib-msgs, ros-galactic-ament-cmake, ros-galactic-ament-cmake-pytest, ros-galactic-ament-cmake-ros, ros-galactic-builtin-interfaces, ros-galactic-diagnostic-msgs, ros-galactic-example-interfaces, ros-galactic-geometry-msgs, ros-galactic-nav-msgs, ros-galactic-rosbridge-test-msgs, ros-galactic-sensor-msgs, ros-galactic-std-msgs, ros-galactic-std-srvs, ros-galactic-stereo-msgs, ros-galactic-tf2-msgs, ros-galactic-trajectory-msgs, ros-galactic-visualization-msgs, ros-galactic-ros-workspace
+Homepage: http://ros.org/wiki/rosbridge_library
+Standards-Version: 3.9.2
+
+Package: ros-galactic-rosbridge-library
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, python3-bson, python3-pil, ros-galactic-rclpy, ros-galactic-rosidl-default-runtime, ros-galactic-ros-workspace
+Description: The core rosbridge package, responsible for interpreting JSON andperforming the appropriate ROS action, like subscribe, publish, call service, and interact with params.
