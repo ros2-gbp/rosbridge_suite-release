@@ -1,1 +1,1 @@
-{"base": "5ce587b", "parent": "rpm/rolling/rosbridge_server", "previous": "11b89e9", "trim": "", "trimbase": ""}
+{"base": "2e098a4", "parent": "rpm/humble/rosbridge_server", "previous": "cb90b17", "trim": "", "trimbase": ""}
