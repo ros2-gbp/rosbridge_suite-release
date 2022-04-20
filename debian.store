@@ -1,1 +1,1 @@
-{"base": "2bd92f0", "parent": "debian/rolling/rosapi_msgs", "previous": "4158462", "trim": "", "trimbase": ""}
+{"base": "4037075", "parent": "debian/humble/rosapi_msgs", "previous": "25ec337", "trim": "", "trimbase": ""}
