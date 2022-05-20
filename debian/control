@@ -1,0 +1,12 @@
+Source: ros-rolling-rosapi
+Section: misc
+Priority: optional
+Maintainer: Jihoon Lee <jihoonlee.in@gmail.com>
+Build-Depends: debhelper (>= 9.0.0), ros-rolling-ament-cmake-pytest <!nocheck>, ros-rolling-ament-cmake-ros, ros-rolling-geometry-msgs <!nocheck>, ros-rolling-rmw-dds-common <!nocheck>, ros-rolling-sensor-msgs <!nocheck>, ros-rolling-shape-msgs <!nocheck>, ros-rolling-ros-workspace
+Homepage: http://ros.org/wiki/rosapi
+Standards-Version: 3.9.2
+
+Package: ros-rolling-rosapi
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, ros-rolling-builtin-interfaces, ros-rolling-rcl-interfaces, ros-rolling-rclpy, ros-rolling-ros2node, ros-rolling-ros2param, ros-rolling-ros2pkg, ros-rolling-ros2service, ros-rolling-ros2topic, ros-rolling-rosapi-msgs, ros-rolling-rosbridge-library, ros-rolling-ros-workspace
+Description: Provides service calls for getting ros meta-information, like list of topics, services, params, etc.
