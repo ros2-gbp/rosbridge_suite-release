@@ -1,0 +1,12 @@
+Source: ros-rolling-rosbridge-test-msgs
+Section: misc
+Priority: optional
+Maintainer: Jihoon Lee <jihoonlee.in@gmail.com>
+Build-Depends: debhelper (>= 9.0.0), ros-rolling-actionlib-msgs <!nocheck>, ros-rolling-ament-cmake, ros-rolling-ament-cmake-pytest <!nocheck>, ros-rolling-builtin-interfaces, ros-rolling-builtin-interfaces <!nocheck>, ros-rolling-diagnostic-msgs <!nocheck>, ros-rolling-example-interfaces <!nocheck>, ros-rolling-geometry-msgs, ros-rolling-geometry-msgs <!nocheck>, ros-rolling-nav-msgs <!nocheck>, ros-rolling-rosidl-default-generators, ros-rolling-sensor-msgs <!nocheck>, ros-rolling-std-msgs, ros-rolling-std-msgs <!nocheck>, ros-rolling-std-srvs <!nocheck>, ros-rolling-stereo-msgs <!nocheck>, ros-rolling-tf2-msgs <!nocheck>, ros-rolling-trajectory-msgs <!nocheck>, ros-rolling-visualization-msgs <!nocheck>, ros-rolling-ros-workspace, ros-rolling-rosidl-typesupport-fastrtps-c, ros-rolling-rosidl-typesupport-fastrtps-cpp
+Homepage: http://ros.org/wiki/rosbridge_library
+Standards-Version: 3.9.2
+
+Package: ros-rolling-rosbridge-test-msgs
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, ros-rolling-builtin-interfaces, ros-rolling-geometry-msgs, ros-rolling-rclpy, ros-rolling-rosidl-default-runtime, ros-rolling-std-msgs, ros-rolling-ros-workspace
+Description: Message and service definitions used in internal tests for rosbridge packages.
