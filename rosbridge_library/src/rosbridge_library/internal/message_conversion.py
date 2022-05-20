@@ -37,9 +37,9 @@ import re
 from base64 import standard_b64decode, standard_b64encode
 
 import numpy as np
-import rclpy
 from rcl_interfaces.msg import Parameter
 from rclpy.clock import ROSClock
+from rclpy.time import Duration, Time
 from rosbridge_library.internal import ros_loader
 from rosbridge_library.util import bson
 
@@ -61,8 +61,6 @@ type_map = {
         "uint32",
         "int64",
         "uint64",
-        "float32",
-        "float64",
     ],
     "float": ["float32", "float64", "double", "float"],
     "str": ["string"],
@@ -91,7 +89,7 @@ ros_primitive_types = [
     "string",
 ]
 ros_header_types = ["Header", "std_msgs/Header", "roslib/Header"]
-ros_binary_types = ["uint8[]", "char[]"]
+ros_binary_types = ["uint8[]", "char[]", "sequence<uint8>", "sequence<char>"]
 list_tokens = re.compile("<(.+?)>")
 bounded_array_tokens = re.compile(r"(.+)\[.*\]")
 ros_binary_types_list_braces = [
@@ -210,10 +208,7 @@ def _from_inst(inst, rostype):
 
     # Check for time or duration
     if rostype in ros_time_types:
-        try:
-            return {"sec": inst.sec, "nanosec": inst.nanosec}
-        except AttributeError:
-            return {"secs": inst.secs, "nsecs": inst.nsecs}
+        return {"sec": inst.sec, "nanosec": inst.nanosec}
 
     if bson_only_mode is None:
         bson_only_mode = rospy.get_param("~bson_only_mode", False)
@@ -250,8 +245,15 @@ def _from_list_inst(inst, rostype):
         rostype = re.search(bounded_array_tokens, rostype).group(1)
 
     # Shortcut for primitives
-    if rostype in ros_primitive_types and rostype not in type_map.get("float"):
-        return list(inst)
+    if rostype in ros_primitive_types:
+        # Convert to Built-in integer types to dump as JSON
+        if isinstance(inst, np.ndarray) and (
+            rostype in type_map.get("int") or rostype in type_map.get("float")
+        ):
+            return inst.tolist()
+
+        if rostype not in type_map.get("float"):
+            return list(inst)
 
     # Call to _to_inst for every element of the list
     return [_from_inst(x, rostype) for x in inst]
@@ -293,33 +295,36 @@ def _to_inst(msg, rostype, roottype, inst=None, stack=[]):
 
 
 def _to_binary_inst(msg):
-    try:
-        return standard_b64decode(msg) if isinstance(msg, str) else bytes(bytearray(msg))
-    except Exception:
+    if isinstance(msg, str):
+        return list(standard_b64decode(msg))
+    if isinstance(msg, list):
         return msg
+    return bytes(bytearray(msg))
 
 
 def _to_time_inst(msg, rostype, inst=None):
     # Create an instance if we haven't been provided with one
 
-    if rostype == "time" and msg == "now":
+    if rostype == "builtin_interfaces/Time" and msg == "now":
         return ROSClock().now().to_msg()
 
     if inst is None:
-        if rostype == "time":
-            inst = rclpy.time.Time().to_msg()
-        elif rostype == "duration":
-            inst = rclpy.duration.Duration().to_msg()
+        if rostype == "builtin_interfaces/Time":
+            inst = Time().to_msg()
+        elif rostype == "builtin_interfaces/Duration":
+            inst = Duration().to_msg()
         else:
             return None
 
     # Copy across the fields, try ROS1 and ROS2 fieldnames
-    for field in ["secs", "nsecs", "sec", "nanosec"]:
-        try:
-            if field in msg:
-                setattr(inst, field, msg[field])
-        except TypeError:
-            continue
+    for field in ["sec", "secs"]:
+        if field in msg:
+            setattr(inst, "sec", msg[field])
+            break
+    for field in ["nanosec", "nsecs"]:
+        if field in msg:
+            setattr(inst, "nanosec", msg[field])
+            break
 
     return inst
 
@@ -352,8 +357,9 @@ def _to_list_inst(msg, rostype, roottype, inst, stack):
     if len(msg) == 0:
         return []
 
-    if isinstance(inst, np.ndarray):
-        return list(inst.astype(float))
+    # Special mappings for numeric types https://design.ros2.org/articles/idl_interface_definition.html
+    if isinstance(inst, array.array) or isinstance(inst, np.ndarray):
+        return msg
 
     # Remove the list indicators from the rostype
     try:
