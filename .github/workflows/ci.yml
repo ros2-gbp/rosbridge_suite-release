@@ -8,11 +8,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - uses: actions/setup-python@v3
+      - uses: actions/setup-python@v4.1.0
         with:
           python-version: '3.8'
 
-      - uses: pre-commit/action@v2.0.3
+      - uses: pre-commit/action@v3.0.0
 
   test:
     strategy:
@@ -25,8 +25,10 @@ jobs:
             os: ubuntu-20.04
           - ros: galactic
             os: ubuntu-20.04
+          - ros: humble
+            os: ubuntu-22.04
           - ros: rolling
-            os: ubuntu-20.04
+            os: ubuntu-22.04
 
     name: ROS 2 ${{ matrix.ros }} (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
@@ -36,7 +38,7 @@ jobs:
         with:
           path: ros_ws/src
 
-      - uses: ros-tooling/setup-ros@0.3.1
+      - uses: ros-tooling/setup-ros@0.3.4
 
       - uses: ros-tooling/action-ros-ci@v0.2
         with:
