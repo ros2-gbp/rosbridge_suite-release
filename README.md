@@ -1,3 +1,33 @@
+## rosbridge_suite (galactic) - 1.3.1-1
+
+The packages in the `rosbridge_suite` repository were released into the `galactic` distro by running `/usr/bin/bloom-release --rosdistro galactic rosbridge_suite` on `Fri, 21 Oct 2022 19:55:43 -0000`
+
+These packages were released:
+- `rosapi`
+- `rosapi_msgs`
+- `rosbridge_library`
+- `rosbridge_msgs`
+- `rosbridge_server`
+- `rosbridge_suite`
+- `rosbridge_test_msgs`
+
+Version of package(s) in repository `rosbridge_suite`:
+
+- upstream repository: https://github.com/RobotWebTools/rosbridge_suite.git
+- release repository: https://github.com/ros2-gbp/rosbridge_suite-release.git
+- rosdistro version: `1.3.0-1`
+- old version: `1.3.0-1`
+- new version: `1.3.1-1`
+
+Versions of tools used:
+
+- bloom version: `0.10.7`
+- catkin_pkg version: `0.5.2`
+- rosdep version: `0.22.1`
+- rosdistro version: `0.9.0`
+- vcstools version: `0.1.42`
+
+
 ## rosbridge_suite (foxy) - 1.3.1-1
 
 The packages in the `rosbridge_suite` repository were released into the `foxy` distro by running `/usr/bin/bloom-release --rosdistro foxy rosbridge_suite` on `Fri, 21 Oct 2022 19:52:56 -0000`
