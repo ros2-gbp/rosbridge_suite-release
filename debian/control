@@ -1,0 +1,12 @@
+Source: ros-galactic-rosapi
+Section: misc
+Priority: optional
+Maintainer: Jihoon Lee <jihoonlee.in@gmail.com>
+Build-Depends: debhelper (>= 9.0.0), ros-galactic-ament-cmake-pytest, ros-galactic-ament-cmake-ros, ros-galactic-geometry-msgs, ros-galactic-rmw-dds-common, ros-galactic-sensor-msgs, ros-galactic-shape-msgs, ros-galactic-ros-workspace
+Homepage: http://ros.org/wiki/rosapi
+Standards-Version: 3.9.2
+
+Package: ros-galactic-rosapi
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, ros-galactic-builtin-interfaces, ros-galactic-rcl-interfaces, ros-galactic-rclpy, ros-galactic-ros2node, ros-galactic-ros2param, ros-galactic-ros2pkg, ros-galactic-ros2service, ros-galactic-ros2topic, ros-galactic-rosapi-msgs, ros-galactic-rosbridge-library, ros-galactic-ros-workspace
+Description: Provides service calls for getting ros meta-information, like list of topics, services, params, etc.
