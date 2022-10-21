@@ -1,0 +1,12 @@
+Source: ros-foxy-rosbridge-server
+Section: misc
+Priority: optional
+Maintainer: Jihoon Lee <jihoonlee.in@gmail.com>
+Build-Depends: debhelper (>= 9.0.0), python3-autobahn, ros-foxy-ament-cmake, ros-foxy-ament-cmake-ros, ros-foxy-launch, ros-foxy-launch-ros, ros-foxy-launch-testing, ros-foxy-launch-testing-ament-cmake, ros-foxy-launch-testing-ros, ros-foxy-std-srvs, ros-foxy-ros-workspace
+Homepage: http://ros.org/wiki/rosbridge_server
+Standards-Version: 3.9.2
+
+Package: ros-foxy-rosbridge-server
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, python3-tornado, python3-twisted, ros-foxy-rclpy, ros-foxy-rosapi, ros-foxy-rosbridge-library, ros-foxy-rosbridge-msgs, ros-foxy-ros-workspace
+Description: A WebSocket interface to rosbridge.
