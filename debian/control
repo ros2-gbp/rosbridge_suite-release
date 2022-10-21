@@ -1,0 +1,12 @@
+Source: ros-foxy-rosbridge-test-msgs
+Section: misc
+Priority: optional
+Maintainer: Jihoon Lee <jihoonlee.in@gmail.com>
+Build-Depends: debhelper (>= 9.0.0), ros-foxy-actionlib-msgs, ros-foxy-ament-cmake, ros-foxy-ament-cmake-pytest, ros-foxy-builtin-interfaces, ros-foxy-diagnostic-msgs, ros-foxy-example-interfaces, ros-foxy-geometry-msgs, ros-foxy-nav-msgs, ros-foxy-rosidl-default-generators, ros-foxy-sensor-msgs, ros-foxy-std-msgs, ros-foxy-std-srvs, ros-foxy-stereo-msgs, ros-foxy-tf2-msgs, ros-foxy-trajectory-msgs, ros-foxy-visualization-msgs, ros-foxy-ros-workspace, ros-foxy-rosidl-typesupport-fastrtps-c, ros-foxy-rosidl-typesupport-fastrtps-cpp, ros-foxy-rosidl-typesupport-connext-c, ros-foxy-rosidl-typesupport-connext-cpp
+Homepage: http://ros.org/wiki/rosbridge_library
+Standards-Version: 3.9.2
+
+Package: ros-foxy-rosbridge-test-msgs
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, ros-foxy-builtin-interfaces, ros-foxy-geometry-msgs, ros-foxy-rclpy, ros-foxy-rosidl-default-runtime, ros-foxy-std-msgs, ros-foxy-ros-workspace
+Description: Message and service definitions used in internal tests for rosbridge packages.
