@@ -1,0 +1,12 @@
+Source: ros-humble-rosbridge-test-msgs
+Section: misc
+Priority: optional
+Maintainer: Jihoon Lee <jihoonlee.in@gmail.com>
+Build-Depends: debhelper (>= 9.0.0), libactionlib-msgs-dev, libdiagnostic-msgs-dev, libgeometry-msgs-dev, libnav-msgs-dev, libsensor-msgs-dev, libstd-msgs-dev, libstd-srvs-dev, libstereo-msgs-dev, libtf2-msgs-dev, libtrajectory-msgs-dev, libvisualization-msgs-dev, python3-actionlib-msgs, python3-diagnostic-msgs, python3-geometry-msgs, python3-nav-msgs, python3-sensor-msgs, python3-std-msgs, python3-std-srvs, python3-stereo-msgs, python3-tf2-msgs, python3-trajectory-msgs, python3-visualization-msgs, ros-actionlib-msgs, ros-diagnostic-msgs, ros-geometry-msgs, ros-humble-ament-cmake, ros-humble-ament-cmake-pytest, ros-humble-builtin-interfaces, ros-humble-example-interfaces, ros-humble-rosidl-default-generators, ros-nav-msgs, ros-sensor-msgs, ros-std-msgs, ros-std-srvs, ros-stereo-msgs, ros-tf2-msgs, ros-trajectory-msgs, ros-visualization-msgs, ros-humble-ros-workspace, ros-humble-rosidl-typesupport-fastrtps-c, ros-humble-rosidl-typesupport-fastrtps-cpp
+Homepage: http://ros.org/wiki/rosbridge_library
+Standards-Version: 3.9.2
+
+Package: ros-humble-rosbridge-test-msgs
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, libgeometry-msgs-dev, libstd-msgs-dev, python3-geometry-msgs, python3-std-msgs, ros-geometry-msgs, ros-humble-builtin-interfaces, ros-humble-rclpy, ros-humble-rosidl-default-runtime, ros-std-msgs, ros-humble-ros-workspace
+Description: Message and service definitions used in internal tests for rosbridge packages.
