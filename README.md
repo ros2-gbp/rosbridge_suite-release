@@ -1,3 +1,33 @@
+## rosbridge_suite (humble) - 1.3.2-1
+
+The packages in the `rosbridge_suite` repository were released into the `humble` distro by running `/home/vscode/.local/bin/bloom-release rosbridge_suite --rosdistro humble` on `Wed, 27 Sep 2023 14:29:58 -0000`
+
+These packages were released:
+- `rosapi`
+- `rosapi_msgs`
+- `rosbridge_library`
+- `rosbridge_msgs`
+- `rosbridge_server`
+- `rosbridge_suite`
+- `rosbridge_test_msgs`
+
+Version of package(s) in repository `rosbridge_suite`:
+
+- upstream repository: https://github.com/RobotWebTools/rosbridge_suite.git
+- release repository: https://github.com/ros2-gbp/rosbridge_suite-release.git
+- rosdistro version: `1.3.1-1`
+- old version: `1.3.1-1`
+- new version: `1.3.2-1`
+
+Versions of tools used:
+
+- bloom version: `0.11.2`
+- catkin_pkg version: `0.5.2`
+- rosdep version: `0.22.2`
+- rosdistro version: `0.9.0`
+- vcstools version: `0.1.42`
+
+
 ## rosbridge_suite (rolling) - 1.3.1-1
 
 The packages in the `rosbridge_suite` repository were released into the `rolling` distro by running `/usr/bin/bloom-release --rosdistro rolling rosbridge_suite` on `Fri, 21 Oct 2022 20:02:29 -0000`
