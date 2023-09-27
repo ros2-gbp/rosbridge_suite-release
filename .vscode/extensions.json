@@ -1,7 +1,0 @@
-{
-    "recommendations": [
-        "ms-python.python",
-        "ms-iot.vscode-ros",
-        "bungcip.better-toml"
-    ]
-}
