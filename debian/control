@@ -1,0 +1,12 @@
+Source: ros-humble-rosbridge-test-msgs
+Section: misc
+Priority: optional
+Maintainer: Jihoon Lee <jihoonlee.in@gmail.com>
+Build-Depends: debhelper (>= 9.0.0), ros-humble-actionlib-msgs <!nocheck>, ros-humble-ament-cmake, ros-humble-ament-cmake-pytest <!nocheck>, ros-humble-builtin-interfaces, ros-humble-builtin-interfaces <!nocheck>, ros-humble-diagnostic-msgs <!nocheck>, ros-humble-example-interfaces <!nocheck>, ros-humble-geometry-msgs, ros-humble-geometry-msgs <!nocheck>, ros-humble-nav-msgs <!nocheck>, ros-humble-rosidl-default-generators, ros-humble-sensor-msgs <!nocheck>, ros-humble-std-msgs, ros-humble-std-msgs <!nocheck>, ros-humble-std-srvs <!nocheck>, ros-humble-stereo-msgs <!nocheck>, ros-humble-tf2-msgs <!nocheck>, ros-humble-trajectory-msgs <!nocheck>, ros-humble-visualization-msgs <!nocheck>, ros-humble-ros-workspace, ros-humble-rosidl-typesupport-fastrtps-c, ros-humble-rosidl-typesupport-fastrtps-cpp
+Homepage: http://ros.org/wiki/rosbridge_library
+Standards-Version: 3.9.2
+
+Package: ros-humble-rosbridge-test-msgs
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, ros-humble-builtin-interfaces, ros-humble-geometry-msgs, ros-humble-rclpy, ros-humble-rosidl-default-runtime, ros-humble-std-msgs, ros-humble-ros-workspace
+Description: Message and service definitions used in internal tests for rosbridge packages.
