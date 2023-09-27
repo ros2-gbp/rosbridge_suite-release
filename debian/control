@@ -1,0 +1,12 @@
+Source: ros-iron-rosapi
+Section: misc
+Priority: optional
+Maintainer: Jihoon Lee <jihoonlee.in@gmail.com>
+Build-Depends: debhelper (>= 9.0.0), ros-iron-ament-cmake-pytest <!nocheck>, ros-iron-ament-cmake-ros, ros-iron-geometry-msgs <!nocheck>, ros-iron-rmw-dds-common <!nocheck>, ros-iron-sensor-msgs <!nocheck>, ros-iron-shape-msgs <!nocheck>, ros-iron-ros-workspace
+Homepage: http://ros.org/wiki/rosapi
+Standards-Version: 3.9.2
+
+Package: ros-iron-rosapi
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, ros-iron-builtin-interfaces, ros-iron-rcl-interfaces, ros-iron-rclpy, ros-iron-ros2node, ros-iron-ros2param, ros-iron-ros2pkg, ros-iron-ros2service, ros-iron-ros2topic, ros-iron-rosapi-msgs, ros-iron-rosbridge-library, ros-iron-ros-workspace
+Description: Provides service calls for getting ros meta-information, like list of topics, services, params, etc.
