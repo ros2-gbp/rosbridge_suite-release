@@ -1,0 +1,12 @@
+Source: ros-iron-rosbridge-library
+Section: misc
+Priority: optional
+Maintainer: Jihoon Lee <jihoonlee.in@gmail.com>
+Build-Depends: debhelper (>= 9.0.0), python3-bson, python3-pil, ros-iron-actionlib-msgs <!nocheck>, ros-iron-ament-cmake, ros-iron-ament-cmake-pytest <!nocheck>, ros-iron-ament-cmake-ros, ros-iron-builtin-interfaces <!nocheck>, ros-iron-diagnostic-msgs <!nocheck>, ros-iron-example-interfaces <!nocheck>, ros-iron-geometry-msgs <!nocheck>, ros-iron-nav-msgs <!nocheck>, ros-iron-rosbridge-test-msgs <!nocheck>, ros-iron-sensor-msgs <!nocheck>, ros-iron-std-msgs <!nocheck>, ros-iron-std-srvs <!nocheck>, ros-iron-stereo-msgs <!nocheck>, ros-iron-tf2-msgs <!nocheck>, ros-iron-trajectory-msgs <!nocheck>, ros-iron-visualization-msgs <!nocheck>, ros-iron-ros-workspace
+Homepage: http://ros.org/wiki/rosbridge_library
+Standards-Version: 3.9.2
+
+Package: ros-iron-rosbridge-library
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, python3-bson, python3-pil, ros-iron-rclpy, ros-iron-rosidl-default-runtime, ros-iron-ros-workspace
+Description: The core rosbridge package, responsible for interpreting JSON andperforming the appropriate ROS action, like subscribe, publish, call service, and interact with params.
