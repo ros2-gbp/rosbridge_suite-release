@@ -1,0 +1,12 @@
+Source: ros-rolling-rosbridge-library
+Section: misc
+Priority: optional
+Maintainer: Jihoon Lee <jihoonlee.in@gmail.com>
+Build-Depends: debhelper (>= 9.0.0), python3-bson, python3-pil, ros-rolling-actionlib-msgs <!nocheck>, ros-rolling-ament-cmake, ros-rolling-ament-cmake-pytest <!nocheck>, ros-rolling-ament-cmake-ros, ros-rolling-builtin-interfaces <!nocheck>, ros-rolling-diagnostic-msgs <!nocheck>, ros-rolling-example-interfaces <!nocheck>, ros-rolling-geometry-msgs <!nocheck>, ros-rolling-nav-msgs <!nocheck>, ros-rolling-rosbridge-test-msgs <!nocheck>, ros-rolling-sensor-msgs <!nocheck>, ros-rolling-std-msgs <!nocheck>, ros-rolling-std-srvs <!nocheck>, ros-rolling-stereo-msgs <!nocheck>, ros-rolling-tf2-msgs <!nocheck>, ros-rolling-trajectory-msgs <!nocheck>, ros-rolling-visualization-msgs <!nocheck>, ros-rolling-ros-workspace
+Homepage: http://ros.org/wiki/rosbridge_library
+Standards-Version: 3.9.2
+
+Package: ros-rolling-rosbridge-library
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, python3-bson, python3-pil, ros-rolling-rclpy, ros-rolling-rosidl-default-runtime, ros-rolling-ros-workspace
+Description: The core rosbridge package, responsible for interpreting JSON andperforming the appropriate ROS action, like subscribe, publish, call service, and interact with params.
