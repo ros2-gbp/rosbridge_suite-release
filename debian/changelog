@@ -1,0 +1,44 @@
+ros-rolling-rosbridge-test-msgs (1.3.2-2noble) noble; urgency=high
+
+
+
+ -- Jihoon Lee <jihoonlee.in@gmail.com>  Wed, 27 Sep 2023 00:00:00 -0000
+
+ros-rolling-rosbridge-test-msgs (1.3.1-2noble) noble; urgency=high
+
+
+
+ -- Jihoon Lee <jihoonlee.in@gmail.com>  Fri, 21 Oct 2022 00:00:00 -0000
+
+ros-rolling-rosbridge-test-msgs (1.3.0-2noble) noble; urgency=high
+
+
+
+ -- Jihoon Lee <jihoonlee.in@gmail.com>  Tue, 16 Aug 2022 00:00:00 -0000
+
+ros-rolling-rosbridge-test-msgs (1.2.0-2noble) noble; urgency=high
+
+
+
+ -- Jihoon Lee <jihoonlee.in@gmail.com>  Fri, 20 May 2022 00:00:00 -0000
+
+ros-rolling-rosbridge-test-msgs (1.1.2-2noble) noble; urgency=high
+
+
+
+ -- Jihoon Lee <jihoonlee.in@gmail.com>  Mon, 03 Jan 2022 00:00:00 -0000
+
+ros-rolling-rosbridge-test-msgs (1.1.1-2noble) noble; urgency=high
+
+
+
+ -- Jihoon Lee <jihoonlee.in@gmail.com>  Thu, 09 Dec 2021 00:00:00 -0000
+
+ros-rolling-rosbridge-test-msgs (1.1.0-2noble) noble; urgency=high
+
+  * Move msg/srv from rosapi and rosbridge_library into separate packages; enable Rolling in CI (#665 <https://github.com/RobotWebTools/rosbridge_suite/issues/665>)
+  * Contributors: Jacob Bandes-Storch
+
+ -- Jihoon Lee <jihoonlee.in@gmail.com>  Fri, 22 Oct 2021 00:00:00 -0000
+
+
