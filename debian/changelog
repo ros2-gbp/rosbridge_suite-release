@@ -1,0 +1,127 @@
+ros-rolling-rosbridge-msgs (1.3.2-2noble) noble; urgency=high
+
+
+
+ -- Hans-Joachim Krauch <achim@intermodalics.eu>  Wed, 27 Sep 2023 00:00:00 -0000
+
+ros-rolling-rosbridge-msgs (1.3.1-2noble) noble; urgency=high
+
+
+
+ -- Hans-Joachim Krauch <achim@intermodalics.eu>  Fri, 21 Oct 2022 00:00:00 -0000
+
+ros-rolling-rosbridge-msgs (1.3.0-2noble) noble; urgency=high
+
+
+
+ -- Hans-Joachim Krauch <achim@intermodalics.eu>  Tue, 16 Aug 2022 00:00:00 -0000
+
+ros-rolling-rosbridge-msgs (1.2.0-2noble) noble; urgency=high
+
+
+
+ -- Hans-Joachim Krauch <achim@intermodalics.eu>  Fri, 20 May 2022 00:00:00 -0000
+
+ros-rolling-rosbridge-msgs (1.1.2-2noble) noble; urgency=high
+
+
+
+ -- Hans-Joachim Krauch <achim@intermodalics.eu>  Mon, 03 Jan 2022 00:00:00 -0000
+
+ros-rolling-rosbridge-msgs (1.1.1-2noble) noble; urgency=high
+
+
+
+ -- Hans-Joachim Krauch <achim@intermodalics.eu>  Thu, 09 Dec 2021 00:00:00 -0000
+
+ros-rolling-rosbridge-msgs (1.1.0-2noble) noble; urgency=high
+
+
+
+ -- Hans-Joachim Krauch <achim@intermodalics.eu>  Fri, 22 Oct 2021 00:00:00 -0000
+
+ros-rolling-rosbridge-msgs (1.0.8-2noble) noble; urgency=high
+
+
+
+ -- Hans-Joachim Krauch <achim@intermodalics.eu>  Thu, 26 Aug 2021 00:00:00 -0000
+
+ros-rolling-rosbridge-msgs (1.0.7-2noble) noble; urgency=high
+
+
+
+ -- Hans-Joachim Krauch <achim@intermodalics.eu>  Wed, 18 Aug 2021 00:00:00 -0000
+
+ros-rolling-rosbridge-msgs (1.0.6-2noble) noble; urgency=high
+
+
+
+ -- Hans-Joachim Krauch <achim@intermodalics.eu>  Tue, 17 Aug 2021 00:00:00 -0000
+
+ros-rolling-rosbridge-msgs (1.0.5-2noble) noble; urgency=high
+
+
+
+ -- Hans-Joachim Krauch <achim@intermodalics.eu>  Thu, 12 Aug 2021 00:00:00 -0000
+
+ros-rolling-rosbridge-msgs (1.0.4-2noble) noble; urgency=high
+
+
+
+ -- Hans-Joachim Krauch <achim@intermodalics.eu>  Wed, 11 Aug 2021 00:00:00 -0000
+
+ros-rolling-rosbridge-msgs (1.0.3-2noble) noble; urgency=high
+
+
+
+ -- Hans-Joachim Krauch <achim@intermodalics.eu>  Tue, 03 Aug 2021 00:00:00 -0000
+
+ros-rolling-rosbridge-msgs (1.0.2-2noble) noble; urgency=high
+
+
+
+ -- Hans-Joachim Krauch <achim@intermodalics.eu>  Tue, 24 Sep 2019 00:00:00 -0000
+
+ros-rolling-rosbridge-msgs (1.0.1-2noble) noble; urgency=high
+
+
+
+ -- Hans-Joachim Krauch <achim@intermodalics.eu>  Fri, 20 Sep 2019 00:00:00 -0000
+
+ros-rolling-rosbridge-msgs (1.0.0-2noble) noble; urgency=high
+
+  * Port to ROS 2
+
+ -- Hans-Joachim Krauch <achim@intermodalics.eu>  Thu, 19 Sep 2019 00:00:00 -0000
+
+ros-rolling-rosbridge-msgs (0.11.3-2noble) noble; urgency=high
+
+
+
+ -- Hans-Joachim Krauch <achim@intermodalics.eu>  Wed, 07 Aug 2019 00:00:00 -0000
+
+ros-rolling-rosbridge-msgs (0.11.2-2noble) noble; urgency=high
+
+
+
+ -- Hans-Joachim Krauch <achim@intermodalics.eu>  Mon, 08 Jul 2019 00:00:00 -0000
+
+ros-rolling-rosbridge-msgs (0.11.1-2noble) noble; urgency=high
+
+
+
+ -- Hans-Joachim Krauch <achim@intermodalics.eu>  Wed, 08 May 2019 00:00:00 -0000
+
+ros-rolling-rosbridge-msgs (0.11.0-2noble) noble; urgency=high
+
+  * Additional client information websocket (#393 <https://github.com/RobotWebTools/rosbridge_suite/issues/393>)
+    * Add package rosbridge_msgs.
+    * rosbridge_server: Publish additional information about connected clients.
+    * rosbridge_server: Make ClientManager's add_client/remove_client methods thread safe.
+    * rosbridge_server: Rm unnecessary publishing.
+    * rosbridge_msgs: Cleanup/fix dependencies.
+  * Contributors: Hans-Joachim Krauch
+
+ -- Hans-Joachim Krauch <achim@intermodalics.eu>  Fri, 29 Mar 2019 00:00:00 -0000
+
+
