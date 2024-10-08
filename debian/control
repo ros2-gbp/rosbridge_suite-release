@@ -1,0 +1,12 @@
+Source: ros-jazzy-rosbridge-test-msgs
+Section: misc
+Priority: optional
+Maintainer: Jihoon Lee <jihoonlee.in@gmail.com>
+Build-Depends: debhelper (>= 9.0.0), ros-jazzy-action-msgs <!nocheck>, ros-jazzy-ament-cmake, ros-jazzy-ament-cmake-pytest <!nocheck>, ros-jazzy-builtin-interfaces, ros-jazzy-builtin-interfaces <!nocheck>, ros-jazzy-diagnostic-msgs <!nocheck>, ros-jazzy-example-interfaces <!nocheck>, ros-jazzy-geometry-msgs, ros-jazzy-geometry-msgs <!nocheck>, ros-jazzy-nav-msgs <!nocheck>, ros-jazzy-rosidl-default-generators, ros-jazzy-sensor-msgs <!nocheck>, ros-jazzy-std-msgs, ros-jazzy-std-msgs <!nocheck>, ros-jazzy-std-srvs <!nocheck>, ros-jazzy-stereo-msgs <!nocheck>, ros-jazzy-tf2-msgs <!nocheck>, ros-jazzy-trajectory-msgs <!nocheck>, ros-jazzy-visualization-msgs <!nocheck>, ros-jazzy-ros-workspace, ros-jazzy-rosidl-typesupport-fastrtps-c, ros-jazzy-rosidl-typesupport-fastrtps-cpp
+Homepage: http://ros.org/wiki/rosbridge_library
+Standards-Version: 3.9.2
+
+Package: ros-jazzy-rosbridge-test-msgs
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, ros-jazzy-builtin-interfaces, ros-jazzy-geometry-msgs, ros-jazzy-rclpy, ros-jazzy-rosidl-default-runtime, ros-jazzy-std-msgs, ros-jazzy-ros-workspace
+Description: Message and service definitions used in internal tests for rosbridge packages.
