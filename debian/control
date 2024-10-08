@@ -1,0 +1,12 @@
+Source: ros-iron-rosbridge-server
+Section: misc
+Priority: optional
+Maintainer: Jihoon Lee <jihoonlee.in@gmail.com>
+Build-Depends: debhelper (>= 9.0.0), python3-autobahn <!nocheck>, ros-iron-ament-cmake, ros-iron-ament-cmake-ros, ros-iron-example-interfaces <!nocheck>, ros-iron-launch <!nocheck>, ros-iron-launch-ros <!nocheck>, ros-iron-launch-testing <!nocheck>, ros-iron-launch-testing-ament-cmake <!nocheck>, ros-iron-launch-testing-ros <!nocheck>, ros-iron-std-srvs <!nocheck>, ros-iron-ros-workspace
+Homepage: http://ros.org/wiki/rosbridge_server
+Standards-Version: 3.9.2
+
+Package: ros-iron-rosbridge-server
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, python3-tornado, python3-twisted, ros-iron-rclpy, ros-iron-rosapi, ros-iron-rosbridge-library, ros-iron-rosbridge-msgs, ros-iron-ros-workspace
+Description: A WebSocket interface to rosbridge.
