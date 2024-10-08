@@ -1,0 +1,12 @@
+Source: ros-jazzy-rosapi
+Section: misc
+Priority: optional
+Maintainer: Jihoon Lee <jihoonlee.in@gmail.com>
+Build-Depends: debhelper (>= 9.0.0), ros-jazzy-ament-cmake-pytest <!nocheck>, ros-jazzy-ament-cmake-ros, ros-jazzy-geometry-msgs <!nocheck>, ros-jazzy-rmw-dds-common <!nocheck>, ros-jazzy-sensor-msgs <!nocheck>, ros-jazzy-shape-msgs <!nocheck>, ros-jazzy-ros-workspace
+Homepage: http://ros.org/wiki/rosapi
+Standards-Version: 3.9.2
+
+Package: ros-jazzy-rosapi
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, ros-jazzy-builtin-interfaces, ros-jazzy-rcl-interfaces, ros-jazzy-rclpy, ros-jazzy-ros2node, ros-jazzy-ros2param, ros-jazzy-ros2pkg, ros-jazzy-ros2service, ros-jazzy-ros2topic, ros-jazzy-rosapi-msgs, ros-jazzy-rosbridge-library, ros-jazzy-ros-workspace
+Description: Provides service calls for getting ros meta-information, like list of topics, services, params, etc.
