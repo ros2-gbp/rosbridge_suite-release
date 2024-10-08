@@ -1,0 +1,13 @@
+Source: ros-jazzy-rosbridge-suite
+Section: misc
+Priority: optional
+Maintainer: Jihoon Lee <jihoonlee.in@gmail.com>
+Build-Depends: debhelper (>= 9.0.0), ros-jazzy-ament-cmake, ros-jazzy-ros-workspace
+Homepage: http://ros.org/wiki/rosbridge_suite
+Standards-Version: 3.9.2
+
+Package: ros-jazzy-rosbridge-suite
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, ros-jazzy-rosapi, ros-jazzy-rosbridge-library, ros-jazzy-rosbridge-server, ros-jazzy-ros-workspace
+Description: Rosbridge provides a JSON API to ROS functionality for non-ROS programs.
+ There are a variety of front ends that interface with rosbridge, including a WebSocket server for web browsers to interact with. Rosbridge_suite is a meta-package containing rosbridge, various front end packages for rosbridge like a WebSocket package, and helper packages.
