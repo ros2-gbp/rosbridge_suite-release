@@ -1,0 +1,12 @@
+Source: ros-jazzy-rosbridge-server
+Section: misc
+Priority: optional
+Maintainer: Jihoon Lee <jihoonlee.in@gmail.com>
+Build-Depends: debhelper (>= 9.0.0), python3-autobahn <!nocheck>, ros-jazzy-ament-cmake, ros-jazzy-ament-cmake-ros, ros-jazzy-example-interfaces <!nocheck>, ros-jazzy-launch <!nocheck>, ros-jazzy-launch-ros <!nocheck>, ros-jazzy-launch-testing <!nocheck>, ros-jazzy-launch-testing-ament-cmake <!nocheck>, ros-jazzy-launch-testing-ros <!nocheck>, ros-jazzy-std-srvs <!nocheck>, ros-jazzy-ros-workspace
+Homepage: http://ros.org/wiki/rosbridge_server
+Standards-Version: 3.9.2
+
+Package: ros-jazzy-rosbridge-server
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, python3-tornado, python3-twisted, ros-jazzy-rclpy, ros-jazzy-rosapi, ros-jazzy-rosbridge-library, ros-jazzy-rosbridge-msgs, ros-jazzy-ros-workspace
+Description: A WebSocket interface to rosbridge.
