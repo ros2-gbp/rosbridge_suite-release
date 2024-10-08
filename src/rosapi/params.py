@@ -74,7 +74,9 @@ def init(parent_node_name):
     parent_node_basename = parent_node_name.split("/")[-1]
     param_node_name = f"{parent_node_basename}_params"
     _node = rclpy.create_node(
-        param_node_name, cli_args=["--ros-args", "-r", f"__node:={param_node_name}"]
+        param_node_name,
+        cli_args=["--ros-args", "-r", f"__node:={param_node_name}"],
+        start_parameter_services=False,
     )
     _parent_node_name = get_absolute_node_name(parent_node_name)
 
@@ -234,7 +236,10 @@ def _get_param_names(node_name):
 
     request = ListParameters.Request()
     future = client.call_async(request)
-    rclpy.spin_until_future_complete(_node, future)
+    if _node.executor:
+        _node.executor.spin_until_future_complete(future)
+    else:
+        rclpy.spin_until_future_complete(_node, future)
     response = future.result()
 
     if response is not None:
