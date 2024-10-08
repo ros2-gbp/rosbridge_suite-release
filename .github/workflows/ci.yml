@@ -1,16 +1,16 @@
 name: CI
 
-on: [push, pull_request]
+on: [push, pull_request, workflow_dispatch]
 
 jobs:
   lint:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-python@v5.0.0
+      - uses: actions/setup-python@v5
         with:
-          python-version: '3.8'
+          python-version: '3.10'
 
       - uses: pre-commit/action@v3.0.1
 
@@ -19,9 +19,15 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          # NOTE: Tests only Humble since the `ros2` branch tests later distros.
-          - ros: humble
+          # Test supported ROS 2 distributions
+          # https://docs.ros.org/en/rolling/Releases.html
+          # NOTE: Humble does not work on the `ros2` branch, so it is tested in its own branch.
+          - ros: iron
             os: ubuntu-22.04
+          - ros: jazzy
+            os: ubuntu-24.04
+          - ros: rolling
+            os: ubuntu-24.04
 
     name: ROS 2 ${{ matrix.ros }} (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
@@ -31,7 +37,7 @@ jobs:
         with:
           path: ros_ws/src
 
-      - uses: ros-tooling/setup-ros@0.7.1
+      - uses: ros-tooling/setup-ros@v0.7
 
       - uses: ros-tooling/action-ros-ci@v0.3
         with:
