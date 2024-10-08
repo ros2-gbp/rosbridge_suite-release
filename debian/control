@@ -1,0 +1,12 @@
+Source: ros-jazzy-rosapi-msgs
+Section: misc
+Priority: optional
+Maintainer: Jihoon Lee <jihoonlee.in@gmail.com>
+Build-Depends: debhelper (>= 9.0.0), ros-jazzy-ament-cmake-ros, ros-jazzy-builtin-interfaces, ros-jazzy-rosidl-default-generators, ros-jazzy-ros-workspace, ros-jazzy-rosidl-typesupport-fastrtps-c, ros-jazzy-rosidl-typesupport-fastrtps-cpp
+Homepage: http://ros.org/wiki/rosapi
+Standards-Version: 3.9.2
+
+Package: ros-jazzy-rosapi-msgs
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, ros-jazzy-builtin-interfaces, ros-jazzy-rcl-interfaces, ros-jazzy-rosidl-default-runtime, ros-jazzy-ros-workspace
+Description: Provides service calls for getting ros meta-information, like list of topics, services, params, etc.
