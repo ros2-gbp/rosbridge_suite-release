@@ -1,3 +1,33 @@
+## rosbridge_suite (iron) - 2.1.0-1
+
+The packages in the `rosbridge_suite` repository were released into the `iron` distro by running `/usr/bin/bloom-release --ros-distro iron rosbridge_suite` on `Tue, 08 Oct 2024 02:01:43 -0000`
+
+These packages were released:
+- `rosapi`
+- `rosapi_msgs`
+- `rosbridge_library`
+- `rosbridge_msgs`
+- `rosbridge_server`
+- `rosbridge_suite`
+- `rosbridge_test_msgs`
+
+Version of package(s) in repository `rosbridge_suite`:
+
+- upstream repository: https://github.com/RobotWebTools/rosbridge_suite.git
+- release repository: https://github.com/ros2-gbp/rosbridge_suite-release.git
+- rosdistro version: `1.3.2-1`
+- old version: `1.3.2-1`
+- new version: `2.1.0-1`
+
+Versions of tools used:
+
+- bloom version: `0.12.0`
+- catkin_pkg version: `1.0.0`
+- rosdep version: `0.25.1`
+- rosdistro version: `0.9.1`
+- vcstools version: `0.1.42`
+
+
 ## rosbridge_suite (humble) - 2.0.0-1
 
 The packages in the `rosbridge_suite` repository were released into the `humble` distro by running `/usr/bin/bloom-release --ros-distro humble -e rosbridge_suite` on `Tue, 08 Oct 2024 01:54:23 -0000`
