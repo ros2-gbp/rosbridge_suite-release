@@ -164,6 +164,10 @@ async def get_param(node_name: str, name: str, params_glob: str) -> str:
     pvalue = await _get_param(node_name, name)
     value = getattr(pvalue, _parameter_type_mapping[pvalue.type])
 
+    # Convert array types to lists for JSON serialization
+    if hasattr(value, "tolist"):  # This will catch numpy arrays and Python arrays
+        value = value.tolist()
+
     return dumps(value)
 
 
