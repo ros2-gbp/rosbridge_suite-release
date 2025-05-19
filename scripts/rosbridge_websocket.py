@@ -72,6 +72,7 @@ class RosbridgeWebsocketNode(Node):
         ##################################################
 
         self.protocol_parameter_handling()
+        self.check_deprecated_parameters()
 
         # get tornado application parameters
         tornado_settings = {}
@@ -176,6 +177,10 @@ class RosbridgeWebsocketNode(Node):
 
         RosbridgeWebSocket.call_services_in_new_thread = self.declare_parameter(
             "call_services_in_new_thread", False
+        ).value
+
+        RosbridgeWebSocket.default_call_service_timeout = self.declare_parameter(
+            "default_call_service_timeout", 0.0
         ).value
 
         RosbridgeWebSocket.send_action_goals_in_new_thread = self.declare_parameter(
@@ -326,6 +331,31 @@ class RosbridgeWebsocketNode(Node):
         AdvertiseService.services_glob = RosbridgeWebSocket.services_glob
         UnadvertiseService.services_glob = RosbridgeWebSocket.services_glob
         CallService.services_glob = RosbridgeWebSocket.services_glob
+
+    def check_deprecated_parameters(self):
+        if RosbridgeWebSocket.default_call_service_timeout == 0.0:
+            self.get_logger().warn(
+                "The 'default_call_service_timeout' parameter is currently set to 0.0, "
+                "which means service calls will block indefinitely if no response is received. "
+                "Please note that in the Jazzy and later releases, the default value for this parameter "
+                "will be updated to 5.0 seconds."
+            )
+
+        if RosbridgeWebSocket.call_services_in_new_thread is False:
+            self.get_logger().warn(
+                "The 'call_services_in_new_thread' parameter is currently set to False, "
+                "which means service calls will block the main thread. "
+                "Please note that in the Jazzy and later releases, the default value for this parameter "
+                "will be updated to True."
+            )
+
+        if RosbridgeWebSocket.send_action_goals_in_new_thread is False:
+            self.get_logger().warn(
+                "The 'send_action_goals_in_new_thread' parameter is currently set to False, "
+                "which means sending action goals will block the main thread. "
+                "Please note that in the Jazzy and later releases, the default value for this parameter "
+                "will be updated to True."
+            )
 
 
 def main(args=None):
