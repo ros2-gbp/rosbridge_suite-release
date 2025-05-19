@@ -7,11 +7,9 @@ import launch_ros
 import rclpy
 import rclpy.task
 from autobahn.twisted.websocket import WebSocketClientFactory, WebSocketClientProtocol
-from launch.launch_description import LaunchDescription
 from rcl_interfaces.srv import GetParameters
 from rclpy.executors import SingleThreadedExecutor
 from rclpy.node import Node
-from rclpy.task import Future
 from twisted.internet import reactor
 from twisted.internet.endpoints import TCP4ClientEndpoint
 
@@ -25,7 +23,7 @@ class TestClientProtocol(WebSocketClientProtocol):
 
     def __init__(self, *args, **kwargs):
         self.received = []
-        self.connected_future = Future()
+        self.connected_future = rclpy.task.Future()
         self.message_handler = lambda _: None
         super().__init__(*args, **kwargs)
 
@@ -62,19 +60,19 @@ def _generate_node():
 try:
     from launch_testing.actions import ReadyToTest
 
-    def generate_test_description() -> LaunchDescription:
+    def generate_test_description() -> launch.LaunchDescription:
         """
         Generate a launch description that runs the websocket server. Re-export this from a test file and use add_launch_test() to run the test.
         """
-        return LaunchDescription([_generate_node(), ReadyToTest()])
+        return launch.LaunchDescription([_generate_node(), ReadyToTest()])
 
 except ImportError:
 
-    def generate_test_description(ready_fn) -> LaunchDescription:  # type: ignore[misc]
+    def generate_test_description(ready_fn) -> launch.LaunchDescription:
         """
         Generate a launch description that runs the websocket server. Re-export this from a test file and use add_launch_test() to run the test.
         """
-        return LaunchDescription(
+        return launch.LaunchDescription(
             [_generate_node(), launch.actions.OpaqueFunction(function=lambda context: ready_fn())]
         )
 
@@ -88,7 +86,6 @@ async def get_server_port(node: Node) -> int:
         if not client.wait_for_service(5):
             raise RuntimeError("GetParameters service not available")
         port_param = await client.call_async(GetParameters.Request(names=["actual_port"]))
-        assert port_param is not None
         return port_param.values[0].integer_value
     finally:
         node.destroy_client(client)
@@ -99,21 +96,18 @@ async def connect_to_server(node: Node) -> TestClientProtocol:
     factory = WebSocketClientFactory("ws://127.0.0.1:" + str(port))
     factory.protocol = TestClientProtocol
 
-    future: Future = Future()
-    executor = node.executor
-    assert executor is not None
-    future.add_done_callback(lambda _: executor.wake())
+    future = rclpy.task.Future()
+    future.add_done_callback(lambda _: node.executor.wake())
 
     def connect():
         TCP4ClientEndpoint(reactor, "127.0.0.1", port).connect(factory).addCallback(
             future.set_result
         )
 
-    reactor.callFromThread(connect)  # type: ignore[attr-defined]
+    reactor.callFromThread(connect)
 
-    protocol: TestClientProtocol | None = await future
-    assert protocol is not None
-    protocol.connected_future.add_done_callback(lambda _: executor.wake())
+    protocol = await future
+    protocol.connected_future.add_done_callback(lambda _: node.executor.wake())
     await protocol.connected_future  # wait for onOpen before proceeding
     return protocol
 
@@ -134,8 +128,8 @@ def run_websocket_test(
 
     future = executor.create_task(task)
 
-    reactor.callInThread(executor.spin_until_future_complete, future)  # type: ignore[attr-defined]
-    reactor.run(installSignalHandlers=False)  # type: ignore[attr-defined]
+    reactor.callInThread(executor.spin_until_future_complete, future)
+    reactor.run(installSignalHandlers=False)
 
     executor.remove_node(node)
     node.destroy_node()
@@ -146,7 +140,7 @@ def sleep(node: Node, duration: float) -> Awaitable[None]:
     """
     Async-compatible delay function based on a ROS timer.
     """
-    future: Future = Future()
+    future = rclpy.task.Future()
 
     def callback():
         future.set_result(None)
@@ -175,7 +169,7 @@ def expect_messages(count: int, description: str, logger):
     Convenience function to create a Future and a message handler function which gathers results
     into a list and waits for the list to have the expected number of items.
     """
-    future: Future = Future()
+    future = rclpy.Future()
     results = []
 
     def handler(msg):

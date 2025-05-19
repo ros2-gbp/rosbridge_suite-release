@@ -9,4 +9,3 @@
 - Matthias Gruhler <matthias.gruhler@ipa.fraunhofer.de>
 - Russell Toris <rctoris@wpi.edu>
 - Travis Prosser <travisprosser@gmail.com>
-- Błażej Sowa <blazej@fictionlab.pl>

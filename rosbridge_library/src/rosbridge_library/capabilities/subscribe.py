@@ -40,10 +40,10 @@ from rosbridge_library.internal.subscribers import manager
 from rosbridge_library.internal.subscription_modifiers import MessageHandler
 
 try:
-    from ujson import dumps as encode_json  # type: ignore[import-untyped]
+    from ujson import dumps as encode_json
 except ImportError:
     try:
-        from simplejson import dumps as encode_json  # type: ignore[import-untyped]
+        from simplejson import dumps as encode_json
     except ImportError:
         from json import dumps as encode_json
 
@@ -199,7 +199,7 @@ class Subscription:
             self.compression = "cbor-raw"
 
         with self.handler_lock:
-            self.handler.set_throttle_rate(self.throttle_rate)
+            self.handler = self.handler.set_throttle_rate(self.throttle_rate)
             self.handler = self.handler.set_queue_length(self.queue_length)
 
 

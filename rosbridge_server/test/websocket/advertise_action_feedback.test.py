@@ -7,7 +7,6 @@ from action_msgs.msg import GoalStatus
 from example_interfaces.action import Fibonacci
 from rclpy.action import ActionClient
 from rclpy.node import Node
-from rclpy.task import Future
 from twisted.python import log
 
 sys.path.append(os.path.dirname(__file__))  # enable importing from common.py in this directory
@@ -21,11 +20,8 @@ generate_test_description = common.generate_test_description
 
 
 class TestActionFeedback(unittest.TestCase):
-    goal_result_future: Future | None
-
-    def goal_response_callback(self, future: Future):
+    def goal_response_callback(self, future):
         goal_handle = future.result()
-        assert goal_handle is not None
         if not goal_handle.accepted:
             return
         self.goal_result_future = goal_handle.get_result_async()
@@ -49,7 +45,6 @@ class TestActionFeedback(unittest.TestCase):
         requests_future, ws_client.message_handler = expect_messages(
             1, "WebSocket", node.get_logger()
         )
-        assert node.executor is not None
         requests_future.add_done_callback(lambda _: node.executor.wake())
 
         self.goal_result_future = None
@@ -86,7 +81,6 @@ class TestActionFeedback(unittest.TestCase):
             }
         )
 
-        assert self.goal_result_future is not None
         result = await self.goal_result_future
         self.assertIsNotNone(self.latest_feedback)
         self.assertEqual(self.latest_feedback.feedback, Fibonacci.Feedback(sequence=[0, 1, 1, 2]))

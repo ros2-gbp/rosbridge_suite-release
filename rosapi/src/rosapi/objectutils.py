@@ -135,36 +135,6 @@ def get_service_response_typedef_recursive(servicetype):
     return _get_subtypedefs_recursive(typedef, [])
 
 
-def get_action_goal_typedef_recursive(actiontype):
-    """Returns a list of typedef dicts for this type and all contained type fields"""
-    # Get an instance of the action goal class and get its typedef
-    instance = ros_loader.get_action_goal_instance(actiontype)
-    typedef = _get_typedef(instance)
-
-    # Return the list of sub-typedefs
-    return _get_subtypedefs_recursive(typedef, [])
-
-
-def get_action_result_typedef_recursive(actiontype):
-    """Returns a list of typedef dicts for this type and all contained type fields"""
-    # Get an instance of the action result class and get its typedef
-    instance = ros_loader.get_action_result_instance(actiontype)
-    typedef = _get_typedef(instance)
-
-    # Return the list of sub-typedefs
-    return _get_subtypedefs_recursive(typedef, [])
-
-
-def get_action_feedback_typedef_recursive(actiontype):
-    """Returns a list of typedef dicts for this type and all contained type fields"""
-    # Get an instance of the action feedback class and get its typedef
-    instance = ros_loader.get_action_feedback_instance(actiontype)
-    typedef = _get_typedef(instance)
-
-    # Return the list of sub-typedefs
-    return _get_subtypedefs_recursive(typedef, [])
-
-
 def get_typedef_full_text(ty):
     """Returns the full text (similar to `gendeps --cat`) for the specified message type"""
     try:
@@ -201,18 +171,18 @@ def _handle_array_information(instance):
     fieldtypes = []
     fieldarraylen = []
     examples = []
-    for slot in instance.__slots__:
-        key = slot[1:] if slot.startswith("_") else slot
-        if key not in instance._fields_and_field_types:
-            continue
+    for i in range(len(instance.__slots__)):
+        name = instance.__slots__[i]
+        fieldnames.append(name)
 
-        fieldnames.append(key)
-        field_type, arraylen = _handle_type_and_array_len(instance, slot)
+        field_type, arraylen = _handle_type_and_array_len(instance, name)
         fieldarraylen.append(arraylen)
 
-        value = getattr(instance, slot)
-        fieldtypes.append(_type_name(field_type, value))
-        examples.append(str(_handle_example(arraylen, field_type, value)))
+        field_instance = getattr(instance, name)
+        fieldtypes.append(_type_name(field_type, field_instance))
+
+        example = _handle_example(arraylen, field_type, field_instance)
+        examples.append(str(example))
 
     return fieldnames, fieldtypes, fieldarraylen, examples
 
