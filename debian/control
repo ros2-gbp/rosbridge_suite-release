@@ -1,0 +1,12 @@
+Source: ros-humble-rosapi
+Section: misc
+Priority: optional
+Maintainer: Jihoon Lee <jihoonlee.in@gmail.com>
+Build-Depends: debhelper (>= 9.0.0), ros-humble-ament-cmake-pytest <!nocheck>, ros-humble-ament-cmake-ros, ros-humble-geometry-msgs <!nocheck>, ros-humble-rmw-dds-common <!nocheck>, ros-humble-sensor-msgs <!nocheck>, ros-humble-shape-msgs <!nocheck>, ros-humble-ros-workspace
+Homepage: http://ros.org/wiki/rosapi
+Standards-Version: 3.9.2
+
+Package: ros-humble-rosapi
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, ros-humble-builtin-interfaces, ros-humble-rcl-interfaces, ros-humble-rclpy, ros-humble-ros2node, ros-humble-ros2param, ros-humble-ros2pkg, ros-humble-ros2service, ros-humble-ros2topic, ros-humble-rosapi-msgs, ros-humble-rosbridge-library, ros-humble-ros-workspace
+Description: Provides service calls for getting ros meta-information, like list of topics, services, params, etc.
