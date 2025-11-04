@@ -1,0 +1,12 @@
+Source: ros-kilted-rosapi
+Section: misc
+Priority: optional
+Maintainer: Błażej Sowa <blazej@fictionlab.pl>
+Build-Depends: debhelper (>= 9.0.0), ros-kilted-ament-cmake, ros-kilted-ament-cmake-mypy <!nocheck>, ros-kilted-ament-cmake-pytest <!nocheck>, ros-kilted-ament-cmake-python, ros-kilted-geometry-msgs <!nocheck>, ros-kilted-rmw-dds-common <!nocheck>, ros-kilted-sensor-msgs <!nocheck>, ros-kilted-shape-msgs <!nocheck>, ros-kilted-ros-workspace
+Homepage: http://ros.org/wiki/rosapi
+Standards-Version: 3.9.2
+
+Package: ros-kilted-rosapi
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, ros-kilted-builtin-interfaces, ros-kilted-rcl-interfaces, ros-kilted-rclpy, ros-kilted-ros2action, ros-kilted-ros2interface, ros-kilted-ros2node, ros-kilted-ros2service, ros-kilted-ros2topic, ros-kilted-rosapi-msgs, ros-kilted-rosbridge-library, ros-kilted-rosidl-adapter, ros-kilted-rosidl-runtime-py, ros-kilted-ros-workspace
+Description: Provides services for getting various ROS meta-information, including ROS topic, services, interfaces or action servers and managing ROS parameters.
