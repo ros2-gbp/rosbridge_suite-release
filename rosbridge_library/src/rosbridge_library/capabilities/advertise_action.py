@@ -61,8 +61,10 @@ class AdvertisedActionHandler(Generic[ROSActionGoalT, ROSActionResultT, ROSActio
     def __init__(
         self, action_name: str, action_type: str, protocol: Protocol, sleep_time: float = 0.001
     ) -> None:
-        self.goal_futures: dict[str, Future] = {}
-        self.goal_handles: dict[str, ServerGoalHandle] = {}
+        self.goal_futures: dict[str, Future[ROSActionResultT]] = {}
+        self.goal_handles: dict[
+            str, ServerGoalHandle[ROSActionGoalT, ROSActionResultT, ROSActionFeedbackT]
+        ] = {}
         self.goal_statuses: dict[str, int] = {}
 
         self.action_name = action_name
@@ -70,13 +72,15 @@ class AdvertisedActionHandler(Generic[ROSActionGoalT, ROSActionResultT, ROSActio
         self.protocol = protocol
         self.sleep_time = sleep_time
         # setup the action
-        self.action_server = ActionServer(
-            protocol.node_handle,
-            get_action_class(action_type),
-            action_name,
-            self.execute_callback,  # type: ignore[arg-type]  # rclpy type hint does not support coroutines
-            cancel_callback=self.cancel_callback,  # type: ignore[arg-type]  # rclpy type hint is incorrect
-            callback_group=ReentrantCallbackGroup(),  # https://github.com/ros2/rclpy/issues/834#issuecomment-961331870
+        self.action_server: ActionServer[ROSActionGoalT, ROSActionResultT, ROSActionFeedbackT] = (
+            ActionServer(
+                protocol.node_handle,
+                get_action_class(action_type),
+                action_name,
+                self.execute_callback,  # type: ignore[arg-type]  # rclpy type hint does not support coroutines
+                cancel_callback=self.cancel_callback,  # type: ignore[arg-type]  # rclpy type hint is incorrect
+                callback_group=ReentrantCallbackGroup(),  # https://github.com/ros2/rclpy/issues/834#issuecomment-961331870
+            )
         )
 
     def next_id(self) -> int:
@@ -84,7 +88,9 @@ class AdvertisedActionHandler(Generic[ROSActionGoalT, ROSActionResultT, ROSActio
         self.id_counter += 1
         return next_id_value
 
-    async def execute_callback(self, goal: ServerGoalHandle) -> ROSActionResultT:
+    async def execute_callback(
+        self, goal: ServerGoalHandle[ROSActionGoalT, ROSActionResultT, ROSActionFeedbackT]
+    ) -> ROSActionResultT:
         """
         Execute action goal.
 
@@ -93,7 +99,7 @@ class AdvertisedActionHandler(Generic[ROSActionGoalT, ROSActionResultT, ROSActio
         # generate a unique ID
         goal_id = f"action_goal:{self.action_name}:{self.next_id()}"
 
-        def done_callback(fut: Future) -> None:
+        def done_callback(fut: Future[ROSActionResultT]) -> None:
             if fut.cancelled():
                 goal.abort()
                 self.protocol.log("info", f"Aborted goal {goal_id}")
@@ -114,7 +120,7 @@ class AdvertisedActionHandler(Generic[ROSActionGoalT, ROSActionResultT, ROSActio
                 else:
                     goal.abort()
 
-        future = Future()
+        future: Future[ROSActionResultT] = Future()
         future.add_done_callback(done_callback)
         self.goal_handles[goal_id] = goal
         self.goal_futures[goal_id] = future
@@ -138,7 +144,9 @@ class AdvertisedActionHandler(Generic[ROSActionGoalT, ROSActionResultT, ROSActio
             del self.goal_futures[goal_id]
             del self.goal_handles[goal_id]
 
-    def cancel_callback(self, goal: ServerGoalHandle) -> CancelResponse:
+    def cancel_callback(
+        self, goal: ServerGoalHandle[ROSActionGoalT, ROSActionResultT, ROSActionFeedbackT]
+    ) -> CancelResponse:
         """
         Cancel action goal.
 

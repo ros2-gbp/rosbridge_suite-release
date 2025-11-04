@@ -2,12 +2,12 @@
 Changelog for package rosbridge_library
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-2.4.0 (2025-11-04)
+3.0.0 (2025-11-04)
 ------------------
-* chore: Update pre-commit hooks (backport `#1090 <https://github.com/RobotWebTools/rosbridge_suite/issues/1090>`_) (`#1092 <https://github.com/RobotWebTools/rosbridge_suite/issues/1092>`_)
-* Fix mypy errors (backport `#1084 <https://github.com/RobotWebTools/rosbridge_suite/issues/1084>`_) (`#1085 <https://github.com/RobotWebTools/rosbridge_suite/issues/1085>`_)
-* feat: New parameter and cli arguments handling (backport `#1060 <https://github.com/RobotWebTools/rosbridge_suite/issues/1060>`_) (`#1081 <https://github.com/RobotWebTools/rosbridge_suite/issues/1081>`_)
-* refactor: Add type annotations to all functions and methods (`#1079 <https://github.com/RobotWebTools/rosbridge_suite/issues/1079>`_)
+* chore: Update pre-commit hooks (`#1090 <https://github.com/RobotWebTools/rosbridge_suite/issues/1090>`_)
+* Fix mypy errors (`#1084 <https://github.com/RobotWebTools/rosbridge_suite/issues/1084>`_)
+* feat: New parameter and cli arguments handling  (`#1060 <https://github.com/RobotWebTools/rosbridge_suite/issues/1060>`_)
+* refactor: Add type annotations to all functions and methods (`#1069 <https://github.com/RobotWebTools/rosbridge_suite/issues/1069>`_)
 * fix: Add delays to tests after subscribing/unsubscribing topics (`#1071 <https://github.com/RobotWebTools/rosbridge_suite/issues/1071>`_)
 * fix: Change warn to warning (`#1067 <https://github.com/RobotWebTools/rosbridge_suite/issues/1067>`_)
 * refactor: Enable various ruff checks and fix lint errors (`#1059 <https://github.com/RobotWebTools/rosbridge_suite/issues/1059>`_)

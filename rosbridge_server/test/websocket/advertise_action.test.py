@@ -3,7 +3,7 @@ from __future__ import annotations
 import sys
 import unittest
 from pathlib import Path
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from action_msgs.msg import GoalStatus
 from example_interfaces.action import Fibonacci
@@ -19,6 +19,7 @@ if TYPE_CHECKING:
     from collections.abc import Awaitable, Callable
 
     from common import TestClientProtocol
+    from rclpy.action.client import ClientGoalHandle
     from rclpy.node import Node
     from rclpy.task import Future
 
@@ -31,14 +32,14 @@ class TestAdvertiseAction(unittest.TestCase):
     goal1_result_future: Future | None
     goal2_result_future: Future | None
 
-    def goal1_response_callback(self, future: Future) -> None:
+    def goal1_response_callback(self, future: Future[ClientGoalHandle]) -> None:
         goal_handle = future.result()
         assert goal_handle is not None
         if not goal_handle.accepted:
             return
         self.goal1_result_future = goal_handle.get_result_async()
 
-    def goal2_response_callback(self, future: Future) -> None:
+    def goal2_response_callback(self, future: Future[ClientGoalHandle]) -> None:
         goal_handle = future.result()
         assert goal_handle is not None
         if not goal_handle.accepted:
@@ -64,6 +65,7 @@ class TestAdvertiseAction(unittest.TestCase):
         )
         client.wait_for_server()
 
+        requests_future: Future[list[dict[str, Any]]]
         requests_future, ws_client.message_handler = expect_messages(
             2, "WebSocket", node.get_logger()
         )
