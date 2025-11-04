@@ -2,10 +2,27 @@
 Changelog for package rosapi_msgs
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-2.0.1 (2025-05-19)
+2.4.0 (2025-11-04)
 ------------------
-* Add new service to retrieve the different interfaces in the ROS Network (`#993 <https://github.com/RobotWebTools/rosbridge_suite/issues/993>`_)
-* Contributors: Lebecque Florian
+* Add pydocstyle lint checks and fix rosdoc2 warnings (`#1056 <https://github.com/RobotWebTools/rosbridge_suite/issues/1056>`_)
+* fix: Clean up package dependencies (`#1053 <https://github.com/RobotWebTools/rosbridge_suite/issues/1053>`_)
+* feat: Add interface and service for retrieving action type (`#1046 <https://github.com/RobotWebTools/rosbridge_suite/issues/1046>`_)
+* Contributors: Błażej Sowa, MNV Chaitanya Kumar, Sebastian Castro
+
+2.3.0 (2025-05-19)
+------------------
+* Add services to return Action interface details (`#1021 <https://github.com/RobotWebTools/rosbridge_suite/issues/1021>`_)
+* Contributors: David Fernàndez López
+
+2.2.0 (2025-02-26)
+------------------
+* New async rosapi params module implementation (`#1001 <https://github.com/RobotWebTools/rosbridge_suite/issues/1001>`_)
+* Update maintainers (`#1000 <https://github.com/RobotWebTools/rosbridge_suite/issues/1000>`_)
+* Add new service to retrieve the different interfaces in the ROS Network (`#988 <https://github.com/RobotWebTools/rosbridge_suite/issues/988>`_)
+* Contributors: Błażej Sowa, Lebecque Florian
+
+2.1.0 (2024-10-08)
+------------------
 
 2.0.0 (2024-10-08)
 ------------------
