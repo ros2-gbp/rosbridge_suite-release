@@ -2,21 +2,14 @@
 Changelog for package rosbridge_msgs
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-3.0.0 (2025-11-04)
+2.0.2 (2025-11-05)
 ------------------
-* Add pydocstyle lint checks and fix rosdoc2 warnings (`#1056 <https://github.com/RobotWebTools/rosbridge_suite/issues/1056>`_)
-* fix: Clean up package dependencies (`#1053 <https://github.com/RobotWebTools/rosbridge_suite/issues/1053>`_)
+* chore: Update maintainers (`#1066 <https://github.com/RobotWebTools/rosbridge_suite/issues/1066>`_)
+* Add pydocstyle lint checks and fix rosdoc2 warnings (`#1057 <https://github.com/RobotWebTools/rosbridge_suite/issues/1057>`_)
+* fix: Clean up package dependencies (`#1054 <https://github.com/RobotWebTools/rosbridge_suite/issues/1054>`_)
 * Contributors: Błażej Sowa, Sebastian Castro
 
-2.3.0 (2025-05-19)
-------------------
-
-2.2.0 (2025-02-26)
-------------------
-* Update maintainers (`#1000 <https://github.com/RobotWebTools/rosbridge_suite/issues/1000>`_)
-* Contributors: Błażej Sowa
-
-2.1.0 (2024-10-08)
+2.0.1 (2025-05-19)
 ------------------
 
 2.0.0 (2024-10-08)
