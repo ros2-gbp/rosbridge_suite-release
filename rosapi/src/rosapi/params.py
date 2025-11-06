@@ -29,7 +29,9 @@
 # LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
+from __future__ import annotations
 
+import contextlib
 import fnmatch
 import threading
 from json import dumps, loads
@@ -39,6 +41,7 @@ from rcl_interfaces.msg import Parameter, ParameterType, ParameterValue
 from rcl_interfaces.srv import ListParameters
 from ros2node.api import get_absolute_node_name
 from ros2param.api import call_get_parameters, call_set_parameters, get_parameter_value
+
 from rosapi.proxy import get_nodes
 
 """ Methods to interact with the param server.  Values have to be passed
@@ -67,10 +70,17 @@ _parameter_type_mapping = [
 ]
 
 
-def init(parent_node_name, timeout_sec=DEFAULT_PARAM_TIMEOUT_SEC):
+def init(parent_node_name: str, timeout_sec: float = DEFAULT_PARAM_TIMEOUT_SEC) -> None:
     """
-    Initializes params module with a rclpy.node.Node for further use.
+    Initialize params module with a rclpy.node.Node for further use.
+
     This function has to be called before any other for the module to work.
+
+    :param node: The rclpy node to use for service calls.
+    :type node: Node
+    :param timeout_sec: The timeout in seconds for service calls.
+    :type timeout_sec: float | int, optional
+    :raises ValueError: If the timeout is not a positive number.
     """
     global _node, _parent_node_name, _timeout_sec
     # TODO(@jubeira): remove this node; use rosapi node with MultiThreadedExecutor or
@@ -84,14 +94,14 @@ def init(parent_node_name, timeout_sec=DEFAULT_PARAM_TIMEOUT_SEC):
     )
     _parent_node_name = get_absolute_node_name(parent_node_name)
 
-    if not isinstance(timeout_sec, (int, float)) or timeout_sec <= 0:
-        raise ValueError("Parameter timeout must be a positive number")
+    if not isinstance(timeout_sec, int | float) or timeout_sec <= 0:
+        msg = "Parameter timeout must be a positive number"
+        raise ValueError(msg)
     _timeout_sec = timeout_sec
 
 
-def set_param(node_name, name, value, params_glob):
-    """Sets a parameter in a given node"""
-
+def set_param(node_name: str, name: str, value: str, params_glob: list[str]) -> None:
+    """Set a parameter in a given node."""
     if params_glob and not any(fnmatch.fnmatch(str(name), glob) for glob in params_glob):
         # If the glob list is not empty and there are no glob matches,
         # stop the attempt to set the parameter.
@@ -102,18 +112,24 @@ def set_param(node_name, name, value, params_glob):
     try:
         d = loads(value)
         value = d if isinstance(d, str) else value
-    except ValueError:
-        raise Exception(
-            "Due to the type flexibility of the ROS parameter server, the value argument to set_param must be a JSON-formatted string."
+    except ValueError as exc:
+        msg = (
+            "Due to the type flexibility of the ROS parameter server, "
+            "the value argument to set_param must be a JSON-formatted string."
         )
+        raise Exception(msg) from exc
 
     node_name = get_absolute_node_name(node_name)
     with param_server_lock:
         _set_param(node_name, name, value)
 
 
-def _set_param(node_name, name, value, parameter_type=None):
+def _set_param(
+    node_name: str, name: str, value: str | None, parameter_type: int | None = None
+) -> None:
     """
+    Set a parameter in a given node.
+
     Internal helper function for set_param.
     Attempts to set the given parameter in the target node with the desired value,
     deducing the parameter type if it's not specified.
@@ -122,34 +138,32 @@ def _set_param(node_name, name, value, parameter_type=None):
     parameter = Parameter()
     parameter.name = name
     if parameter_type is None:
+        assert value is not None
         parameter.value = get_parameter_value(string_value=value)
     else:
         parameter.value = ParameterValue()
         parameter.value.type = parameter_type
         if parameter_type != ParameterType.PARAMETER_NOT_SET:
-            setattr(parameter.value, _parameter_type_mapping[parameter_type])
+            assert value is not None
+            setattr(parameter.value, _parameter_type_mapping[parameter_type], loads(value))
 
-    try:
+    with contextlib.suppress(Exception):
         # call_get_parameters will fail if node does not exist.
         call_set_parameters(node=_node, node_name=node_name, parameters=[parameter])
-    except Exception:
-        pass
 
 
-def get_param(node_name, name, default, params_glob):
-    """Gets a parameter from a given node"""
-
+def get_param(node_name: str, name: str, default: str, params_glob: list[str]) -> str | None:
+    """Get a parameter from a given node."""
     if params_glob and not any(fnmatch.fnmatch(str(name), glob) for glob in params_glob):
         # If the glob list is not empty and there are no glob matches,
         # stop the attempt to get the parameter.
-        return
+        return None
     # If the glob list is empty (i.e. false) or the parameter matches
     # one of the glob strings, continue to get the parameter.
     if default != "":
-        try:
+        # Keep default without modifications in case of failure.
+        with contextlib.suppress(ValueError):
             default = loads(default)
-        except ValueError:
-            pass  # Keep default without modifications.
 
     node_name = get_absolute_node_name(node_name)
     with param_server_lock:
@@ -171,9 +185,8 @@ def get_param(node_name, name, default, params_glob):
     return dumps(value)
 
 
-def has_param(node_name, name, params_glob):
-    """Checks whether a given node has a parameter or not"""
-
+def has_param(node_name: str, name: str, params_glob: list[str]) -> bool:
+    """Check whether a given node has a parameter or not."""
     if params_glob and not any(fnmatch.fnmatch(str(name), glob) for glob in params_glob):
         # If the glob list is not empty and there are no glob matches,
         # stop the attempt to set the parameter.
@@ -190,9 +203,8 @@ def has_param(node_name, name, params_glob):
     return response.values[0].type > 0 and response.values[0].type < len(_parameter_type_mapping)
 
 
-def delete_param(node_name, name, params_glob):
-    """Deletes a parameter in a given node"""
-
+def delete_param(node_name: str, name: str, params_glob: list[str]) -> None:
+    """Delete a parameter in a given node."""
     if params_glob and not any(fnmatch.fnmatch(str(name), glob) for glob in params_glob):
         # If the glob list is not empty and there are no glob matches,
         # stop the attempt to delete the parameter.
@@ -205,7 +217,7 @@ def delete_param(node_name, name, params_glob):
             _set_param(node_name, name, None, ParameterType.PARAMETER_NOT_SET)
 
 
-def get_param_names(params_glob):
+def get_param_names(params_glob: list[str]) -> list[str]:
     params = []
     nodes = get_nodes()
 
@@ -215,8 +227,8 @@ def get_param_names(params_glob):
     return params
 
 
-def get_node_param_names(node_name, params_glob):
-    """Gets list of parameter names for a given node"""
+def get_node_param_names(node_name: str, params_glob: list[str]) -> list[str]:
+    """Get list of parameter names for a given node."""
     node_name = get_absolute_node_name(node_name)
 
     with param_server_lock:
@@ -228,15 +240,14 @@ def get_node_param_names(node_name, params_glob):
                     _get_param_names(node_name),
                 )
             )
-        else:
-            # If there is no parameter glob, don't filter.
-            return _get_param_names(node_name)
+        # If there is no parameter glob, don't filter.
+        return _get_param_names(node_name)
 
 
-def _get_param_names(node_name):
+def _get_param_names(node_name: str) -> list[str]:
     # This method is called in a service callback; calling a service of the same node
     # will cause a deadlock.
-    global _parent_node_name
+    assert _node is not None
     if node_name == _parent_node_name or node_name == _node.get_fully_qualified_name():
         return []
 
@@ -255,5 +266,4 @@ def _get_param_names(node_name):
 
     if response is not None:
         return [f"{node_name}:{param_name}" for param_name in response.result.names]
-    else:
-        return []
+    return []
