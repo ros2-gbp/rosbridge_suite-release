@@ -53,10 +53,10 @@ if TYPE_CHECKING:
 
 
 try:
-    from ujson import dumps as encode_json  # type: ignore[import]
+    from ujson import dumps as encode_json  # type: ignore[import-untyped]
 except ImportError:
     try:
-        from simplejson import dumps as encode_json  # type: ignore[import]
+        from simplejson import dumps as encode_json  # type: ignore[import-untyped]
     except ImportError:
         from json import dumps as encode_json  # type: ignore[assignment]
 
@@ -233,7 +233,7 @@ class Subscription(Generic[ROSMessageT]):
             self.compression = "cbor-raw"
 
         with self.handler_lock:
-            self.handler = self.handler.set_throttle_rate(self.throttle_rate)
+            self.handler.set_throttle_rate(self.throttle_rate)
             self.handler = self.handler.set_queue_length(self.queue_length)
 
 
@@ -272,7 +272,7 @@ class Subscribe(Capability):
         # Make the subscription
         topic: str = msg["topic"]
 
-        if self.topics_glob is not None and self.topics_glob:
+        if self.topics_glob is not None:
             self.protocol.log("debug", "Topic security glob enabled, checking topic: " + topic)
             match = False
             for glob in self.topics_glob:

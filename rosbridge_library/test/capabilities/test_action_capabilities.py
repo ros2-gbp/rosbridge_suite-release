@@ -10,7 +10,7 @@ from typing import Any
 import rclpy
 from action_msgs.msg import GoalStatus
 from example_interfaces.action._fibonacci import Fibonacci_FeedbackMessage
-from rclpy.executors import SingleThreadedExecutor
+from rclpy.executors import MultiThreadedExecutor
 from rclpy.node import Node
 from rclpy.qos import DurabilityPolicy, QoSProfile, ReliabilityPolicy
 from rosbridge_library.capabilities.action_feedback import ActionFeedback
@@ -28,7 +28,7 @@ from rosbridge_library.protocol import Protocol
 class TestActionCapabilities(unittest.TestCase):
     def setUp(self) -> None:
         rclpy.init()
-        self.executor = SingleThreadedExecutor()
+        self.executor = MultiThreadedExecutor()
         self.node = Node("test_action_capabilities")
         self.executor.add_node(self.node)
 
@@ -39,10 +39,10 @@ class TestActionCapabilities(unittest.TestCase):
 
         self.proto = Protocol(self._testMethodName, self.node, protocol_parameters)
         # change the log function so we can verify errors are logged
-        self.proto.log = self.mock_log  # type: ignore[assignment]
+        self.proto.log = self.mock_log  # type: ignore[method-assign]
         # change the send callback so we can access the rosbridge messages
         # being sent
-        self.proto.send = self.local_send_cb  # type: ignore[assignment]
+        self.proto.send = self.local_send_cb  # type: ignore[method-assign]
         self.advertise = AdvertiseAction(self.proto)
         self.unadvertise = UnadvertiseAction(self.proto)
         self.result = ActionResult(self.proto)

@@ -32,44 +32,46 @@
 
 from __future__ import annotations
 
-from typing import Protocol, TypeVar, runtime_checkable
+from typing import TYPE_CHECKING
+
+from rclpy.task import Future
+
+if TYPE_CHECKING:
+    from rclpy.node import Node
 
 
-@runtime_checkable
-class ROSMessage(Protocol):
-    """Protocol for ROS message types."""
+async def futures_wait_for(node: Node, futures: list[Future], timeout_sec: float) -> None:
+    """Await a list of futures with a timeout."""
+    first_done_future: Future = Future()
 
-    __slots__: list[str]
-    _fields_and_field_types: dict[str, str]
+    def timeout_callback() -> None:
+        first_done_future.set_result(None)
 
-    def get_fields_and_field_types(self) -> dict[str, str]:
-        """Return a dictionary of field names to field types."""
+    timer = node.create_timer(timeout_sec, timeout_callback)
 
+    def future_done_callback(_arg: Future) -> None:
+        if all(future.done() for future in futures):
+            first_done_future.set_result(None)
 
-@runtime_checkable
-class ROSService(Protocol):
-    """Protocol for ROS service types."""
+    for future in futures:
+        future.add_done_callback(future_done_callback)
 
-    Request: type[ROSMessage]
-    Response: type[ROSMessage]
-    Event: type[ROSMessage]
+    await first_done_future
 
-
-@runtime_checkable
-class ROSAction(Protocol):
-    """Protocol for ROS action types."""
-
-    Goal: type[ROSMessage]
-    Result: type[ROSMessage]
-    Feedback: type[ROSMessage]
+    timer.cancel()
+    timer.destroy()
 
 
-# Type variables for ROS types
-ROSMessageT = TypeVar("ROSMessageT", bound=ROSMessage)
-ROSServiceT = TypeVar("ROSServiceT", bound=ROSService)
-ROSServiceRequestT = TypeVar("ROSServiceRequestT", bound=ROSMessage)
-ROSServiceResponseT = TypeVar("ROSServiceResponseT", bound=ROSMessage)
-ROSActionT = TypeVar("ROSActionT", bound=ROSAction)
-ROSActionGoalT = TypeVar("ROSActionGoalT", bound=ROSMessage)
-ROSActionResultT = TypeVar("ROSActionResultT", bound=ROSMessage)
-ROSActionFeedbackT = TypeVar("ROSActionFeedbackT", bound=ROSMessage)
+async def async_sleep(node: Node, delay_sec: float) -> None:
+    """Block the coroutine for a given time."""
+    sleep_future: Future = Future()
+
+    def timeout_callback() -> None:
+        sleep_future.set_result(None)
+
+    timer = node.create_timer(delay_sec, timeout_callback)
+
+    await sleep_future
+
+    timer.cancel()
+    timer.destroy()

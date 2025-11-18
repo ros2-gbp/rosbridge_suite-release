@@ -18,6 +18,7 @@ if TYPE_CHECKING:
 
     from common import TestClientProtocol
     from rclpy.node import Node
+    from rclpy.task import Future
 
 log.startLogging(sys.stderr)
 
@@ -40,6 +41,7 @@ class TestWebsocketSmoke(unittest.TestCase):
         B_STRING = "B" * MSG_SIZE
         WARMUP_DELAY = 1.0  # seconds
 
+        sub_completed_future: Future[list[String]]
         sub_completed_future, sub_handler = expect_messages(
             NUM_MSGS, "ROS subscriber", node.get_logger()
         )
