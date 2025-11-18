@@ -35,14 +35,11 @@ from __future__ import annotations
 
 import os
 import sys
-from json import dumps, loads
 from typing import Any
 
 import rclpy
-from rclpy.callback_groups import ReentrantCallbackGroup
 from rclpy.clock import Clock, ClockType
 from rclpy.node import Node
-from rclpy.qos import qos_profile_parameters
 
 from rosapi import glob_helper, objectutils, params, proxy
 from rosapi_msgs.msg import TypeDef
@@ -88,107 +85,99 @@ class Rosapi(Node):
         self.declare_parameter("services_glob", "[*]")
         self.declare_parameter("params_glob", "[*]")
         self.declare_parameter("params_timeout", 5.0)
+        self.declare_parameter("use_private_service_names", False)
         self.globs = self.get_globs()
         self.register_services()
 
     # Initialises the ROS node
     def register_services(self) -> None:
         proxy.init(self)
+        if self.get_namespace() == "/":
+            full_name = self.get_namespace() + self.get_name()
+        else:
+            full_name = self.get_namespace() + "/" + self.get_name()
 
         timeout_sec = self.get_parameter("params_timeout").value
-        params.init(self, timeout_sec)
+        params.init(full_name, timeout_sec)
 
-        self.create_service(Topics, "~/topics", self.get_topics)
-        self.create_service(Interfaces, "~/interfaces", self.get_interfaces)
-        self.create_service(TopicsForType, "~/topics_for_type", self.get_topics_for_type)
+        use_private_service_names = (
+            self.get_parameter("use_private_service_names").get_parameter_value().bool_value
+        )
+        if not use_private_service_names:
+            if self.get_namespace() != "/":
+                self.get_logger().warn(
+                    "You are running rosapi node under a namespace. The services will still use "
+                    "global /rosapi/ namespace. Starting from ROS Jazzy, the services will be "
+                    "namespaced under the node namespace. To use the new namespaced services, set "
+                    "the parameter 'use_private_service_names' to true."
+                )
+            service_prefix = "/rosapi/"
+        else:
+            service_prefix = "~/"
+
+        self.create_service(Topics, service_prefix + "topics", self.get_topics)
+        self.create_service(Interfaces, service_prefix + "interfaces", self.get_interfaces)
+        self.create_service(
+            TopicsForType, service_prefix + "topics_for_type", self.get_topics_for_type
+        )
         self.create_service(
             TopicsAndRawTypes,
-            "~/topics_and_raw_types",
+            service_prefix + "topics_and_raw_types",
             self.get_topics_and_raw_types,
         )
-        self.create_service(Services, "~/services", self.get_services)
+        self.create_service(Services, service_prefix + "services", self.get_services)
         self.create_service(
-            ServicesForType,
-            "~/services_for_type",
-            self.get_services_for_type,
+            ServicesForType, service_prefix + "services_for_type", self.get_services_for_type
         )
-        self.create_service(Nodes, "~/nodes", self.get_nodes)
-        self.create_service(NodeDetails, "~/node_details", self.get_node_details)
-        self.create_service(GetActionServers, "~/action_servers", self.get_action_servers)
-        self.create_service(ActionType, "~/action_type", self.get_action_type)
-        self.create_service(TopicType, "~/topic_type", self.get_topic_type)
-        self.create_service(ServiceType, "~/service_type", self.get_service_type)
-        self.create_service(Publishers, "~/publishers", self.get_publishers)
-        self.create_service(Subscribers, "~/subscribers", self.get_subscribers)
+        self.create_service(Nodes, service_prefix + "nodes", self.get_nodes)
+        self.create_service(NodeDetails, service_prefix + "node_details", self.get_node_details)
         self.create_service(
-            ServiceProviders,
-            "~/service_providers",
-            self.get_service_providers,
+            GetActionServers, service_prefix + "action_servers", self.get_action_servers
         )
-        self.create_service(ServiceNode, "~/service_node", self.get_service_node)
-        self.create_service(MessageDetails, "~/message_details", self.get_message_details)
+        self.create_service(ActionType, service_prefix + "action_type", self.get_action_type)
+        self.create_service(TopicType, service_prefix + "topic_type", self.get_topic_type)
+        self.create_service(ServiceType, service_prefix + "service_type", self.get_service_type)
+        self.create_service(Publishers, service_prefix + "publishers", self.get_publishers)
+        self.create_service(Subscribers, service_prefix + "subscribers", self.get_subscribers)
+        self.create_service(
+            ServiceProviders, service_prefix + "service_providers", self.get_service_providers
+        )
+        self.create_service(ServiceNode, service_prefix + "service_node", self.get_service_node)
+        self.create_service(
+            MessageDetails, service_prefix + "message_details", self.get_message_details
+        )
         self.create_service(
             ServiceRequestDetails,
-            "~/service_request_details",
+            service_prefix + "service_request_details",
             self.get_service_request_details,
         )
         self.create_service(
             ServiceResponseDetails,
-            "~/service_response_details",
+            service_prefix + "service_response_details",
             self.get_service_response_details,
         )
         self.create_service(
             ActionGoalDetails,
-            "~/action_goal_details",
+            service_prefix + "action_goal_details",
             self.get_action_goal_details,
         )
         self.create_service(
             ActionResultDetails,
-            "~/action_result_details",
+            service_prefix + "action_result_details",
             self.get_action_result_details,
         )
         self.create_service(
             ActionFeedbackDetails,
-            "~/action_feedback_details",
+            service_prefix + "action_feedback_details",
             self.get_action_feedback_details,
         )
-        self.create_service(
-            SetParam,
-            "~/set_param",
-            self.set_param,
-            callback_group=ReentrantCallbackGroup(),
-            qos_profile=qos_profile_parameters,
-        )
-        self.create_service(
-            GetParam,
-            "~/get_param",
-            self.get_param,
-            callback_group=ReentrantCallbackGroup(),
-            qos_profile=qos_profile_parameters,
-        )
-        self.create_service(
-            HasParam,
-            "~/has_param",
-            self.has_param,
-            callback_group=ReentrantCallbackGroup(),
-            qos_profile=qos_profile_parameters,
-        )
-        self.create_service(
-            DeleteParam,
-            "~/delete_param",
-            self.delete_param,
-            callback_group=ReentrantCallbackGroup(),
-            qos_profile=qos_profile_parameters,
-        )
-        self.create_service(
-            GetParamNames,
-            "~/get_param_names",
-            self.get_param_names,
-            callback_group=ReentrantCallbackGroup(),
-            qos_profile=qos_profile_parameters,
-        )
-        self.create_service(GetTime, "~/get_time", self.get_time)
-        self.create_service(GetROSVersion, "~/get_ros_version", self.get_ros_version)
+        self.create_service(SetParam, service_prefix + "set_param", self.set_param)
+        self.create_service(GetParam, service_prefix + "get_param", self.get_param)
+        self.create_service(HasParam, service_prefix + "has_param", self.has_param)
+        self.create_service(DeleteParam, service_prefix + "delete_param", self.delete_param)
+        self.create_service(GetParamNames, service_prefix + "get_param_names", self.get_param_names)
+        self.create_service(GetTime, service_prefix + "get_time", self.get_time)
+        self.create_service(GetROSVersion, service_prefix + "get_ros_version", self.get_ros_version)
 
     def get_globs(self) -> glob_helper.Globs:
         return glob_helper.get_globs(self)
@@ -472,82 +461,43 @@ class Rosapi(Node):
     ) -> SetParam.Response:
         try:
             node_name, param_name = self._get_node_and_param_name(request.name)
+            params.set_param(node_name, param_name, request.value, self.globs.params)
         except ValueError:
             self._print_malformed_param_name_warning(request.name)
-
-        try:
-            await params.set_param(node_name, param_name, request.value, self.globs.params)
-        except Exception as e:
-            response.successful = False
-            response.reason = str(e)
-        else:
-            response.successful = True
-
         return response
 
-    async def get_param(
+    def get_param(
         self, request: GetParam.Request, response: GetParam.Response
     ) -> GetParam.Response:
         try:
             node_name, param_name = self._get_node_and_param_name(request.name)
+            response.value = params.get_param(
+                node_name, param_name, request.default_value, self.globs.params
+            )
         except ValueError:
             self._print_malformed_param_name_warning(request.name)
-
-        try:
-            response.value = await params.get_param(node_name, param_name, self.globs.params)
-        except Exception as e:
-            response.successful = False
-            response.reason = str(e)
-
-            default = ""
-            if request.default_value != "":
-                try:
-                    default = loads(request.default_value)
-                except ValueError:
-                    self.get_logger().error(
-                        f"Failed to parse default value: {request.default_value}"
-                    )
-
-            response.value = dumps(default)
-        else:
-            response.successful = True
-
         return response
 
-    async def has_param(
+    def has_param(
         self, request: HasParam.Request, response: HasParam.Response
     ) -> HasParam.Response:
         try:
             node_name, param_name = self._get_node_and_param_name(request.name)
+            response.exists = params.has_param(node_name, param_name, self.globs.params)
         except ValueError:
             self._print_malformed_param_name_warning(request.name)
-
-        response.exists = await params.has_param(node_name, param_name, self.globs.params)
-
         return response
 
-    async def delete_param(
+    def delete_param(
         self, request: DeleteParam.Request, response: DeleteParam.Response
     ) -> DeleteParam.Response:
-        try:
-            node_name, param_name = self._get_node_and_param_name(request.name)
-        except ValueError:
-            self._print_malformed_param_name_warning(request.name)
-
-        try:
-            await params.delete_param(node_name, param_name, self.globs.params)
-        except Exception as e:
-            response.successful = False
-            response.reason = str(e)
-        else:
-            response.successful = True
-
+        params.delete_param(request.node_name, request.name, self.globs.params)
         return response
 
-    async def get_param_names(
+    def get_param_names(
         self, _request: GetParamNames.Request, response: GetParamNames.Response
     ) -> GetParamNames.Response:
-        response.names = await params.get_param_names(self.globs.params)
+        response.names = params.get_param_names(self.globs.params)
         return response
 
     def get_time(self, _request: GetTime.Request, response: GetTime.Response) -> GetTime.Response:

@@ -1,6 +1,6 @@
 name: CI
 
-on: [push, pull_request, workflow_dispatch]
+on: [push, pull_request]
 
 jobs:
   lint:
@@ -19,8 +19,9 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - ros: jazzy
-            os: ubuntu-24.04
+          # NOTE: Tests only Humble since the `ros2` branch tests later distros.
+          - ros: humble
+            os: ubuntu-22.04
 
     name: ROS 2 ${{ matrix.ros }} (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
