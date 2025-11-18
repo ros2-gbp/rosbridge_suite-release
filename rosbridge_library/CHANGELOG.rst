@@ -2,19 +2,19 @@
 Changelog for package rosbridge_library
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-3.0.1 (2025-11-17)
+2.4.1 (2025-11-17)
 ------------------
-* fix: Don't add rosapi services to glob patterns if we pass empty `services_glob` parameter (`#1115 <https://github.com/RobotWebTools/rosbridge_suite/issues/1115>`_)
-* feat: Allow importing action feedback message types (`#1108 <https://github.com/RobotWebTools/rosbridge_suite/issues/1108>`_)
-* feat: Replace cbor with cbor2 library, remove inline implementation (`#1107 <https://github.com/RobotWebTools/rosbridge_suite/issues/1107>`_)
+* fix: Don't add rosapi services to glob patterns if we pass empty `services_glob` parameter (backport `#1115 <https://github.com/RobotWebTools/rosbridge_suite/issues/1115>`_) (`#1116 <https://github.com/RobotWebTools/rosbridge_suite/issues/1116>`_)
+* feat: Allow importing action feedback message types (backport `#1108 <https://github.com/RobotWebTools/rosbridge_suite/issues/1108>`_) (`#1111 <https://github.com/RobotWebTools/rosbridge_suite/issues/1111>`_)
+* feat: Replace cbor with cbor2 library, remove inline implementation (backport `#1107 <https://github.com/RobotWebTools/rosbridge_suite/issues/1107>`_) (`#1109 <https://github.com/RobotWebTools/rosbridge_suite/issues/1109>`_)
 * Contributors: Błażej Sowa
 
-3.0.0 (2025-11-04)
+2.4.0 (2025-11-04)
 ------------------
-* chore: Update pre-commit hooks (`#1090 <https://github.com/RobotWebTools/rosbridge_suite/issues/1090>`_)
-* Fix mypy errors (`#1084 <https://github.com/RobotWebTools/rosbridge_suite/issues/1084>`_)
-* feat: New parameter and cli arguments handling  (`#1060 <https://github.com/RobotWebTools/rosbridge_suite/issues/1060>`_)
-* refactor: Add type annotations to all functions and methods (`#1069 <https://github.com/RobotWebTools/rosbridge_suite/issues/1069>`_)
+* chore: Update pre-commit hooks (backport `#1090 <https://github.com/RobotWebTools/rosbridge_suite/issues/1090>`_) (`#1092 <https://github.com/RobotWebTools/rosbridge_suite/issues/1092>`_)
+* Fix mypy errors (backport `#1084 <https://github.com/RobotWebTools/rosbridge_suite/issues/1084>`_) (`#1085 <https://github.com/RobotWebTools/rosbridge_suite/issues/1085>`_)
+* feat: New parameter and cli arguments handling (backport `#1060 <https://github.com/RobotWebTools/rosbridge_suite/issues/1060>`_) (`#1081 <https://github.com/RobotWebTools/rosbridge_suite/issues/1081>`_)
+* refactor: Add type annotations to all functions and methods (`#1079 <https://github.com/RobotWebTools/rosbridge_suite/issues/1079>`_)
 * fix: Add delays to tests after subscribing/unsubscribing topics (`#1071 <https://github.com/RobotWebTools/rosbridge_suite/issues/1071>`_)
 * fix: Change warn to warning (`#1067 <https://github.com/RobotWebTools/rosbridge_suite/issues/1067>`_)
 * refactor: Enable various ruff checks and fix lint errors (`#1059 <https://github.com/RobotWebTools/rosbridge_suite/issues/1059>`_)
