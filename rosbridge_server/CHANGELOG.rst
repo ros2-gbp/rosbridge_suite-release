@@ -2,22 +2,22 @@
 Changelog for package rosbridge_server
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-2.4.2 (2025-11-20)
+3.0.2 (2025-11-20)
 ------------------
-* fix: Use correct type for delay_between_messages parameter in launch file (backport `#1126 <https://github.com/RobotWebTools/rosbridge_suite/issues/1126>`_) (`#1131 <https://github.com/RobotWebTools/rosbridge_suite/issues/1131>`_)
+* fix: Use correct type for delay_between_messages parameter in launch file (`#1126 <https://github.com/RobotWebTools/rosbridge_suite/issues/1126>`_)
 * Contributors: Błażej Sowa
 
-2.4.1 (2025-11-17)
+3.0.1 (2025-11-17)
 ------------------
-* fix: Don't add rosapi services to glob patterns if we pass empty `services_glob` parameter (backport `#1115 <https://github.com/RobotWebTools/rosbridge_suite/issues/1115>`_) (`#1116 <https://github.com/RobotWebTools/rosbridge_suite/issues/1116>`_)
+* fix: Don't add rosapi services to glob patterns if we pass empty `services_glob` parameter (`#1115 <https://github.com/RobotWebTools/rosbridge_suite/issues/1115>`_)
 * Contributors: Błażej Sowa
 
-2.4.0 (2025-11-04)
+3.0.0 (2025-11-04)
 ------------------
-* chore: Update pre-commit hooks (backport `#1090 <https://github.com/RobotWebTools/rosbridge_suite/issues/1090>`_) (`#1092 <https://github.com/RobotWebTools/rosbridge_suite/issues/1092>`_)
-* Fix mypy errors (backport `#1084 <https://github.com/RobotWebTools/rosbridge_suite/issues/1084>`_) (`#1085 <https://github.com/RobotWebTools/rosbridge_suite/issues/1085>`_)
-* feat: New parameter and cli arguments handling (backport `#1060 <https://github.com/RobotWebTools/rosbridge_suite/issues/1060>`_) (`#1081 <https://github.com/RobotWebTools/rosbridge_suite/issues/1081>`_)
-* refactor: Add type annotations to all functions and methods (`#1079 <https://github.com/RobotWebTools/rosbridge_suite/issues/1079>`_)
+* chore: Update pre-commit hooks (`#1090 <https://github.com/RobotWebTools/rosbridge_suite/issues/1090>`_)
+* Fix mypy errors (`#1084 <https://github.com/RobotWebTools/rosbridge_suite/issues/1084>`_)
+* feat: New parameter and cli arguments handling  (`#1060 <https://github.com/RobotWebTools/rosbridge_suite/issues/1060>`_)
+* refactor: Add type annotations to all functions and methods (`#1069 <https://github.com/RobotWebTools/rosbridge_suite/issues/1069>`_)
 * fix: Change warn to warning (`#1067 <https://github.com/RobotWebTools/rosbridge_suite/issues/1067>`_)
 * refactor: Enable various ruff checks and fix lint errors (`#1059 <https://github.com/RobotWebTools/rosbridge_suite/issues/1059>`_)
 * fix: rosbridge_websocket cooperative shutdown (`#1048 <https://github.com/RobotWebTools/rosbridge_suite/issues/1048>`_)
