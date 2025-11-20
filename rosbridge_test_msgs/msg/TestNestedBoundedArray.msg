@@ -1,1 +1,0 @@
-TestFloat32BoundedArray data
