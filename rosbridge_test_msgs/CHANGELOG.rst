@@ -2,19 +2,26 @@
 Changelog for package rosbridge_test_msgs
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-2.0.4 (2025-11-20)
+2.4.2 (2025-11-20)
 ------------------
 
-2.0.3 (2025-11-17)
+2.4.1 (2025-11-17)
 ------------------
 
-2.0.2 (2025-11-05)
+2.4.0 (2025-11-04)
 ------------------
-* chore: Update maintainers (`#1066 <https://github.com/RobotWebTools/rosbridge_suite/issues/1066>`_)
-* fix: Clean up package dependencies (`#1054 <https://github.com/RobotWebTools/rosbridge_suite/issues/1054>`_)
+* fix: Clean up package dependencies (`#1053 <https://github.com/RobotWebTools/rosbridge_suite/issues/1053>`_)
 * Contributors: Błażej Sowa
 
-2.0.1 (2025-05-19)
+2.3.0 (2025-05-19)
+------------------
+
+2.2.0 (2025-02-26)
+------------------
+* Update maintainers (`#1000 <https://github.com/RobotWebTools/rosbridge_suite/issues/1000>`_)
+* Contributors: Błażej Sowa
+
+2.1.0 (2024-10-08)
 ------------------
 
 2.0.0 (2024-10-08)

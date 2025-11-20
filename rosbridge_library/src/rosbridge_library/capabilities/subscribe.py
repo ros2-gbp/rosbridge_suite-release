@@ -53,10 +53,10 @@ if TYPE_CHECKING:
 
 
 try:
-    from ujson import dumps as encode_json  # type: ignore[import]
+    from ujson import dumps as encode_json  # type: ignore[import-untyped]
 except ImportError:
     try:
-        from simplejson import dumps as encode_json  # type: ignore[import]
+        from simplejson import dumps as encode_json  # type: ignore[import-untyped]
     except ImportError:
         from json import dumps as encode_json  # type: ignore[assignment]
 
@@ -233,7 +233,7 @@ class Subscription(Generic[ROSMessageT]):
             self.compression = "cbor-raw"
 
         with self.handler_lock:
-            self.handler = self.handler.set_throttle_rate(self.throttle_rate)
+            self.handler.set_throttle_rate(self.throttle_rate)
             self.handler = self.handler.set_queue_length(self.queue_length)
 
 
