@@ -1,3 +1,33 @@
+## rosbridge_suite (rolling) - 3.0.2-1
+
+The packages in the `rosbridge_suite` repository were released into the `rolling` distro by running `/usr/bin/bloom-release --rosdistro rolling rosbridge_suite` on `Thu, 20 Nov 2025 16:08:00 -0000`
+
+These packages were released:
+- `rosapi`
+- `rosapi_msgs`
+- `rosbridge_library`
+- `rosbridge_msgs`
+- `rosbridge_server`
+- `rosbridge_suite`
+- `rosbridge_test_msgs`
+
+Version of package(s) in repository `rosbridge_suite`:
+
+- upstream repository: https://github.com/RobotWebTools/rosbridge_suite.git
+- release repository: https://github.com/ros2-gbp/rosbridge_suite-release.git
+- rosdistro version: `3.0.1-1`
+- old version: `3.0.1-1`
+- new version: `3.0.2-1`
+
+Versions of tools used:
+
+- bloom version: `0.13.0`
+- catkin_pkg version: `1.1.0`
+- rosdep version: `0.26.0`
+- rosdistro version: `1.0.1`
+- vcstools version: `0.1.42`
+
+
 ## rosbridge_suite (kilted) - 3.0.2-1
 
 The packages in the `rosbridge_suite` repository were released into the `kilted` distro by running `/usr/bin/bloom-release --rosdistro kilted rosbridge_suite` on `Thu, 20 Nov 2025 16:04:30 -0000`
