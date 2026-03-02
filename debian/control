@@ -1,0 +1,12 @@
+Source: ros-jazzy-rosapi
+Section: misc
+Priority: optional
+Maintainer: Błażej Sowa <blazej@fictionlab.pl>
+Build-Depends: debhelper (>= 9.0.0), ros-jazzy-ament-cmake, ros-jazzy-ament-cmake-mypy <!nocheck>, ros-jazzy-ament-cmake-pytest <!nocheck>, ros-jazzy-ament-cmake-python, ros-jazzy-geometry-msgs <!nocheck>, ros-jazzy-rmw-dds-common <!nocheck>, ros-jazzy-sensor-msgs <!nocheck>, ros-jazzy-shape-msgs <!nocheck>, ros-jazzy-ros-workspace
+Homepage: http://ros.org/wiki/rosapi
+Standards-Version: 3.9.2
+
+Package: ros-jazzy-rosapi
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, ros-jazzy-builtin-interfaces, ros-jazzy-rcl-interfaces, ros-jazzy-rclpy, ros-jazzy-ros2action, ros-jazzy-ros2interface, ros-jazzy-ros2node, ros-jazzy-ros2service, ros-jazzy-ros2topic, ros-jazzy-rosapi-msgs, ros-jazzy-rosbridge-library, ros-jazzy-rosidl-adapter, ros-jazzy-rosidl-runtime-py, ros-jazzy-ros-workspace
+Description: Provides services for getting various ROS meta-information, including ROS topic, services, interfaces or action servers and managing ROS parameters.
