@@ -32,10 +32,7 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Protocol, TypeVar, runtime_checkable
-
-if TYPE_CHECKING:
-    from uuid import UUID
+from typing import Protocol, TypeVar, runtime_checkable
 
 
 @runtime_checkable
@@ -76,16 +73,3 @@ ROSActionT = TypeVar("ROSActionT", bound=ROSAction)
 ROSActionGoalT = TypeVar("ROSActionGoalT", bound=ROSMessage)
 ROSActionResultT = TypeVar("ROSActionResultT", bound=ROSMessage)
 ROSActionFeedbackT = TypeVar("ROSActionFeedbackT", bound=ROSMessage)
-
-
-# Backports of rclpy types for type checking
-
-
-class GetResultServiceResponse(ROSMessage, Protocol[ROSActionResultT]):
-    status: int
-    result: ROSActionResultT
-
-
-class FeedbackMessage(ROSMessage, Protocol[ROSActionFeedbackT]):
-    goal_id: UUID
-    feedback: ROSActionFeedbackT

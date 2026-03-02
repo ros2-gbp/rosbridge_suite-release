@@ -16,6 +16,8 @@ from rosbridge_library.internal.type_support import (
 )
 
 if TYPE_CHECKING:
+    from rclpy.service import Service
+
     from rosbridge_library.protocol import Protocol
 
 
@@ -23,16 +25,18 @@ class AdvertisedServiceHandler(Generic[ROSServiceRequestT, ROSServiceResponseT])
     id_counter = 1
 
     def __init__(self, service_name: str, service_type: str, protocol: Protocol) -> None:
-        self.request_futures: dict[str, Future] = {}
+        self.request_futures: dict[str, Future[ROSServiceResponseT]] = {}
         self.service_name = service_name
         self.service_type = service_type
         self.protocol = protocol
         # setup the service
-        self.service_handle = protocol.node_handle.create_service(
-            get_service_class(service_type),  # type: ignore[misc]  # Silence type checker about not being able to infer type
-            service_name,
-            self.handle_request,  # type: ignore[arg-type]  # rclpy type hint does not support coroutines
-            callback_group=ReentrantCallbackGroup(),  # https://github.com/ros2/rclpy/issues/834#issuecomment-961331870
+        self.service_handle: Service[ROSServiceRequestT, ROSServiceResponseT] = (
+            protocol.node_handle.create_service(
+                get_service_class(service_type),
+                service_name,
+                self.handle_request,  # type: ignore[arg-type]  # rclpy type hint does not support coroutines
+                callback_group=ReentrantCallbackGroup(),  # https://github.com/ros2/rclpy/issues/834#issuecomment-961331870
+            )
         )
 
     def next_id(self) -> int:
@@ -46,7 +50,7 @@ class AdvertisedServiceHandler(Generic[ROSServiceRequestT, ROSServiceResponseT])
         # generate a unique ID
         request_id = f"service_request:{self.service_name}:{self.next_id()}"
 
-        future = Future()
+        future: Future[ROSServiceResponseT] = Future()
         self.request_futures[request_id] = future
 
         # build a request to send to the external client
