@@ -1,9 +1,9 @@
 # try to import json-lib: 1st try ujson, 2nd try simplejson, else import standard Python json
 try:
-    import ujson as json  # type: ignore[import-untyped]
+    import ujson as json  # type: ignore[import]
 except ImportError:
     try:
-        import simplejson as json  # type: ignore[import-untyped, no-redef]
+        import simplejson as json  # type: ignore[import]
     except ImportError:
         import json  # type: ignore[no-redef] # noqa: F401
 

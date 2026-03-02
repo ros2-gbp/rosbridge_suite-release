@@ -26,11 +26,9 @@ if TYPE_CHECKING:
 class TestClientProtocol(WebSocketClientProtocol):
     """Set message_handler to handle messages received from the server."""
 
-    message_handler: Callable[[Any], None]
-
     def __init__(self, *args: Any, **kwargs: Any) -> None:  # noqa: ANN401
-        self.connected_future: Future[None] = Future()
-        self.message_handler = lambda _: None
+        self.connected_future = Future()
+        self.message_handler: Callable[[Any], None] = lambda _: None
         super().__init__(*args, **kwargs)
 
     def onOpen(self) -> None:
@@ -167,15 +165,15 @@ MsgT = TypeVar("MsgT")
 
 def expect_messages(
     count: int, description: str, logger: RcutilsLogger
-) -> tuple[Future[list[MsgT]], Callable[[MsgT], None]]:
+) -> tuple[Future, Callable[[MsgT], None]]:
     """
     Expect a specific number of messages.
 
     Convenience function to create a Future and a message handler function which gathers results
     into a list and waits for the list to have the expected number of items.
     """
-    future: Future[list[MsgT]] = Future()
-    results: list[MsgT] = []
+    future = Future()
+    results = []
 
     def handler(msg: MsgT) -> None:
         logger.info(f"Received message on {description}: {msg}")  # noqa: G004

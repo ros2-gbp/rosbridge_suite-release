@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
+import contextlib
 import time
 import unittest
 from json import dumps, loads
@@ -27,16 +28,16 @@ class TestServiceCapabilities(unittest.TestCase):
 
         protocol_parameters = {
             "call_services_in_new_thread": False,
-            "default_call_service_timeout": 5.0,
+            "default_call_service_timeout": 0.5,
             "send_action_goals_in_new_thread": False,
         }
 
         self.proto = Protocol(self._testMethodName, self.node, protocol_parameters)
         # change the log function so we can verify errors are logged
-        self.proto.log = self.mock_log  # type: ignore[method-assign]
+        self.proto.log = self.mock_log  # type: ignore[assignment]
         # change the send callback so we can access the rosbridge messages
         # being sent
-        self.proto.send = self.local_send_cb  # type: ignore[method-assign]
+        self.proto.send = self.local_send_cb  # type: ignore[assignment]
         self.advertise = AdvertiseService(self.proto)
         self.unadvertise = UnadvertiseService(self.proto)
         self.response = ServiceResponse(self.proto)
@@ -160,6 +161,7 @@ class TestServiceCapabilities(unittest.TestCase):
         self.assertEqual(self.received_message["op"], "service_response")
         self.assertTrue(self.received_message["result"])
 
+    @unittest.skip("Gets stuck in rclpy.shutdown on teardown")
     def test_call_advertised_service_with_timeout(self) -> None:
         # Advertise the service
         service_path = "/set_bool_3"
@@ -257,20 +259,62 @@ class TestServiceCapabilities(unittest.TestCase):
         self.assertTrue("id" in self.received_message)
 
         # Now unadvertise the service
-        # TODO: This raises an exception, likely because of the following rclpy issue:
-        # https://github.com/ros2/rclpy/issues/1098
         unadvertise_msg = loads(dumps({"op": "unadvertise_service", "service": service_path}))
         self.received_message = None
         self.unadvertise.unadvertise_service(unadvertise_msg)
 
-        with self.assertRaises(RuntimeError) as context:
-            start_time = time.monotonic()
-            while self.received_message is None:
+        # The in-flight request should time out and return a service_response (result False)
+        # TODO: Ideally, the in-flight request should be cancelled immediately and return a
+        # response indicating the service was unadvertised. Right now, the service handler from
+        # advertise_service does not differentiate between internal and remote service calls and
+        # rclpy does not provide a way to cancel an in-flight service request, so we just let the
+        # request time out on the client side and return a timeout response.
+        self.received_message = None
+        start_time = time.monotonic()
+        while self.received_message is None:
+            # TODO: Remove this suppress once this is merged: https://github.com/ros2/rclpy/pull/1582
+            with contextlib.suppress(RuntimeError):
                 rclpy.spin_once(self.node, timeout_sec=0.1)
-                if time.monotonic() - start_time > 0.3:
-                    self.fail("Timed out waiting for unadvertise service message.")
+            if time.monotonic() - start_time > 1.0:
+                self.fail(
+                    "Timed out waiting for service_response after unadvertise (expected timeout response)."
+                )
 
-            self.assertTrue(f"Service {service_path} was unadvertised" in context.exception)
+        self.assertEqual(self.received_message["op"], "service_response")
+        self.assertFalse(self.received_message["result"])
+        self.assertEqual(
+            self.received_message["values"],
+            "Timeout exceeded while waiting for service response",
+        )
+
+        # Subsequent calls should be rejected immediately
+        self.received_message = None
+        call_msg2 = loads(
+            dumps(
+                {
+                    "op": "call_service",
+                    "id": "bar",
+                    "service": service_path,
+                    "args": {"data": False},
+                }
+            )
+        )
+        Thread(target=self.call_service.call_service, args=(call_msg2,)).start()
+
+        start_time = time.monotonic()
+        while self.received_message is None:
+            rclpy.spin_once(self.node, timeout_sec=0.1)
+            if time.monotonic() - start_time > 0.5:
+                self.fail(
+                    "Timed out waiting for immediate rejection of call to unadvertised service."
+                )
+
+        self.assertEqual(self.received_message["op"], "service_response")
+        self.assertFalse(self.received_message["result"])
+        self.assertEqual(
+            self.received_message["values"],
+            f"Service {service_path} does not exist",
+        )
 
 
 if __name__ == "__main__":

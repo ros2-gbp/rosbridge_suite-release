@@ -2,26 +2,22 @@
 Changelog for package rosbridge_suite
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-3.0.2 (2025-11-20)
+2.0.5 (2026-03-02)
 ------------------
 
-3.0.1 (2025-11-17)
+2.0.4 (2025-11-20)
 ------------------
 
-3.0.0 (2025-11-04)
+2.0.3 (2025-11-17)
 ------------------
-* Add pydocstyle lint checks and fix rosdoc2 warnings (`#1056 <https://github.com/RobotWebTools/rosbridge_suite/issues/1056>`_)
+
+2.0.2 (2025-11-05)
+------------------
+* chore: Update maintainers (`#1066 <https://github.com/RobotWebTools/rosbridge_suite/issues/1066>`_)
+* Add pydocstyle lint checks and fix rosdoc2 warnings (`#1057 <https://github.com/RobotWebTools/rosbridge_suite/issues/1057>`_)
 * Contributors: Błażej Sowa, Sebastian Castro
 
-2.3.0 (2025-05-19)
-------------------
-
-2.2.0 (2025-02-26)
-------------------
-* Update maintainers (`#1000 <https://github.com/RobotWebTools/rosbridge_suite/issues/1000>`_)
-* Contributors: Błażej Sowa
-
-2.1.0 (2024-10-08)
+2.0.1 (2025-05-19)
 ------------------
 
 2.0.0 (2024-10-08)
