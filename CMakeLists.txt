@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.5)
 project(rosbridge_server)
 
-find_package(ament_cmake REQUIRED)
+find_package(ament_cmake_ros REQUIRED)
 find_package(ament_cmake_python REQUIRED)
 
 ament_python_install_package(
@@ -22,8 +22,17 @@ install(FILES
 
 if(BUILD_TESTING)
   find_package(launch_testing_ament_cmake REQUIRED)
+  find_package(ament_cmake_pytest REQUIRED)
+
+  # Unit tests (pytest)
+  ament_add_ros_isolated_pytest_test(test_stress_clients
+    "test/test_stress_clients.py"
+    TIMEOUT 60
+  )
+
   add_launch_test(test/websocket/advertise_action.test.py)
   add_launch_test(test/websocket/advertise_action_feedback.test.py)
+  add_launch_test(test/websocket/advertise_publish.test.py)
   add_launch_test(test/websocket/advertise_service.test.py)
   add_launch_test(test/websocket/call_service.test.py)
   add_launch_test(test/websocket/send_action_goal.test.py)
