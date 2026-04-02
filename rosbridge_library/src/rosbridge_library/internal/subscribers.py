@@ -169,17 +169,17 @@ class MultiSubscriber(Generic[ROSMessageT]):
             raw=raw,
             callback_group=self.callback_group,
         )
-        self.new_subscriber: Subscription[ROSMessageT] | None = None
+        self.new_subscriber: Subscription | None = None
         self.new_subscriptions: dict[str, Callable[[OutgoingMessage[ROSMessageT]], None]] = {}
 
-    def _schedule_destroy_subscription(self, subscription: Subscription[ROSMessageT]) -> None:
+    def _schedule_destroy_subscription(self, subscription: Subscription) -> None:
         """
         Schedule subscription destruction on the executor thread.
 
         Used to avoid race conditions between executor and non-executor threads.
 
         Args:
-            subscription (Subscription[ROSMessageT]): Subscription to destroy
+            subscription (Subscription): Subscription to destroy
 
         """
         executor = self.node_handle.executor

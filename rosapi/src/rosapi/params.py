@@ -35,7 +35,7 @@ from __future__ import annotations
 import fnmatch
 from dataclasses import dataclass
 from json import dumps, loads
-from typing import TYPE_CHECKING, cast
+from typing import TYPE_CHECKING
 
 from rcl_interfaces.msg import Parameter, ParameterType, ParameterValue
 from rcl_interfaces.srv import GetParameters, ListParameters, SetParameters
@@ -49,14 +49,6 @@ from rosapi.async_helper import futures_wait_for
 from rosapi.proxy import get_nodes
 
 if TYPE_CHECKING:
-    from rcl_interfaces.srv import (
-        GetParameters_Request,
-        GetParameters_Response,
-        ListParameters_Request,
-        ListParameters_Response,
-        SetParameters_Request,
-        SetParameters_Response,
-    )
     from rclpy.client import Client
     from rclpy.node import Node
     from rclpy.task import Future
@@ -141,12 +133,7 @@ def init(
     _node.create_timer(0.5, _cleanup_timer_callback)
 
 
-def _get_client(
-    service_name: str, service_type: type[GetParameters | SetParameters]
-) -> (
-    Client[SetParameters_Request, SetParameters_Response]
-    | Client[GetParameters_Request, GetParameters_Response]
-):
+def _get_client(service_name: str, service_type: type[GetParameters | SetParameters]) -> Client:
     """
     Get a cached client for the given service, or create a new one if it doesn't exist.
 
@@ -163,10 +150,7 @@ def _get_client(
 
     _node.get_logger().get_child("params").debug(f"Creating new client for service {service_name}")
 
-    client: (
-        Client[SetParameters_Request, SetParameters_Response]
-        | Client[GetParameters_Request, GetParameters_Response]
-    ) = _node.create_client(
+    client = _node.create_client(
         service_type,  # type: ignore[misc]
         service_name,
         callback_group=MutuallyExclusiveCallbackGroup(),
@@ -249,10 +233,7 @@ async def _set_param(
             setattr(parameter.value, _parameter_type_mapping[parameter_type], loads(value))
 
     service_name = f"{node_name}/set_parameters"
-    client = cast(
-        "Client[SetParameters_Request, SetParameters_Response]",
-        _get_client(service_name, SetParameters),
-    )
+    client = _get_client(service_name, SetParameters)
 
     if not client.service_is_ready():
         _node.destroy_client(client)
@@ -316,10 +297,7 @@ async def _get_param(node_name: str, name: str) -> ParameterValue:
     assert _node is not None
 
     service_name = f"{node_name}/get_parameters"
-    client = cast(
-        "Client[GetParameters_Request, GetParameters_Response]",
-        _get_client(service_name, GetParameters),
-    )
+    client = _get_client(service_name, GetParameters)
 
     if not client.service_is_ready():
         _node.destroy_client(client)
@@ -390,13 +368,13 @@ async def get_param_names(params_glob: str | None) -> list[str]:
 
     nodes = [get_absolute_node_name(node) for node in get_nodes()]
 
-    futures: list[tuple[str, Future[ListParameters_Response]]] = []
-    clients: list[Client[ListParameters_Request, ListParameters_Response]] = []
+    futures: list[tuple[str, Future]] = []
+    clients: list[Client] = []
     for node_name in nodes:
         if node_name == _node.get_fully_qualified_name():
             continue
 
-        client: Client[ListParameters_Request, ListParameters_Response] = _node.create_client(
+        client = _node.create_client(
             ListParameters,
             f"{node_name}/list_parameters",
             callback_group=MutuallyExclusiveCallbackGroup(),

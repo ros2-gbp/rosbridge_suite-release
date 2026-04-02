@@ -44,7 +44,6 @@ from typing import TYPE_CHECKING, cast
 import rclpy
 from rcl_interfaces.msg import ParameterDescriptor
 from rclpy.executors import SingleThreadedExecutor
-from rclpy.experimental import EventsExecutor
 from rclpy.node import Node
 from rclpy.utilities import remove_ros_args
 from tornado.httpserver import HTTPServer
@@ -70,8 +69,6 @@ SERVER_PARAMETERS = (
     ("websocket_ping_timeout", float, 30.0, "Timeout in seconds for WebSocket ping responses."),
     # Websocket handler parameters
     ("use_compression", bool, False, "Enable compression for WebSocket messages."),
-    # Executor parameters
-    ("use_events_executor", bool, False, "Use EventsExecutor instead of SingleThreadedExecutor."),
 )
 
 PROTOCOL_PARAMETERS = (
@@ -198,11 +195,6 @@ class RosbridgeWebsocketNode(Node):
             self.get_parameter("use_compression").get_parameter_value().bool_value
         )
 
-        # Executor parameters
-        self.use_events_executor = (
-            self.get_parameter("use_events_executor").get_parameter_value().bool_value
-        )
-
     def _start_server(self) -> None:
         handlers = [(r"/", RosbridgeWebSocket), (r"", RosbridgeWebSocket)]
         if self.url_path != "/":
@@ -239,11 +231,7 @@ async def async_main() -> None:
 
     node = RosbridgeWebsocketNode()
 
-    if node.use_events_executor:
-        executor = EventsExecutor()
-    else:
-        executor = SingleThreadedExecutor()
-
+    executor = SingleThreadedExecutor()
     executor.add_node(node)
 
     spin_thread = threading.Thread(target=executor.spin)
