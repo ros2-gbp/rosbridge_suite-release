@@ -49,7 +49,6 @@ from rosbridge_library.internal.ros_loader import (
 from rosbridge_library.internal.type_support import (
     ROSActionFeedbackT,
     ROSActionGoalT,
-    ROSActionImplT,
     ROSActionResultT,
 )
 
@@ -70,9 +69,7 @@ class InvalidActionException(Exception):
         Exception.__init__(self, f"Action {action_name} does not exist")
 
 
-class ActionClientHandler(
-    Thread, Generic[ROSActionGoalT, ROSActionResultT, ROSActionFeedbackT, ROSActionImplT]
-):
+class ActionClientHandler(Thread, Generic[ROSActionGoalT, ROSActionResultT, ROSActionFeedbackT]):
     def __init__(
         self,
         action: str,
@@ -107,9 +104,9 @@ class ActionClientHandler(
         self.error = error_callback
         self.feedback = feedback_callback
         self.node_handle = node_handle
-        self.send_goal_helper = SendGoal[
-            ROSActionGoalT, ROSActionResultT, ROSActionFeedbackT, ROSActionImplT
-        ]()
+        self.send_goal_helper: SendGoal[ROSActionGoalT, ROSActionResultT, ROSActionFeedbackT] = (
+            SendGoal()
+        )
 
     def run(self) -> None:
         try:
@@ -146,7 +143,7 @@ def args_to_action_goal_instance(inst: ROSMessage, args: list | dict[str, Any] |
     populate_instance(msg, inst)
 
 
-class SendGoal(Generic[ROSActionGoalT, ROSActionResultT, ROSActionFeedbackT, ROSActionImplT]):
+class SendGoal(Generic[ROSActionGoalT, ROSActionResultT, ROSActionFeedbackT]):
     """Helper class to send action goals."""
 
     result: GetResultServiceResponse[ROSActionResultT] | Exception | None = None
@@ -155,8 +152,7 @@ class SendGoal(Generic[ROSActionGoalT, ROSActionResultT, ROSActionFeedbackT, ROS
         self.server_timeout_time = server_timeout_time
         self.sleep_time = sleep_time
         self.goal_handle: (
-            ClientGoalHandle[ROSActionGoalT, ROSActionResultT, ROSActionFeedbackT, ROSActionImplT]
-            | None
+            ClientGoalHandle[ROSActionGoalT, ROSActionResultT, ROSActionFeedbackT] | None
         ) = None
         self.goal_canceled = False
 
@@ -164,10 +160,7 @@ class SendGoal(Generic[ROSActionGoalT, ROSActionResultT, ROSActionFeedbackT, ROS
         self.result = future.result()
 
     def goal_response_cb(
-        self,
-        future: Future[
-            ClientGoalHandle[ROSActionGoalT, ROSActionResultT, ROSActionFeedbackT, ROSActionImplT]
-        ],
+        self, future: Future[ClientGoalHandle[ROSActionGoalT, ROSActionResultT, ROSActionFeedbackT]]
     ) -> None:
         self.goal_handle = future.result()
         assert self.goal_handle is not None
@@ -200,7 +193,7 @@ class SendGoal(Generic[ROSActionGoalT, ROSActionResultT, ROSActionFeedbackT, ROS
         args_to_action_goal_instance(inst, args)
 
         self.result = None
-        client = ActionClient[ROSActionGoalT, ROSActionResultT, ROSActionFeedbackT, ROSActionImplT](
+        client: ActionClient[ROSActionGoalT, ROSActionResultT, ROSActionFeedbackT] = ActionClient(
             node_handle, action_class, action_name
         )
         if not client.wait_for_server(timeout_sec=self.server_timeout_time):
