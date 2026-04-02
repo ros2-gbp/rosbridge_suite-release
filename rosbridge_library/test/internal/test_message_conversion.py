@@ -58,26 +58,24 @@ class TestMessageConversion(unittest.TestCase):
         for msg in [{"data": data_value}, loads(dumps({"data": data_value}))]:
             inst = ros_loader.get_message_instance(msgtype)
             message_conversion.populate_instance(msg, inst)
-            assert hasattr(inst, "data")
-            self.assertEqual(inst.data, data_value)
+            self.assertEqual(inst.data, data_value)  # type: ignore[attr-defined]
             self.validate_instance(inst)
             extracted = message_conversion.extract_values(inst)
             for msg2 in [extracted, loads(dumps(extracted))]:
                 self.msgs_equal(msg, msg2)
                 self.assertEqual(msg["data"], msg2["data"])
-                self.assertEqual(msg2["data"], inst.data)
+                self.assertEqual(msg2["data"], inst.data)  # type: ignore[attr-defined]
 
     def do_byte_test(self, data_value: int, msgtype: str) -> None:
         for msg in [{"data": data_value}]:
             inst = ros_loader.get_message_instance(msgtype)
             message_conversion.populate_instance(msg, inst)
-            assert hasattr(inst, "data")
-            self.assertEqual(inst.data, bytes([data_value]))
+            self.assertEqual(inst.data, bytes([data_value]))  # type: ignore[attr-defined]
             self.validate_instance(inst)
             extracted = message_conversion.extract_values(inst)
             for msg2 in [extracted, loads(dumps(extracted))]:
                 self.assertEqual(msg["data"], msg2["data"])
-                self.assertEqual(bytes([msg2["data"]]), inst.data)
+                self.assertEqual(bytes([msg2["data"]]), inst.data)  # type: ignore[attr-defined]
 
     def do_test(self, orig_msg: dict[str, Any], msgtype: str) -> None:
         for msg in [orig_msg, loads(dumps(orig_msg))]:
@@ -291,7 +289,7 @@ class TestMessageConversion(unittest.TestCase):
             assert hasattr(inst, "data")
             message_conversion.populate_instance(msg, inst)
             self.validate_instance(inst)
-            return inst.data
+            return inst.data  # type: ignore[attr-defined]
 
         for msgtype in ["TestChar", "TestUInt8"]:
             rostype = "rosbridge_test_msgs/" + msgtype
@@ -326,7 +324,7 @@ class TestMessageConversion(unittest.TestCase):
             assert hasattr(inst, "data")
             message_conversion.populate_instance(msg, inst)
             self.validate_instance(inst)
-            return inst.data
+            return inst.data  # type: ignore[attr-defined]
 
         for msgtype in ["TestFloat32Array"]:
             rostype = "rosbridge_test_msgs/" + msgtype
@@ -362,7 +360,7 @@ class TestMessageConversion(unittest.TestCase):
             assert hasattr(inst, "data")
             message_conversion.populate_instance(msg, inst)
             self.validate_instance(inst)
-            return inst.data
+            return inst.data  # type: ignore[attr-defined]
 
         for msgtype in ["TestNestedBoundedArray"]:
             rostype = "rosbridge_test_msgs/" + msgtype

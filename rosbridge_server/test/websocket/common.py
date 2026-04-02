@@ -28,11 +28,9 @@ RETRIES = 3
 class TestClientProtocol(WebSocketClientProtocol):
     """Set message_handler to handle messages received from the server."""
 
-    message_handler: Callable[[Any], None]
-
     def __init__(self, *args: Any, **kwargs: Any) -> None:  # noqa: ANN401
         self.connected_future = Future()
-        self.message_handler = lambda _: None
+        self.message_handler: Callable[[Any], None] = lambda _: None
         super().__init__(*args, **kwargs)
 
     def onOpen(self) -> None:  # noqa: N802

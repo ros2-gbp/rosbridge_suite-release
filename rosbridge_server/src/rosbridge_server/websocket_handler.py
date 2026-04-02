@@ -57,6 +57,7 @@ if TYPE_CHECKING:
 def _log_exception() -> None:
     """Log the most recent exception to ROS."""
     exc = traceback.format_exception(*sys.exc_info())
+    assert RosbridgeWebSocket.node_handle is not None
     RosbridgeWebSocket.node_handle.get_logger().error("".join(exc))
 
 
@@ -165,6 +166,7 @@ class RosbridgeWebSocket(WebSocketHandler):
             self.set_nodelay(True)
             cls.clients_connected += 1
             if cls.client_manager:
+                assert self.request.remote_ip is not None
                 cls.client_manager.add_client(self.client_id, self.request.remote_ip)
         except Exception as exc:
             cls.node_handle.get_logger().error(
@@ -192,6 +194,7 @@ class RosbridgeWebSocket(WebSocketHandler):
 
         cls.clients_connected -= 1
         if cls.client_manager:
+            assert self.request.remote_ip is not None
             cls.client_manager.remove_client(self.client_id, self.request.remote_ip)
         cls.node_handle.get_logger().info(
             f"Client disconnected. {cls.clients_connected} clients total."

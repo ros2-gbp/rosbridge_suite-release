@@ -2,65 +2,53 @@
 Changelog for package rosbridge_server
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-2.6.0 (2026-04-02)
+2.0.6 (2026-04-02)
 ------------------
-* fix: Race condition in subscription destruction (backport `#1194 <https://github.com/RobotWebTools/rosbridge_suite/issues/1194>`_) (`#1208 <https://github.com/RobotWebTools/rosbridge_suite/issues/1208>`_)
-* feat: Create topic registrations in publish when topic not previously advertised (backport `#1203 <https://github.com/RobotWebTools/rosbridge_suite/issues/1203>`_) (`#1205 <https://github.com/RobotWebTools/rosbridge_suite/issues/1205>`_)
-* fix: Prevent client destruction race condition (backport `#1183 <https://github.com/RobotWebTools/rosbridge_suite/issues/1183>`_) (`#1189 <https://github.com/RobotWebTools/rosbridge_suite/issues/1189>`_)
-* fix: Race condition in websocket test (backport `#1185 <https://github.com/RobotWebTools/rosbridge_suite/issues/1185>`_) (`#1187 <https://github.com/RobotWebTools/rosbridge_suite/issues/1187>`_)
-* feat: Add pep8-naming checks (backport `#1177 <https://github.com/RobotWebTools/rosbridge_suite/issues/1177>`_) (`#1181 <https://github.com/RobotWebTools/rosbridge_suite/issues/1181>`_)
-* fix: Deadlock in concurrent module import in ros_loader (backport `#1173 <https://github.com/RobotWebTools/rosbridge_suite/issues/1173>`_) (`#1179 <https://github.com/RobotWebTools/rosbridge_suite/issues/1179>`_)
-* feat: Add timeout parameters to launch (backport `#1174 <https://github.com/RobotWebTools/rosbridge_suite/issues/1174>`_) (`#1176 <https://github.com/RobotWebTools/rosbridge_suite/issues/1176>`_)
+* fix: Race condition in subscription destruction (backport `#1194 <https://github.com/RobotWebTools/rosbridge_suite/issues/1194>`_) (`#1209 <https://github.com/RobotWebTools/rosbridge_suite/issues/1209>`_)
+* feat: Create topic registrations in publish when topic not previously advertised (backport `#1203 <https://github.com/RobotWebTools/rosbridge_suite/issues/1203>`_) (`#1206 <https://github.com/RobotWebTools/rosbridge_suite/issues/1206>`_)
+* fix: Race condition in websocket test (backport `#1185 <https://github.com/RobotWebTools/rosbridge_suite/issues/1185>`_) (`#1197 <https://github.com/RobotWebTools/rosbridge_suite/issues/1197>`_)
+* fix: Deadlock in concurrent module import in ros_loader (backport `#1173 <https://github.com/RobotWebTools/rosbridge_suite/issues/1173>`_) (`#1179 <https://github.com/RobotWebTools/rosbridge_suite/issues/1179>`_) (`#1196 <https://github.com/RobotWebTools/rosbridge_suite/issues/1196>`_)
+* feat: Add timeout parameters to launch (backport `#1174 <https://github.com/RobotWebTools/rosbridge_suite/issues/1174>`_) (`#1195 <https://github.com/RobotWebTools/rosbridge_suite/issues/1195>`_)
+* fix: Reduce idle CPU consumption of websocket server (backport `#1040 <https://github.com/RobotWebTools/rosbridge_suite/issues/1040>`_) (`#1171 <https://github.com/RobotWebTools/rosbridge_suite/issues/1171>`_)
+* fix: Prevent client destruction race condition (backport `#1183 <https://github.com/RobotWebTools/rosbridge_suite/issues/1183>`_) (`#1190 <https://github.com/RobotWebTools/rosbridge_suite/issues/1190>`_)
+* feat: Add pep8-naming checks (backport `#1177 <https://github.com/RobotWebTools/rosbridge_suite/issues/1177>`_) (`#1182 <https://github.com/RobotWebTools/rosbridge_suite/issues/1182>`_)
 * Contributors: Błażej Sowa, FieldSwan
 
-2.5.0 (2026-03-02)
+2.0.5 (2026-03-02)
 ------------------
-* fix: Reduce idle CPU consumption of websocket server (backport `#1040 <https://github.com/RobotWebTools/rosbridge_suite/issues/1040>`_) (`#1153 <https://github.com/RobotWebTools/rosbridge_suite/issues/1153>`_)
+
+2.0.4 (2025-11-20)
+------------------
+* fix: Use correct type for delay_between_messages parameter in launch file (backport `#1126 <https://github.com/RobotWebTools/rosbridge_suite/issues/1126>`_) (`#1132 <https://github.com/RobotWebTools/rosbridge_suite/issues/1132>`_)
 * Contributors: Błażej Sowa
 
-2.4.2 (2025-11-20)
+2.0.3 (2025-11-17)
 ------------------
-* fix: Use correct type for delay_between_messages parameter in launch file (backport `#1126 <https://github.com/RobotWebTools/rosbridge_suite/issues/1126>`_) (`#1131 <https://github.com/RobotWebTools/rosbridge_suite/issues/1131>`_)
+* fix: Don't add rosapi services to glob patterns if we pass empty `services_glob` parameter (backport `#1115 <https://github.com/RobotWebTools/rosbridge_suite/issues/1115>`_) (`#1117 <https://github.com/RobotWebTools/rosbridge_suite/issues/1117>`_)
 * Contributors: Błażej Sowa
 
-2.4.1 (2025-11-17)
+2.0.2 (2025-11-05)
 ------------------
-* fix: Don't add rosapi services to glob patterns if we pass empty `services_glob` parameter (backport `#1115 <https://github.com/RobotWebTools/rosbridge_suite/issues/1115>`_) (`#1116 <https://github.com/RobotWebTools/rosbridge_suite/issues/1116>`_)
-* Contributors: Błażej Sowa
+* chore: Update pre-commit hooks (backport `#1090 <https://github.com/RobotWebTools/rosbridge_suite/issues/1090>`_) (`#1100 <https://github.com/RobotWebTools/rosbridge_suite/issues/1100>`_)
+* Fix mypy errors (backport `#1084 <https://github.com/RobotWebTools/rosbridge_suite/issues/1084>`_) (`#1099 <https://github.com/RobotWebTools/rosbridge_suite/issues/1099>`_)
+* feat: Add type annotations, new parameter handling (backport `#1069 <https://github.com/RobotWebTools/rosbridge_suite/issues/1069>`_, `#1060 <https://github.com/RobotWebTools/rosbridge_suite/issues/1060>`_) (`#1098 <https://github.com/RobotWebTools/rosbridge_suite/issues/1098>`_)
+* fix: Change warn to warning (`#1068 <https://github.com/RobotWebTools/rosbridge_suite/issues/1068>`_)
+* chore: Update maintainers (`#1066 <https://github.com/RobotWebTools/rosbridge_suite/issues/1066>`_)
+* fix: rosbridge_websocket cooperative shutdown (`#1064 <https://github.com/RobotWebTools/rosbridge_suite/issues/1064>`_)
+* refactor: Enable ruff and ament_mypy checks and fix lint errors (`#1063 <https://github.com/RobotWebTools/rosbridge_suite/issues/1063>`_)
+* chore: Use ruff to replace other linters used in pre-commit hook (`#1062 <https://github.com/RobotWebTools/rosbridge_suite/issues/1062>`_)
+* Add pydocstyle lint checks and fix rosdoc2 warnings (`#1057 <https://github.com/RobotWebTools/rosbridge_suite/issues/1057>`_)
+* fix: Clean up package dependencies (`#1054 <https://github.com/RobotWebTools/rosbridge_suite/issues/1054>`_)
+* Contributors: Błażej Sowa, Sebastian Castro, cyan-at, pascalauroboa
 
-2.4.0 (2025-11-04)
+2.0.1 (2025-05-19)
 ------------------
-* chore: Update pre-commit hooks (backport `#1090 <https://github.com/RobotWebTools/rosbridge_suite/issues/1090>`_) (`#1092 <https://github.com/RobotWebTools/rosbridge_suite/issues/1092>`_)
-* Fix mypy errors (backport `#1084 <https://github.com/RobotWebTools/rosbridge_suite/issues/1084>`_) (`#1085 <https://github.com/RobotWebTools/rosbridge_suite/issues/1085>`_)
-* feat: New parameter and cli arguments handling (backport `#1060 <https://github.com/RobotWebTools/rosbridge_suite/issues/1060>`_) (`#1081 <https://github.com/RobotWebTools/rosbridge_suite/issues/1081>`_)
-* refactor: Add type annotations to all functions and methods (`#1079 <https://github.com/RobotWebTools/rosbridge_suite/issues/1079>`_)
-* fix: Change warn to warning (`#1067 <https://github.com/RobotWebTools/rosbridge_suite/issues/1067>`_)
-* refactor: Enable various ruff checks and fix lint errors (`#1059 <https://github.com/RobotWebTools/rosbridge_suite/issues/1059>`_)
-* fix: rosbridge_websocket cooperative shutdown (`#1048 <https://github.com/RobotWebTools/rosbridge_suite/issues/1048>`_)
-* chore: Use ruff to replace other linters used in pre-commit hook (`#1058 <https://github.com/RobotWebTools/rosbridge_suite/issues/1058>`_)
-* Add pydocstyle lint checks and fix rosdoc2 warnings (`#1056 <https://github.com/RobotWebTools/rosbridge_suite/issues/1056>`_)
-* fix: Clean up package dependencies (`#1053 <https://github.com/RobotWebTools/rosbridge_suite/issues/1053>`_)
-* fix: ament_mypy errors (`#1039 <https://github.com/RobotWebTools/rosbridge_suite/issues/1039>`_)
-* Contributors: Błażej Sowa, cyan-at, pascalauroboa, Sebastian Castro
-
-2.3.0 (2025-05-19)
-------------------
-* Add missing service timeout parameter to conditional launch (`#1028 <https://github.com/RobotWebTools/rosbridge_suite/issues/1028>`_)
-* Contributors: Ana
-
-2.2.0 (2025-02-26)
-------------------
-* Update maintainers (`#1000 <https://github.com/RobotWebTools/rosbridge_suite/issues/1000>`_)
-* Prevent parameter retrieval crashes (`#978 <https://github.com/RobotWebTools/rosbridge_suite/issues/978>`_)
-* Call services and send action goals in new threads by default (`#996 <https://github.com/RobotWebTools/rosbridge_suite/issues/996>`_)
-* Add timeout option to call_service messages (`#984 <https://github.com/RobotWebTools/rosbridge_suite/issues/984>`_)
-* Add ament_mypy test and fix all mypy errors (`#980 <https://github.com/RobotWebTools/rosbridge_suite/issues/980>`_)
-* Add namespace and respawn parameters to the nodes in the launch file (`#977 <https://github.com/RobotWebTools/rosbridge_suite/issues/977>`_)
-* fix: add url_path parameter in rosbridge_websocket_launch.xml (`#963 <https://github.com/RobotWebTools/rosbridge_suite/issues/963>`_)
-* Contributors: Błażej Sowa, Lebecque Florian, Mehsias, Matthias Rathauscher, SeanPai
-
-2.1.0 (2024-10-08)
-------------------
+* Add missing service timeout parameter to conditional launch (`#1030 <https://github.com/RobotWebTools/rosbridge_suite/issues/1030>`_)
+* fix: add url_path parameter in rosbridge_websocket_launch.xml (`#1011 <https://github.com/RobotWebTools/rosbridge_suite/issues/1011>`_)
+* Prevent parameter retrieval crashes (`#998 <https://github.com/RobotWebTools/rosbridge_suite/issues/998>`_)
+* Add warnings about default parameter values changes (`#997 <https://github.com/RobotWebTools/rosbridge_suite/issues/997>`_)
+* Add timeout option to call_service messages (`#994 <https://github.com/RobotWebTools/rosbridge_suite/issues/994>`_)
+* Contributors: Ana, Matthias Rathauscher, Lebecque Florian, Błażej Sowa, SeanPai
 
 2.0.0 (2024-10-08)
 ------------------
