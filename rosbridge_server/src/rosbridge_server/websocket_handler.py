@@ -32,18 +32,19 @@
 
 from __future__ import annotations
 
+import asyncio
 import sys
 import threading
 import traceback
 import uuid
+from asyncio.events import AbstractEventLoop
 from collections import deque
-from functools import partial, wraps
+from functools import wraps
 from typing import TYPE_CHECKING, ClassVar, ParamSpec, TypeVar
 
 from rclpy.node import Node
 from rosbridge_library.rosbridge_protocol import RosbridgeProtocol
 from rosbridge_library.util import bson
-from tornado.ioloop import IOLoop
 from tornado.iostream import StreamClosedError
 from tornado.websocket import WebSocketClosedError, WebSocketHandler
 
@@ -51,8 +52,6 @@ if TYPE_CHECKING:
     from collections.abc import Callable
 
     from .client_manager import ClientManager
-
-_io_loop = IOLoop.instance()
 
 
 def _log_exception() -> None:
@@ -122,8 +121,11 @@ class IncomingQueue(threading.Thread):
                 msg = self.queue.popleft()
 
             self.protocol.incoming(msg)
-
-        self.protocol.finish()
+        executor = self.protocol.node_handle.executor
+        if executor is not None:
+            executor.create_task(self.protocol.finish)
+        else:
+            self.protocol.finish()
 
 
 class RosbridgeWebSocket(WebSocketHandler):
@@ -132,6 +134,9 @@ class RosbridgeWebSocket(WebSocketHandler):
 
     # Class variable to manage connected clients
     client_manager: ClassVar[ClientManager | None] = None
+
+    # Event loop to run the coroutines on
+    event_loop: ClassVar[AbstractEventLoop | None] = None
 
     # Node handle to pass to RosbridgeProtocol when opening a connection
     node_handle: ClassVar[Node | None] = None
@@ -182,6 +187,11 @@ class RosbridgeWebSocket(WebSocketHandler):
     def on_close(self) -> None:
         cls = self.__class__
         assert isinstance(cls.node_handle, Node), "Node handle was not set"
+        # Discard outgoing messages to reduce number of failed writes to closed websocket
+        # ROS subscriptions have an inherent race condition with protocol.finish()
+        self.protocol.outgoing = lambda *_args, **_kwargs: None
+        self.incoming_queue.finish()
+
         cls.clients_connected -= 1
         if cls.client_manager:
             assert self.request.remote_ip is not None
@@ -189,15 +199,17 @@ class RosbridgeWebSocket(WebSocketHandler):
         cls.node_handle.get_logger().info(
             f"Client disconnected. {cls.clients_connected} clients total."
         )
-        self.incoming_queue.finish()
 
     def send_message(self, message: bson.BSON | bytearray | str, compression: str = "none") -> None:
+        cls = self.__class__
+        assert isinstance(cls.event_loop, AbstractEventLoop), "Event loop was not set"
+
         if isinstance(message, bson.BSON) or compression in ["cbor", "cbor-raw"]:
             binary = True
         else:
             binary = False
 
-        _io_loop.add_callback(partial(self.prewrite_message, message, binary))
+        asyncio.run_coroutine_threadsafe(self.prewrite_message(message, binary), cls.event_loop)
 
     async def prewrite_message(self, message: bson.BSON | bytearray | str, binary: bool) -> None:
         cls = self.__class__
