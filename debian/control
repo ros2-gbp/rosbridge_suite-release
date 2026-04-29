@@ -1,0 +1,12 @@
+Source: ros-lyrical-rosapi
+Section: misc
+Priority: optional
+Maintainer: Błażej Sowa <blazej@fictionlab.pl>
+Build-Depends: debhelper (>= 9.0.0), ros-lyrical-ament-cmake, ros-lyrical-ament-cmake-mypy <!nocheck>, ros-lyrical-ament-cmake-pytest <!nocheck>, ros-lyrical-ament-cmake-python, ros-lyrical-geometry-msgs <!nocheck>, ros-lyrical-rmw-dds-common <!nocheck>, ros-lyrical-sensor-msgs <!nocheck>, ros-lyrical-shape-msgs <!nocheck>, ros-lyrical-ros-workspace
+Homepage: http://ros.org/wiki/rosapi
+Standards-Version: 3.9.2
+
+Package: ros-lyrical-rosapi
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, ros-lyrical-builtin-interfaces, ros-lyrical-rcl-interfaces, ros-lyrical-rclpy, ros-lyrical-ros2action, ros-lyrical-ros2interface, ros-lyrical-ros2node, ros-lyrical-ros2service, ros-lyrical-ros2topic, ros-lyrical-rosapi-msgs, ros-lyrical-rosbridge-library, ros-lyrical-rosidl-adapter, ros-lyrical-rosidl-runtime-py, ros-lyrical-ros-workspace
+Description: Provides services for getting various ROS meta-information, including ROS topic, services, interfaces or action servers and managing ROS parameters.
