@@ -1,0 +1,12 @@
+Source: ros-lyrical-rosbridge-server
+Section: misc
+Priority: optional
+Maintainer: Błażej Sowa <blazej@fictionlab.pl>
+Build-Depends: debhelper (>= 9.0.0), python3-autobahn <!nocheck>, python3-twisted <!nocheck>, ros-lyrical-action-msgs <!nocheck>, ros-lyrical-ament-cmake-mypy <!nocheck>, ros-lyrical-ament-cmake-python, ros-lyrical-ament-cmake-ros, ros-lyrical-example-interfaces <!nocheck>, ros-lyrical-launch <!nocheck>, ros-lyrical-launch-ros <!nocheck>, ros-lyrical-launch-testing-ament-cmake <!nocheck>, ros-lyrical-rcl-interfaces <!nocheck>, ros-lyrical-std-srvs <!nocheck>, ros-lyrical-ros-workspace
+Homepage: http://ros.org/wiki/rosbridge_server
+Standards-Version: 3.9.2
+
+Package: ros-lyrical-rosbridge-server
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, python3-tornado, ros-lyrical-rclpy, ros-lyrical-rosapi, ros-lyrical-rosbridge-library, ros-lyrical-rosbridge-msgs, ros-lyrical-std-msgs, ros-lyrical-ros-workspace
+Description: A WebSocket interface to rosbridge.
