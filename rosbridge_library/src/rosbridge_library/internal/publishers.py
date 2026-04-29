@@ -50,6 +50,7 @@ from rosbridge_library.internal.type_support import ROSMessage, ROSMessageT
 
 if TYPE_CHECKING:
     from rclpy.node import Node
+    from rclpy.publisher import Publisher
 
 
 class MultiPublisher(Generic[ROSMessageT]):
@@ -134,7 +135,9 @@ class MultiPublisher(Generic[ROSMessageT]):
         else:
             publisher_qos.depth = 1
 
-        self.publisher = node_handle.create_publisher(msg_class, topic, qos_profile=publisher_qos)
+        self.publisher: Publisher[ROSMessageT] = node_handle.create_publisher(
+            msg_class, topic, qos_profile=publisher_qos
+        )
 
     def unregister(self) -> None:
         """Unregister the publisher and clear the clients."""

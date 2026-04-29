@@ -44,6 +44,7 @@ from typing import TYPE_CHECKING, cast
 import rclpy
 from rcl_interfaces.msg import ParameterDescriptor
 from rclpy.executors import SingleThreadedExecutor
+from rclpy.experimental import EventsExecutor
 from rclpy.node import Node
 from rclpy.utilities import remove_ros_args
 from tornado.httpserver import HTTPServer
@@ -69,6 +70,8 @@ SERVER_PARAMETERS = (
     ("websocket_ping_timeout", float, 30.0, "Timeout in seconds for WebSocket ping responses."),
     # Websocket handler parameters
     ("use_compression", bool, False, "Enable compression for WebSocket messages."),
+    # Executor parameters
+    ("use_events_executor", bool, False, "Use EventsExecutor instead of SingleThreadedExecutor."),
 )
 
 PROTOCOL_PARAMETERS = (
@@ -81,20 +84,12 @@ PROTOCOL_PARAMETERS = (
         10.0,
         "How long to wait before unregistering a client from publisher after unadvertising publisher.",
     ),
-    (
-        "binary_encoder_type",
-        str,
-        "default",
-        "Encoder used for encoding binary data in messages. Available: 'default', 'b64', `bson'. "
-        "Ignored if bson_only_mode is True.",
-    ),
-    ("bson_only_mode", bool, False, "Use BSON only mode for messages."),
     ("topics_glob", str, "", "Glob patterns for topics publish/subscribe."),
     ("services_glob", str, "", "Glob patterns for services call/advertise."),
     ("actions_glob", str, "", "Glob patterns for actions send/advertise."),
-    ("call_services_in_new_thread", bool, False, "Call services in a new threads."),
-    ("default_call_service_timeout", float, 0.0, "Default timeout for service calls."),
-    ("send_action_goals_in_new_thread", bool, False, "Send action goals in a new threads."),
+    ("call_services_in_new_thread", bool, True, "Call services in a new threads."),
+    ("default_call_service_timeout", float, 5.0, "Default timeout for service calls."),
+    ("send_action_goals_in_new_thread", bool, True, "Send action goals in a new threads."),
 )
 
 
@@ -130,7 +125,6 @@ class RosbridgeWebsocketNode(Node):
         RosbridgeWebSocket.event_loop = asyncio.get_event_loop()
 
         self._handle_parameters()
-        self._check_deprecated_parameters()
 
         # To be able to access the list of topics and services,
         # you must be able to access the rosapi services.
@@ -196,6 +190,11 @@ class RosbridgeWebsocketNode(Node):
             self.get_parameter("use_compression").get_parameter_value().bool_value
         )
 
+        # Executor parameters
+        self.use_events_executor = (
+            self.get_parameter("use_events_executor").get_parameter_value().bool_value
+        )
+
     def _start_server(self) -> None:
         handlers = [(r"/", RosbridgeWebSocket), (r"", RosbridgeWebSocket)]
         if self.url_path != "/":
@@ -226,38 +225,17 @@ class RosbridgeWebsocketNode(Node):
                 )
                 time.sleep(self.retry_startup_delay)
 
-    def _check_deprecated_parameters(self) -> None:
-        if self.protocol_parameters["default_call_service_timeout"] == 0.0:
-            self.get_logger().warn(
-                "The 'default_call_service_timeout' parameter is currently set to 0.0, "
-                "which means service calls will block indefinitely if no response is received. "
-                "Please note that in the Jazzy and later releases, the default value for this parameter "
-                "will be updated to 5.0 seconds."
-            )
-
-        if self.protocol_parameters["call_services_in_new_thread"] is False:
-            self.get_logger().warn(
-                "The 'call_services_in_new_thread' parameter is currently set to False, "
-                "which means service calls will block the main thread. "
-                "Please note that in the Jazzy and later releases, the default value for this parameter "
-                "will be updated to True."
-            )
-
-        if self.protocol_parameters["send_action_goals_in_new_thread"] is False:
-            self.get_logger().warn(
-                "The 'send_action_goals_in_new_thread' parameter is currently set to False, "
-                "which means sending action goals will block the main thread. "
-                "Please note that in the Jazzy and later releases, the default value for this parameter "
-                "will be updated to True."
-            )
-
 
 async def async_main() -> None:
     rclpy.init(args=sys.argv, signal_handler_options=rclpy.signals.SignalHandlerOptions.NO)
 
     node = RosbridgeWebsocketNode()
 
-    executor = SingleThreadedExecutor()
+    if node.use_events_executor:
+        executor = EventsExecutor()
+    else:
+        executor = SingleThreadedExecutor()
+
     executor.add_node(node)
 
     spin_thread = threading.Thread(target=executor.spin)

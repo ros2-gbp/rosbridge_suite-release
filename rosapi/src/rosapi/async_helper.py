@@ -32,21 +32,46 @@
 
 from __future__ import annotations
 
-from typing import Any, TypeAlias, TypeVar
+from typing import TYPE_CHECKING
 
-from rosidl_pycommon.interface_base_classes import BaseAction, BaseImpl, BaseMessage, BaseService
+from rclpy.task import Future
 
-ROSMessage: TypeAlias = BaseMessage
-ROSService: TypeAlias = BaseService
-ROSAction: TypeAlias = BaseAction
+if TYPE_CHECKING:
+    from rclpy.node import Node
 
-# Type variables for ROS types
-ROSMessageT = TypeVar("ROSMessageT", bound=ROSMessage)
-ROSServiceT = TypeVar("ROSServiceT", bound=ROSService)
-ROSServiceRequestT = TypeVar("ROSServiceRequestT", bound=ROSMessage)
-ROSServiceResponseT = TypeVar("ROSServiceResponseT", bound=ROSMessage)
-ROSActionT = TypeVar("ROSActionT", bound=ROSAction)
-ROSActionGoalT = TypeVar("ROSActionGoalT", bound=ROSMessage)
-ROSActionResultT = TypeVar("ROSActionResultT", bound=ROSMessage)
-ROSActionFeedbackT = TypeVar("ROSActionFeedbackT", bound=ROSMessage)
-ROSActionImplT = TypeVar("ROSActionImplT", bound=BaseImpl[Any, Any, Any])
+
+async def futures_wait_for(node: Node, futures: list[Future], timeout_sec: float) -> None:
+    """Await a list of futures with a timeout."""
+    first_done_future: Future = Future()
+
+    def timeout_callback() -> None:
+        first_done_future.set_result(None)
+
+    timer = node.create_timer(timeout_sec, timeout_callback)
+
+    def future_done_callback(_arg: Future) -> None:
+        if all(future.done() for future in futures):
+            first_done_future.set_result(None)
+
+    for future in futures:
+        future.add_done_callback(future_done_callback)
+
+    await first_done_future
+
+    timer.cancel()
+    timer.destroy()
+
+
+async def async_sleep(node: Node, delay_sec: float) -> None:
+    """Block the coroutine for a given time."""
+    sleep_future: Future = Future()
+
+    def timeout_callback() -> None:
+        sleep_future.set_result(None)
+
+    timer = node.create_timer(delay_sec, timeout_callback)
+
+    await sleep_future
+
+    timer.cancel()
+    timer.destroy()

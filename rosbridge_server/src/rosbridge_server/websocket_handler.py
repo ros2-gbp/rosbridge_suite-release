@@ -44,7 +44,6 @@ from typing import TYPE_CHECKING, ClassVar, ParamSpec, TypeVar
 
 from rclpy.node import Node
 from rosbridge_library.rosbridge_protocol import RosbridgeProtocol
-from rosbridge_library.util import bson
 from tornado.iostream import StreamClosedError
 from tornado.websocket import WebSocketClosedError, WebSocketHandler
 
@@ -57,7 +56,6 @@ if TYPE_CHECKING:
 def _log_exception() -> None:
     """Log the most recent exception to ROS."""
     exc = traceback.format_exception(*sys.exc_info())
-    assert RosbridgeWebSocket.node_handle is not None
     RosbridgeWebSocket.node_handle.get_logger().error("".join(exc))
 
 
@@ -166,7 +164,6 @@ class RosbridgeWebSocket(WebSocketHandler):
             self.set_nodelay(True)
             cls.clients_connected += 1
             if cls.client_manager:
-                assert self.request.remote_ip is not None
                 cls.client_manager.add_client(self.client_id, self.request.remote_ip)
         except Exception as exc:
             cls.node_handle.get_logger().error(
@@ -194,24 +191,23 @@ class RosbridgeWebSocket(WebSocketHandler):
 
         cls.clients_connected -= 1
         if cls.client_manager:
-            assert self.request.remote_ip is not None
             cls.client_manager.remove_client(self.client_id, self.request.remote_ip)
         cls.node_handle.get_logger().info(
             f"Client disconnected. {cls.clients_connected} clients total."
         )
 
-    def send_message(self, message: bson.BSON | bytearray | str, compression: str = "none") -> None:
+    def send_message(self, message: bytes | str, compression: str = "none") -> None:
         cls = self.__class__
         assert isinstance(cls.event_loop, AbstractEventLoop), "Event loop was not set"
 
-        if isinstance(message, bson.BSON) or compression in ["cbor", "cbor-raw"]:
+        if compression in ["cbor", "cbor-raw"]:
             binary = True
         else:
             binary = False
 
         asyncio.run_coroutine_threadsafe(self.prewrite_message(message, binary), cls.event_loop)
 
-    async def prewrite_message(self, message: bson.BSON | bytearray | str, binary: bool) -> None:
+    async def prewrite_message(self, message: bytes | str, binary: bool) -> None:
         cls = self.__class__
         assert isinstance(cls.node_handle, Node), "Node handle was not set"
         try:

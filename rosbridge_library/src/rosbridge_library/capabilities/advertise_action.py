@@ -33,11 +33,11 @@
 from __future__ import annotations
 
 import fnmatch
-from typing import TYPE_CHECKING, Generic, cast
+from typing import TYPE_CHECKING, Any, Generic, cast
 
 from action_msgs.msg import GoalStatus
 from rclpy.action import ActionServer
-from rclpy.action.server import CancelResponse, ServerGoalHandle
+from rclpy.action.server import CancelResponse
 from rclpy.callback_groups import ReentrantCallbackGroup
 from rclpy.task import Future
 
@@ -47,22 +47,30 @@ from rosbridge_library.internal.ros_loader import get_action_class
 from rosbridge_library.internal.type_support import (
     ROSActionFeedbackT,
     ROSActionGoalT,
+    ROSActionImplT,
     ROSActionResultT,
     ROSMessage,
 )
 
 if TYPE_CHECKING:
+    from rclpy.action.server import ServerGoalHandle
+
     from rosbridge_library.protocol import Protocol
 
 
-class AdvertisedActionHandler(Generic[ROSActionGoalT, ROSActionResultT, ROSActionFeedbackT]):
+class AdvertisedActionHandler(
+    Generic[ROSActionGoalT, ROSActionResultT, ROSActionFeedbackT, ROSActionImplT]
+):
     id_counter = 1
 
     def __init__(
         self, action_name: str, action_type: str, protocol: Protocol, sleep_time: float = 0.001
     ) -> None:
-        self.goal_futures: dict[str, Future] = {}
-        self.goal_handles: dict[str, ServerGoalHandle] = {}
+        self.goal_futures: dict[str, Future[ROSActionResultT]] = {}
+        self.goal_handles: dict[
+            str,
+            ServerGoalHandle[ROSActionGoalT, ROSActionResultT, ROSActionFeedbackT, ROSActionImplT],
+        ] = {}
         self.goal_statuses: dict[str, int] = {}
 
         self.action_name = action_name
@@ -70,7 +78,9 @@ class AdvertisedActionHandler(Generic[ROSActionGoalT, ROSActionResultT, ROSActio
         self.protocol = protocol
         self.sleep_time = sleep_time
         # setup the action
-        self.action_server = ActionServer(
+        self.action_server = ActionServer[
+            ROSActionGoalT, ROSActionResultT, ROSActionFeedbackT, ROSActionImplT
+        ](
             protocol.node_handle,
             get_action_class(action_type),
             action_name,
@@ -84,7 +94,12 @@ class AdvertisedActionHandler(Generic[ROSActionGoalT, ROSActionResultT, ROSActio
         self.id_counter += 1
         return next_id_value
 
-    async def execute_callback(self, goal: ServerGoalHandle) -> ROSActionResultT:
+    async def execute_callback(
+        self,
+        goal: ServerGoalHandle[
+            ROSActionGoalT, ROSActionResultT, ROSActionFeedbackT, ROSActionImplT
+        ],
+    ) -> ROSActionResultT:
         """
         Execute action goal.
 
@@ -93,7 +108,7 @@ class AdvertisedActionHandler(Generic[ROSActionGoalT, ROSActionResultT, ROSActio
         # generate a unique ID
         goal_id = f"action_goal:{self.action_name}:{self.next_id()}"
 
-        def done_callback(fut: Future) -> None:
+        def done_callback(fut: Future[ROSActionResultT]) -> None:
             if fut.cancelled():
                 goal.abort()
                 self.protocol.log("info", f"Aborted goal {goal_id}")
@@ -110,7 +125,7 @@ class AdvertisedActionHandler(Generic[ROSActionGoalT, ROSActionResultT, ROSActio
                 else:
                     goal.abort()
 
-        future = Future()
+        future: Future[ROSActionResultT] = Future()
         future.add_done_callback(done_callback)
         self.goal_handles[goal_id] = goal
         self.goal_futures[goal_id] = future
@@ -136,7 +151,12 @@ class AdvertisedActionHandler(Generic[ROSActionGoalT, ROSActionResultT, ROSActio
             del self.goal_futures[goal_id]
             del self.goal_handles[goal_id]
 
-    def cancel_callback(self, goal: ServerGoalHandle) -> CancelResponse:
+    def cancel_callback(
+        self,
+        goal: ServerGoalHandle[
+            ROSActionGoalT, ROSActionResultT, ROSActionFeedbackT, ROSActionImplT
+        ],
+    ) -> CancelResponse:
         """
         Cancel action goal.
 
@@ -262,8 +282,8 @@ class AdvertiseAction(Capability):
 
         # setup and store the action information
         action_type: str = message["type"]
-        action_handler: AdvertisedActionHandler[ROSMessage, ROSMessage, ROSMessage] = (
-            AdvertisedActionHandler(action_name, action_type, self.protocol)
+        action_handler = AdvertisedActionHandler[ROSMessage, ROSMessage, ROSMessage, Any](
+            action_name, action_type, self.protocol
         )
         self.protocol.external_action_list[action_name] = action_handler
         self.protocol.log("info", f"Advertised action {action_name}")
