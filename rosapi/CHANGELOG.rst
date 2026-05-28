@@ -2,33 +2,33 @@
 Changelog for package rosapi
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-3.3.0 (2026-05-27)
+2.7.0 (2026-05-27)
 ------------------
-* feat: Provide separate arguments for publish and subscribe topic globs (backport `#1260 <https://github.com/RobotWebTools/rosbridge_suite/issues/1260>`_) (`#1266 <https://github.com/RobotWebTools/rosbridge_suite/issues/1266>`_)
-* fix: avoid rosapi crash on requesting typedefs for non-existent packages (`#1239 <https://github.com/RobotWebTools/rosbridge_suite/issues/1239>`_) (`#1240 <https://github.com/RobotWebTools/rosbridge_suite/issues/1240>`_)
+* feat: Provide separate arguments for publish and subscribe topic globs (backport `#1260 <https://github.com/RobotWebTools/rosbridge_suite/issues/1260>`_) (`#1267 <https://github.com/RobotWebTools/rosbridge_suite/issues/1267>`_)
+* fix: avoid rosapi crash on requesting typedefs for non-existent packages (`#1239 <https://github.com/RobotWebTools/rosbridge_suite/issues/1239>`_) (`#1241 <https://github.com/RobotWebTools/rosbridge_suite/issues/1241>`_)
 * Contributors: Błażej Sowa, Harshdeep Singh, p7yong
 
-3.2.0 (2026-04-02)
+2.6.0 (2026-04-02)
 ------------------
-* feat: Cache rosapi get/set parameter clients (backport `#1201 <https://github.com/RobotWebTools/rosbridge_suite/issues/1201>`_) (`#1211 <https://github.com/RobotWebTools/rosbridge_suite/issues/1211>`_)
+* feat: Cache rosapi get/set parameter clients (backport `#1201 <https://github.com/RobotWebTools/rosbridge_suite/issues/1201>`_) (`#1212 <https://github.com/RobotWebTools/rosbridge_suite/issues/1212>`_)
 * Contributors: Błażej Sowa
 
-3.1.0 (2026-03-02)
+2.5.0 (2026-03-02)
 ------------------
 
-3.0.2 (2025-11-20)
+2.4.2 (2025-11-20)
 ------------------
-* fix: Invert success check for set_param function (`#1133 <https://github.com/RobotWebTools/rosbridge_suite/issues/1133>`_)
+* fix: Invert success check for set_param function (backport `#1133 <https://github.com/RobotWebTools/rosbridge_suite/issues/1133>`_) (`#1134 <https://github.com/RobotWebTools/rosbridge_suite/issues/1134>`_)
 * Contributors: Błażej Sowa
 
-3.0.1 (2025-11-17)
+2.4.1 (2025-11-17)
 ------------------
 
-3.0.0 (2025-11-04)
+2.4.0 (2025-11-04)
 ------------------
-* chore: Update pre-commit hooks (`#1090 <https://github.com/RobotWebTools/rosbridge_suite/issues/1090>`_)
-* Fix mypy errors (`#1084 <https://github.com/RobotWebTools/rosbridge_suite/issues/1084>`_)
-* refactor: Add type annotations to all functions and methods (`#1069 <https://github.com/RobotWebTools/rosbridge_suite/issues/1069>`_)
+* chore: Update pre-commit hooks (backport `#1090 <https://github.com/RobotWebTools/rosbridge_suite/issues/1090>`_) (`#1092 <https://github.com/RobotWebTools/rosbridge_suite/issues/1092>`_)
+* Fix mypy errors (backport `#1084 <https://github.com/RobotWebTools/rosbridge_suite/issues/1084>`_) (`#1085 <https://github.com/RobotWebTools/rosbridge_suite/issues/1085>`_)
+* refactor: Add type annotations to all functions and methods (`#1079 <https://github.com/RobotWebTools/rosbridge_suite/issues/1079>`_)
 * fix: Change warn to warning (`#1067 <https://github.com/RobotWebTools/rosbridge_suite/issues/1067>`_)
 * refactor: Enable various ruff checks and fix lint errors (`#1059 <https://github.com/RobotWebTools/rosbridge_suite/issues/1059>`_)
 * chore: Use ruff to replace other linters used in pre-commit hook (`#1058 <https://github.com/RobotWebTools/rosbridge_suite/issues/1058>`_)
@@ -36,7 +36,7 @@ Changelog for package rosapi
 * fix: Clean up package dependencies (`#1053 <https://github.com/RobotWebTools/rosbridge_suite/issues/1053>`_)
 * feat: Add interface and service for retrieving action type (`#1046 <https://github.com/RobotWebTools/rosbridge_suite/issues/1046>`_)
 * fix: ament_mypy errors (`#1039 <https://github.com/RobotWebTools/rosbridge_suite/issues/1039>`_)
-* Contributors: Błażej Sowa, MNV Chaitanya Kumar, pascalauroboa
+* Contributors: Błażej Sowa, MNV Chaitanya Kumar, pascalauroboa, Sebastian Castro
 
 2.3.0 (2025-05-19)
 ------------------

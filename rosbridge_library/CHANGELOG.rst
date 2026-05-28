@@ -2,52 +2,54 @@
 Changelog for package rosbridge_library
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-3.3.0 (2026-05-27)
+2.7.0 (2026-05-27)
 ------------------
-* fix: Use Clock instead of deprecated ROSClock (backport `#1273 <https://github.com/RobotWebTools/rosbridge_suite/issues/1273>`_) (`#1274 <https://github.com/RobotWebTools/rosbridge_suite/issues/1274>`_)
-* feat: Provide separate arguments for publish and subscribe topic globs (backport `#1260 <https://github.com/RobotWebTools/rosbridge_suite/issues/1260>`_) (`#1266 <https://github.com/RobotWebTools/rosbridge_suite/issues/1266>`_)
-* feat: Improve action unadvertising (backport `#1248 <https://github.com/RobotWebTools/rosbridge_suite/issues/1248>`_) (`#1252 <https://github.com/RobotWebTools/rosbridge_suite/issues/1252>`_)
-* fix: mypy errors and flaky subscriber/publisher tests (backport `#1258 <https://github.com/RobotWebTools/rosbridge_suite/issues/1258>`_) (`#1261 <https://github.com/RobotWebTools/rosbridge_suite/issues/1261>`_)
-* fix: Don't raise exception in service callback (`#1247 <https://github.com/RobotWebTools/rosbridge_suite/issues/1247>`_) (`#1249 <https://github.com/RobotWebTools/rosbridge_suite/issues/1249>`_)
-* fix: Don't use MultiThreadedExecutor in tests (`#1228 <https://github.com/RobotWebTools/rosbridge_suite/issues/1228>`_) (`#1244 <https://github.com/RobotWebTools/rosbridge_suite/issues/1244>`_)
-* chore: Remove unused experimental tests (`#1231 <https://github.com/RobotWebTools/rosbridge_suite/issues/1231>`_) (`#1233 <https://github.com/RobotWebTools/rosbridge_suite/issues/1233>`_)
-* feat: Add QoS Profile support for advertise, publish and subscribe operations (`#1150 <https://github.com/RobotWebTools/rosbridge_suite/issues/1150>`_) (`#1225 <https://github.com/RobotWebTools/rosbridge_suite/issues/1225>`_)
-* fix: Auto-populate header.stamp when header omitted (`#1220 <https://github.com/RobotWebTools/rosbridge_suite/issues/1220>`_) (`#1221 <https://github.com/RobotWebTools/rosbridge_suite/issues/1221>`_)
+* fix: Use Clock instead of deprecated ROSClock (backport `#1273 <https://github.com/RobotWebTools/rosbridge_suite/issues/1273>`_) (`#1275 <https://github.com/RobotWebTools/rosbridge_suite/issues/1275>`_)
+* fix: Prevent client destruction race in services.call_service (backport `#1255 <https://github.com/RobotWebTools/rosbridge_suite/issues/1255>`_) (`#1270 <https://github.com/RobotWebTools/rosbridge_suite/issues/1270>`_)
+* feat: Provide separate arguments for publish and subscribe topic globs (backport `#1260 <https://github.com/RobotWebTools/rosbridge_suite/issues/1260>`_) (`#1267 <https://github.com/RobotWebTools/rosbridge_suite/issues/1267>`_)
+* feat: Improve action unadvertising (backport `#1248 <https://github.com/RobotWebTools/rosbridge_suite/issues/1248>`_) (`#1264 <https://github.com/RobotWebTools/rosbridge_suite/issues/1264>`_)
+* fix: mypy errors and flaky subscriber/publisher tests (backport `#1258 <https://github.com/RobotWebTools/rosbridge_suite/issues/1258>`_) (`#1261 <https://github.com/RobotWebTools/rosbridge_suite/issues/1261>`_) (`#1262 <https://github.com/RobotWebTools/rosbridge_suite/issues/1262>`_)
+* fix: Don't raise exception in service callback (`#1247 <https://github.com/RobotWebTools/rosbridge_suite/issues/1247>`_) (`#1250 <https://github.com/RobotWebTools/rosbridge_suite/issues/1250>`_)
+* fix: Don't use MultiThreadedExecutor in tests (`#1228 <https://github.com/RobotWebTools/rosbridge_suite/issues/1228>`_) (`#1245 <https://github.com/RobotWebTools/rosbridge_suite/issues/1245>`_)
+* chore: Remove unused experimental tests (`#1231 <https://github.com/RobotWebTools/rosbridge_suite/issues/1231>`_) (`#1234 <https://github.com/RobotWebTools/rosbridge_suite/issues/1234>`_)
+* feat: Add QoS Profile support for advertise, publish and subscribe operations (backport `#1150 <https://github.com/RobotWebTools/rosbridge_suite/issues/1150>`_) (`#1226 <https://github.com/RobotWebTools/rosbridge_suite/issues/1226>`_)
+* fix: Auto-populate header.stamp when header omitted (`#1220 <https://github.com/RobotWebTools/rosbridge_suite/issues/1220>`_) (`#1222 <https://github.com/RobotWebTools/rosbridge_suite/issues/1222>`_)
 * Contributors: Błażej Sowa, Roald Schaum, Joshua Whitley, p7yong
 
-3.2.0 (2026-04-02)
+2.6.0 (2026-04-02)
 ------------------
-* fix: Race condition in subscription destruction (backport `#1194 <https://github.com/RobotWebTools/rosbridge_suite/issues/1194>`_) (`#1207 <https://github.com/RobotWebTools/rosbridge_suite/issues/1207>`_)
-* feat: Create topic registrations in publish when topic not previously advertised (`#1203 <https://github.com/RobotWebTools/rosbridge_suite/issues/1203>`_) (`#1204 <https://github.com/RobotWebTools/rosbridge_suite/issues/1204>`_)
-* feat: Add pep8-naming checks (backport `#1177 <https://github.com/RobotWebTools/rosbridge_suite/issues/1177>`_) (`#1180 <https://github.com/RobotWebTools/rosbridge_suite/issues/1180>`_)
-* fix: Deadlock in concurrent module import in ros_loader (backport `#1173 <https://github.com/RobotWebTools/rosbridge_suite/issues/1173>`_) (`#1178 <https://github.com/RobotWebTools/rosbridge_suite/issues/1178>`_)
+* fix: Race condition in subscription destruction (backport `#1194 <https://github.com/RobotWebTools/rosbridge_suite/issues/1194>`_) (`#1208 <https://github.com/RobotWebTools/rosbridge_suite/issues/1208>`_)
+* feat: Create topic registrations in publish when topic not previously advertised (backport `#1203 <https://github.com/RobotWebTools/rosbridge_suite/issues/1203>`_) (`#1205 <https://github.com/RobotWebTools/rosbridge_suite/issues/1205>`_)
+* feat: Add pep8-naming checks (backport `#1177 <https://github.com/RobotWebTools/rosbridge_suite/issues/1177>`_) (`#1181 <https://github.com/RobotWebTools/rosbridge_suite/issues/1181>`_)
+* fix: Deadlock in concurrent module import in ros_loader (backport `#1173 <https://github.com/RobotWebTools/rosbridge_suite/issues/1173>`_) (`#1179 <https://github.com/RobotWebTools/rosbridge_suite/issues/1179>`_)
 * Contributors: Błażej Sowa, FieldSwan
 
-3.1.0 (2026-03-02)
+2.5.0 (2026-03-02)
 ------------------
-* fix: numpy.ndarray not handled in CBOR serialization (`#1161 <https://github.com/RobotWebTools/rosbridge_suite/issues/1161>`_)
-* fix: Handle action rejection and server timeout (`#1139 <https://github.com/RobotWebTools/rosbridge_suite/issues/1139>`_)
-* fix: Failing service and subscription tests (`#1147 <https://github.com/RobotWebTools/rosbridge_suite/issues/1147>`_)
+* fix: numpy.ndarray not handled in CBOR serialization (backport `#1161 <https://github.com/RobotWebTools/rosbridge_suite/issues/1161>`_) (`#1162 <https://github.com/RobotWebTools/rosbridge_suite/issues/1162>`_)
+* fix: Handle action rejection and server timeout (backport `#1139 <https://github.com/RobotWebTools/rosbridge_suite/issues/1139>`_) (`#1154 <https://github.com/RobotWebTools/rosbridge_suite/issues/1154>`_)
+* fix: Failing service and subscription tests (backport `#1147 <https://github.com/RobotWebTools/rosbridge_suite/issues/1147>`_) (`#1151 <https://github.com/RobotWebTools/rosbridge_suite/issues/1151>`_)
 * Contributors: Błażej Sowa, Spir0u, atofetti-botbot
 
-3.0.2 (2025-11-20)
+2.4.2 (2025-11-20)
 ------------------
-* fix: Apply service timeout parameter correctly (`#1125 <https://github.com/RobotWebTools/rosbridge_suite/issues/1125>`_)
-* Contributors: Mike Lanighan
-
-3.0.1 (2025-11-17)
-------------------
-* fix: Don't add rosapi services to glob patterns if we pass empty `services_glob` parameter (`#1115 <https://github.com/RobotWebTools/rosbridge_suite/issues/1115>`_)
-* feat: Allow importing action feedback message types (`#1108 <https://github.com/RobotWebTools/rosbridge_suite/issues/1108>`_)
-* feat: Replace cbor with cbor2 library, remove inline implementation (`#1107 <https://github.com/RobotWebTools/rosbridge_suite/issues/1107>`_)
+* fix: Apply service timeout parameter correctly (backport `#1125 <https://github.com/RobotWebTools/rosbridge_suite/issues/1125>`_) (`#1129 <https://github.com/RobotWebTools/rosbridge_suite/issues/1129>`_)
+  Co-authored-by: Mike Lanighan <45465435+mlanighan@users.noreply.github.com>
 * Contributors: Błażej Sowa
 
-3.0.0 (2025-11-04)
+2.4.1 (2025-11-17)
 ------------------
-* chore: Update pre-commit hooks (`#1090 <https://github.com/RobotWebTools/rosbridge_suite/issues/1090>`_)
-* Fix mypy errors (`#1084 <https://github.com/RobotWebTools/rosbridge_suite/issues/1084>`_)
-* feat: New parameter and cli arguments handling  (`#1060 <https://github.com/RobotWebTools/rosbridge_suite/issues/1060>`_)
-* refactor: Add type annotations to all functions and methods (`#1069 <https://github.com/RobotWebTools/rosbridge_suite/issues/1069>`_)
+* fix: Don't add rosapi services to glob patterns if we pass empty `services_glob` parameter (backport `#1115 <https://github.com/RobotWebTools/rosbridge_suite/issues/1115>`_) (`#1116 <https://github.com/RobotWebTools/rosbridge_suite/issues/1116>`_)
+* feat: Allow importing action feedback message types (backport `#1108 <https://github.com/RobotWebTools/rosbridge_suite/issues/1108>`_) (`#1111 <https://github.com/RobotWebTools/rosbridge_suite/issues/1111>`_)
+* feat: Replace cbor with cbor2 library, remove inline implementation (backport `#1107 <https://github.com/RobotWebTools/rosbridge_suite/issues/1107>`_) (`#1109 <https://github.com/RobotWebTools/rosbridge_suite/issues/1109>`_)
+* Contributors: Błażej Sowa
+
+2.4.0 (2025-11-04)
+------------------
+* chore: Update pre-commit hooks (backport `#1090 <https://github.com/RobotWebTools/rosbridge_suite/issues/1090>`_) (`#1092 <https://github.com/RobotWebTools/rosbridge_suite/issues/1092>`_)
+* Fix mypy errors (backport `#1084 <https://github.com/RobotWebTools/rosbridge_suite/issues/1084>`_) (`#1085 <https://github.com/RobotWebTools/rosbridge_suite/issues/1085>`_)
+* feat: New parameter and cli arguments handling (backport `#1060 <https://github.com/RobotWebTools/rosbridge_suite/issues/1060>`_) (`#1081 <https://github.com/RobotWebTools/rosbridge_suite/issues/1081>`_)
+* refactor: Add type annotations to all functions and methods (`#1079 <https://github.com/RobotWebTools/rosbridge_suite/issues/1079>`_)
 * fix: Add delays to tests after subscribing/unsubscribing topics (`#1071 <https://github.com/RobotWebTools/rosbridge_suite/issues/1071>`_)
 * fix: Change warn to warning (`#1067 <https://github.com/RobotWebTools/rosbridge_suite/issues/1067>`_)
 * refactor: Enable various ruff checks and fix lint errors (`#1059 <https://github.com/RobotWebTools/rosbridge_suite/issues/1059>`_)

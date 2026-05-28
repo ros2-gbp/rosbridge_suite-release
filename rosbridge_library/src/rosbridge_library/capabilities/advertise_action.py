@@ -60,10 +60,8 @@ class AdvertisedActionHandler(Generic[ROSActionGoalT, ROSActionResultT, ROSActio
     id_counter = 1
 
     def __init__(self, action_name: str, action_type: str, protocol: Protocol) -> None:
-        self.goal_futures: dict[str, Future[ROSActionResultT]] = {}
-        self.goal_handles: dict[
-            str, ServerGoalHandle[ROSActionGoalT, ROSActionResultT, ROSActionFeedbackT]
-        ] = {}
+        self.goal_futures: dict[str, Future] = {}
+        self.goal_handles: dict[str, ServerGoalHandle] = {}
         self.goal_statuses: dict[str, int] = {}
 
         self.action_name = action_name
@@ -75,7 +73,7 @@ class AdvertisedActionHandler(Generic[ROSActionGoalT, ROSActionResultT, ROSActio
         # rebuild and can SIGSEGV inside rclpy/action/server.py:__init__.
         self.action_server = run_on_executor(
             protocol.node_handle,
-            lambda: ActionServer[ROSActionGoalT, ROSActionResultT, ROSActionFeedbackT](
+            lambda: ActionServer(
                 protocol.node_handle,
                 get_action_class(action_type),
                 action_name,
@@ -106,9 +104,7 @@ class AdvertisedActionHandler(Generic[ROSActionGoalT, ROSActionResultT, ROSActio
 
         return GoalResponse.ACCEPT
 
-    async def execute_callback(
-        self, goal: ServerGoalHandle[ROSActionGoalT, ROSActionResultT, ROSActionFeedbackT]
-    ) -> ROSActionResultT:
+    async def execute_callback(self, goal: ServerGoalHandle) -> ROSActionResultT:
         """
         Execute action goal.
 
@@ -117,7 +113,7 @@ class AdvertisedActionHandler(Generic[ROSActionGoalT, ROSActionResultT, ROSActio
         # generate a unique ID
         goal_id = f"action_goal:{self.action_name}:{self.next_id()}"
 
-        def done_callback(fut: Future[ROSActionResultT]) -> None:
+        def done_callback(fut: Future) -> None:
             if fut.cancelled() or fut.exception() is not None:
                 goal.abort()
                 self.protocol.log("info", f"Aborted goal {goal_id}")
@@ -134,7 +130,7 @@ class AdvertisedActionHandler(Generic[ROSActionGoalT, ROSActionResultT, ROSActio
                 else:
                     goal.abort()
 
-        future: Future[ROSActionResultT] = Future()
+        future = Future()
         future.add_done_callback(done_callback)
         self.goal_handles[goal_id] = goal
         self.goal_futures[goal_id] = future
@@ -172,9 +168,7 @@ class AdvertisedActionHandler(Generic[ROSActionGoalT, ROSActionResultT, ROSActio
                 # schedule destruction of the action server
                 self._schedule_action_server_destruction()
 
-    def cancel_callback(
-        self, goal: ServerGoalHandle[ROSActionGoalT, ROSActionResultT, ROSActionFeedbackT]
-    ) -> CancelResponse:
+    def cancel_callback(self, goal: ServerGoalHandle) -> CancelResponse:
         """
         Cancel action goal.
 
