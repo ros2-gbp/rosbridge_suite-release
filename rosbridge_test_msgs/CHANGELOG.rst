@@ -2,15 +2,13 @@
 Changelog for package rosbridge_test_msgs
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-4.2.0 (2026-05-27)
-------------------
-* chore: Update rosbridge_test_msgs cmake minimum version to 3.20 (`#1271 <https://github.com/RobotWebTools/rosbridge_suite/issues/1271>`_)
-* Contributors: Błażej Sowa
-
-4.1.0 (2026-04-02)
+3.3.0 (2026-05-27)
 ------------------
 
-4.0.0 (2026-03-02)
+3.2.0 (2026-04-02)
+------------------
+
+3.1.0 (2026-03-02)
 ------------------
 
 3.0.2 (2025-11-20)

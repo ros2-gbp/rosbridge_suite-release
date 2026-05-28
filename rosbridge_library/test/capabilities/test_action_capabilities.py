@@ -416,9 +416,7 @@ class TestActionCapabilities(unittest.TestCase):
         )
 
         Thread(
-            target=self.send_goal.send_action_goal,
-            args=(goal_msg_after_readvertise,),
-            daemon=True,
+            target=self.send_goal.send_action_goal, args=(goal_msg_after_readvertise,), daemon=True
         ).start()
 
         start_time = time.monotonic()
