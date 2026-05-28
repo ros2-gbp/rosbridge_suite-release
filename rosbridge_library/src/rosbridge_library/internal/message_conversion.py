@@ -42,7 +42,7 @@ from typing import TYPE_CHECKING, Any
 import numpy as np
 from builtin_interfaces.msg import Duration as DurationMsg
 from builtin_interfaces.msg import Time as TimeMsg
-from rclpy.clock import ROSClock
+from rclpy.clock import Clock, ClockType
 from std_msgs.msg import Header as HeaderMsg
 
 from rosbridge_library.internal import ros_loader
@@ -51,8 +51,6 @@ from rosbridge_library.util import bson
 
 if TYPE_CHECKING:
     from collections.abc import Callable
-
-    from rclpy.clock import Clock
 
 
 type_map = {
@@ -99,7 +97,6 @@ ros_primitive_types = (
     "double",
     "string",
 )
-ros_header_types = ("Header", "std_msgs/Header", "roslib/Header")
 ros_binary_types = ("uint8[]", "char[]", "sequence<uint8>", "sequence<char>")
 # Remove the list type wrapper, and length specifier, from rostypes i.e. sequence<double, 3>
 list_tokens = re.compile(r"<(.+?)(, \d+)?>")
@@ -202,9 +199,22 @@ def populate_instance(
     according to the values in msg.
     """
     if clock is None:
-        clock = ROSClock()
+        clock = Clock(clock_type=ClockType.ROS_TIME)
 
     inst_type = msg_instance_type_repr(inst)
+
+    # Auto-populate header.stamp when the root message has a "header" field of type std_msgs/Header
+    # and the client omitted the header entirely or omitted only the stamp.
+    inst_fields = inst.get_fields_and_field_types()
+    if inst_fields.get("header") == "std_msgs/Header":
+        header_msg = msg.get("header")
+        if header_msg is not None and not isinstance(header_msg, dict):
+            raise FieldTypeMismatchException(inst_type, ["header"], "dict", type(header_msg))
+        if header_msg is None or "stamp" not in header_msg:
+            assert hasattr(inst, "header")
+            header_inst = inst.header  # type: ignore[attr-defined]
+            if isinstance(header_inst, HeaderMsg):
+                header_inst.stamp = clock.now().to_msg()
 
     return _to_object_inst(msg, inst_type, inst_type, clock, inst, [])
 
@@ -332,7 +342,7 @@ def _to_inst(
     stack: list[str] | None = None,
 ) -> object:
     if clock is None:
-        clock = ROSClock()
+        clock = Clock(clock_type=ClockType.ROS_TIME)
     if stack is None:
         stack = []
 
@@ -496,13 +506,6 @@ def _to_object_inst(
     # Typecheck the msg
     if not isinstance(msg, dict):
         raise FieldTypeMismatchException(roottype, stack, rostype, type(msg))
-
-    # Substitute the correct time if we're an std_msgs/Header
-    if rostype in ros_header_types:
-        if not isinstance(inst, HeaderMsg):
-            err_msg = f"inst is not a HeaderMsg, but a {type(inst)}"
-            raise TypeError(err_msg)
-        inst.stamp = clock.now().to_msg()
 
     inst_fields: dict[str, str] = inst.get_fields_and_field_types()
     for field_name, field_value in msg.items():
