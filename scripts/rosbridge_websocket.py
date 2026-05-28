@@ -44,6 +44,7 @@ from typing import TYPE_CHECKING, cast
 import rclpy
 from rcl_interfaces.msg import ParameterDescriptor
 from rclpy.executors import SingleThreadedExecutor
+from rclpy.experimental import EventsExecutor
 from rclpy.node import Node
 from rclpy.utilities import remove_ros_args
 from tornado.httpserver import HTTPServer
@@ -69,6 +70,8 @@ SERVER_PARAMETERS = (
     ("websocket_ping_timeout", float, 30.0, "Timeout in seconds for WebSocket ping responses."),
     # Websocket handler parameters
     ("use_compression", bool, False, "Enable compression for WebSocket messages."),
+    # Executor parameters
+    ("use_events_executor", bool, False, "Use EventsExecutor instead of SingleThreadedExecutor."),
 )
 
 PROTOCOL_PARAMETERS = (
@@ -89,7 +92,9 @@ PROTOCOL_PARAMETERS = (
         "Ignored if bson_only_mode is True.",
     ),
     ("bson_only_mode", bool, False, "Use BSON only mode for messages."),
-    ("topics_glob", str, "", "Glob patterns for topics publish/subscribe."),
+    ("topics_glob", str, "", "Legacy glob patterns for topics publish/subscribe."),
+    ("topics_pub_glob", str, "", "Glob patterns for topics publish."),
+    ("topics_sub_glob", str, "", "Glob patterns for topics subscribe."),
     ("services_glob", str, "", "Glob patterns for services call/advertise."),
     ("actions_glob", str, "", "Glob patterns for actions send/advertise."),
     ("call_services_in_new_thread", bool, True, "Call services in a new threads."),
@@ -161,9 +166,21 @@ class RosbridgeWebsocketNode(Node):
         for name, _, _, _ in PROTOCOL_PARAMETERS:
             self.protocol_parameters[name] = self.get_parameter(name).value
 
-        self.protocol_parameters["topics_glob"] = parse_glob_string(
-            self.protocol_parameters["topics_glob"]
+        # Append legacy topics glob into both pub and sub
+        legacy_glob = parse_glob_string(self.protocol_parameters.get("topics_glob", ""))
+        pub_glob = parse_glob_string(self.protocol_parameters.get("topics_pub_glob", ""))
+        sub_glob = parse_glob_string(self.protocol_parameters.get("topics_sub_glob", ""))
+
+        # If pub_glob/sub_glob is "", it inherits whatever legacy_glob is (None or list)
+        # If pub_glob/sub_glob is set (including "[]"), it merges with legacy_glob
+        self.protocol_parameters["topics_pub_glob"] = (
+            legacy_glob if pub_glob is None else list(set(pub_glob + (legacy_glob or [])))
         )
+
+        self.protocol_parameters["topics_sub_glob"] = (
+            legacy_glob if sub_glob is None else list(set(sub_glob + (legacy_glob or [])))
+        )
+
         self.protocol_parameters["services_glob"] = parse_glob_string(
             self.protocol_parameters["services_glob"]
         )
@@ -193,6 +210,11 @@ class RosbridgeWebsocketNode(Node):
         # WebSocket handler parameters
         self.use_compression = (
             self.get_parameter("use_compression").get_parameter_value().bool_value
+        )
+
+        # Executor parameters
+        self.use_events_executor = (
+            self.get_parameter("use_events_executor").get_parameter_value().bool_value
         )
 
     def _start_server(self) -> None:
@@ -231,7 +253,11 @@ async def async_main() -> None:
 
     node = RosbridgeWebsocketNode()
 
-    executor = SingleThreadedExecutor()
+    if node.use_events_executor:
+        executor = EventsExecutor()
+    else:
+        executor = SingleThreadedExecutor()
+
     executor.add_node(node)
 
     spin_thread = threading.Thread(target=executor.spin)
