@@ -44,6 +44,7 @@ from typing import TYPE_CHECKING, Any, ClassVar, ParamSpec, TypeVar
 
 from rclpy.node import Node
 from rosbridge_library.rosbridge_protocol import RosbridgeProtocol
+from rosbridge_library.util import bson
 from tornado.websocket import WebSocketClosedError, WebSocketHandler
 
 if TYPE_CHECKING:
@@ -207,10 +208,10 @@ class RosbridgeWebSocket(WebSocketHandler):
             f"Client disconnected. {cls.clients_connected} clients total."
         )
 
-    def send_message(self, message: bytes | str, compression: str = "none") -> None:
+    def send_message(self, message: bson.BSON | bytearray | str, compression: str = "none") -> None:
         cls = self.__class__
         assert isinstance(cls.event_loop, AbstractEventLoop), "Event loop was not set"
-        binary = compression in ["cbor", "cbor-raw"]
+        binary = isinstance(message, bson.BSON) or compression in ["cbor", "cbor-raw"]
         if not self.write_slots.acquire(blocking=False):
             assert isinstance(cls.node_handle, Node), "Node handle was not set"
             cls.node_handle.get_logger().warning(

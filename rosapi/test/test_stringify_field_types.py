@@ -24,8 +24,8 @@ class TestObjectUtils(unittest.TestCase):
         self.assertRegex(
             stringify_field_types("std_msgs/ByteMultiArray"),
             r"""(?s)
-MultiArrayLayout\s+layout.*
-byte\[\]\s+data.*
+MultiArrayLayout  layout.*
+byte\[\]            data.*
 
 ================================================================================
 MSG: std_msgs/MultiArrayLayout
@@ -76,9 +76,9 @@ uint32 height.*
 uint32 width.*
 string distortion_model.*
 float64\[\] d.*
-float64\[9\]\s+k.*
-float64\[9\]\s+r.*
-float64\[12\]\s+p.*
+float64\[9\]  k.*
+float64\[9\]  r.*
+float64\[12\] p.*
 uint32 binning_x.*
 uint32 binning_y.*
 RegionOfInterest roi.*

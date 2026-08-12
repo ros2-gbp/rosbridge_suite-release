@@ -48,7 +48,7 @@ class ActionTester:
         self.executor.remove_node(self.node)
 
     def execute_callback(
-        self, goal: ServerGoalHandle[Fibonacci_Goal, Fibonacci_Result, Fibonacci_Feedback, Any]
+        self, goal: ServerGoalHandle[Fibonacci_Goal, Fibonacci_Result, Fibonacci_Feedback]
     ) -> Fibonacci_Result:
         self.goal = goal
         feedback_msg = Fibonacci.Feedback()
@@ -72,6 +72,10 @@ class ActionTester:
 
 
 class TestActions(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls) -> None:
+        message_conversion.configure()
+
     def setUp(self) -> None:
         rclpy.init()
         self.executor = SingleThreadedExecutor()
@@ -162,7 +166,11 @@ class TestActions(unittest.TestCase):
             received["msg"] = response.result
 
         # First, call the action the 'proper' way
-        client = ActionClient(self.node, Fibonacci, "get_fibonacci_sequence")
+        client: ActionClient[Fibonacci_Goal, Fibonacci_Result, Fibonacci_Feedback] = ActionClient(
+            self.node,
+            Fibonacci,
+            "get_fibonacci_sequence",
+        )
         client.wait_for_server()
         goal = Fibonacci.Goal()
         goal.order = 5
