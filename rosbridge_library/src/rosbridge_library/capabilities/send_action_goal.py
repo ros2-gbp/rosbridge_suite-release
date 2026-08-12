@@ -44,7 +44,9 @@ from rosbridge_library.internal.actions import ActionClientHandler
 from rosbridge_library.internal.message_conversion import extract_values
 
 if TYPE_CHECKING:
-    from rosbridge_library.internal.type_support import FeedbackMessage, ROSMessage
+    from rclpy.type_support import FeedbackMessage
+
+    from rosbridge_library.internal.type_support import ROSMessage
     from rosbridge_library.protocol import Protocol
 
 
@@ -132,7 +134,7 @@ class SendActionGoal(Capability):
         f_cb = partial(self._feedback, cid, action) if message.get("feedback", False) else None
 
         # Run action client handler in the same thread.
-        client_handler: ActionClientHandler[ROSMessage, ROSMessage, ROSMessage] = (
+        client_handler: ActionClientHandler[ROSMessage, ROSMessage, ROSMessage, Any] = (
             ActionClientHandler(
                 trim_action_name(action),
                 action_type,

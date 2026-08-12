@@ -49,21 +49,20 @@ from rosbridge_library.internal.ros_loader import (
 from rosbridge_library.internal.type_support import (
     ROSActionFeedbackT,
     ROSActionGoalT,
+    ROSActionImplT,
     ROSActionResultT,
 )
 
 if TYPE_CHECKING:
     from collections.abc import Callable
 
+    from action_msgs.srv import CancelGoal_Response
     from rclpy.action.client import ClientGoalHandle
     from rclpy.node import Node
     from rclpy.task import Future
+    from rclpy.type_support import FeedbackMessage, GetResultServiceResponse
 
-    from rosbridge_library.internal.type_support import (
-        FeedbackMessage,
-        GetResultServiceResponse,
-        ROSMessage,
-    )
+    from rosbridge_library.internal.type_support import ROSMessage
 
 
 class InvalidActionException(Exception):
@@ -71,7 +70,9 @@ class InvalidActionException(Exception):
         Exception.__init__(self, f"Action {action_name} does not exist")
 
 
-class ActionClientHandler(Thread, Generic[ROSActionGoalT, ROSActionResultT, ROSActionFeedbackT]):
+class ActionClientHandler(
+    Thread, Generic[ROSActionGoalT, ROSActionResultT, ROSActionFeedbackT, ROSActionImplT]
+):
     def __init__(
         self,
         action: str,
@@ -106,9 +107,9 @@ class ActionClientHandler(Thread, Generic[ROSActionGoalT, ROSActionResultT, ROSA
         self.error = error_callback
         self.feedback = feedback_callback
         self.node_handle = node_handle
-        self.send_goal_helper: SendGoal[ROSActionGoalT, ROSActionResultT, ROSActionFeedbackT] = (
-            SendGoal()
-        )
+        self.send_goal_helper = SendGoal[
+            ROSActionGoalT, ROSActionResultT, ROSActionFeedbackT, ROSActionImplT
+        ]()
 
     def run(self) -> None:
         try:
@@ -145,7 +146,7 @@ def args_to_action_goal_instance(inst: ROSMessage, args: list | dict[str, Any] |
     populate_instance(msg, inst)
 
 
-class SendGoal(Generic[ROSActionGoalT, ROSActionResultT, ROSActionFeedbackT]):
+class SendGoal(Generic[ROSActionGoalT, ROSActionResultT, ROSActionFeedbackT, ROSActionImplT]):
     """Helper class to send action goals."""
 
     result: GetResultServiceResponse[ROSActionResultT] | Exception | None = None
@@ -153,23 +154,33 @@ class SendGoal(Generic[ROSActionGoalT, ROSActionResultT, ROSActionFeedbackT]):
     def __init__(self, server_timeout_time: float = 1.0, sleep_time: float = 0.001) -> None:
         self.server_timeout_time = server_timeout_time
         self.sleep_time = sleep_time
-        self.goal_handle: ClientGoalHandle | None = None
+        self.goal_handle: (
+            ClientGoalHandle[ROSActionGoalT, ROSActionResultT, ROSActionFeedbackT, ROSActionImplT]
+            | None
+        ) = None
         self.goal_canceled = False
 
-    def get_result_cb(self, future: Future) -> None:
+    def get_result_cb(self, future: Future[GetResultServiceResponse[ROSActionResultT]]) -> None:
         self.result = future.result()
 
-    def goal_response_cb(self, future: Future) -> None:
+    def goal_response_cb(
+        self,
+        future: Future[
+            ClientGoalHandle[ROSActionGoalT, ROSActionResultT, ROSActionFeedbackT, ROSActionImplT]
+        ],
+    ) -> None:
         self.goal_handle = future.result()
         assert self.goal_handle is not None
         if not self.goal_handle.accepted:
             msg = "Action goal was rejected"
             self.result = Exception(msg)
             return
-        result_future: Future = self.goal_handle.get_result_async()
+        result_future: Future[GetResultServiceResponse[ROSActionResultT]] = (
+            self.goal_handle.get_result_async()
+        )
         result_future.add_done_callback(self.get_result_cb)
 
-    def goal_cancel_cb(self, _: Future) -> None:
+    def goal_cancel_cb(self, _: Future[CancelGoal_Response]) -> None:
         self.goal_canceled = True
 
     def send_goal(
@@ -189,7 +200,9 @@ class SendGoal(Generic[ROSActionGoalT, ROSActionResultT, ROSActionFeedbackT]):
         args_to_action_goal_instance(inst, args)
 
         self.result = None
-        client = ActionClient(node_handle, action_class, action_name)
+        client = ActionClient[ROSActionGoalT, ROSActionResultT, ROSActionFeedbackT, ROSActionImplT](
+            node_handle, action_class, action_name
+        )
         if not client.wait_for_server(timeout_sec=self.server_timeout_time):
             msg = "No action server available"
             raise Exception(msg)
