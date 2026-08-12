@@ -50,7 +50,6 @@ from rosbridge_library.internal.type_support import ROSMessage, ROSMessageT
 
 if TYPE_CHECKING:
     from rclpy.node import Node
-    from rclpy.publisher import Publisher
 
 
 class MultiPublisher(Generic[ROSMessageT]):
@@ -131,7 +130,7 @@ class MultiPublisher(Generic[ROSMessageT]):
         self.msg_class = msg_class
         self.qos_profile: QoSProfile = qos
 
-        self.publisher: Publisher[ROSMessageT] = node_handle.create_publisher(
+        self.publisher = node_handle.create_publisher(
             msg_class, topic, qos_profile=self.qos_profile
         )
 
