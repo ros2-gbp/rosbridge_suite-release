@@ -42,8 +42,7 @@ from typing import TYPE_CHECKING, Any
 import numpy as np
 from builtin_interfaces.msg import Duration as DurationMsg
 from builtin_interfaces.msg import Time as TimeMsg
-from rclpy.clock import Clock
-from rclpy.clock_type import ClockType
+from rclpy.clock import Clock, ClockType
 from std_msgs.msg import Header as HeaderMsg
 
 from rosbridge_library.internal import ros_loader
@@ -213,7 +212,7 @@ def populate_instance(
             raise FieldTypeMismatchException(inst_type, ["header"], "dict", type(header_msg))
         if header_msg is None or "stamp" not in header_msg:
             assert hasattr(inst, "header")
-            header_inst = inst.header
+            header_inst = inst.header  # type: ignore[attr-defined]
             if isinstance(header_inst, HeaderMsg):
                 header_inst.stamp = clock.now().to_msg()
 

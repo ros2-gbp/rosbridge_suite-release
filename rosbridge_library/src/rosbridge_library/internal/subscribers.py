@@ -185,14 +185,14 @@ class MultiSubscriber(Generic[ROSMessageT]):
 
         return qos
 
-    def _schedule_destroy_subscription(self, subscription: Subscription) -> None:
+    def _schedule_destroy_subscription(self, subscription: Subscription[ROSMessageT]) -> None:
         """
         Schedule subscription destruction on the executor thread.
 
         Used to avoid race conditions between executor and non-executor threads.
 
         Args:
-            subscription (Subscription): Subscription to destroy
+            subscription (Subscription[ROSMessageT]): Subscription to destroy
 
         """
         executor = self.node_handle.executor
